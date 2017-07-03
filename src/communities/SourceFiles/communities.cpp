@@ -16,6 +16,7 @@
 
 using namespace std;
 
+
 int main() {
 	vector<Communities2D> vect2d;
 
@@ -24,7 +25,7 @@ int main() {
 	char line[255], *ncom, *xval, *yval;
 
 	FILE *fp;
-	  fp = fopen("coms_test.csv", "r");
+	  fp = fopen("communities.csv", "r");
 	  fgets(line, sizeof(line), fp); //Skips the first line.
 
 	  while(fgets(line, sizeof(line), fp)) {
@@ -39,8 +40,8 @@ int main() {
 	    yPoint = strtod(yval, NULL);
 
 	    //Store the casted values in the Struct.
-	    vect2d.push_back({comm_id, xPoint, yPoint});
-	    //vect2d.emplace_back(comm_id, xPoint, yPoint);
+	    //vect2d.push_back({comm_id, xPoint, yPoint});
+	    vect2d.emplace_back(comm_id, xPoint, yPoint);
 	  }
 
 	  for (Communities2D const& community: vect2d) {
