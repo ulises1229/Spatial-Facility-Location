@@ -19,8 +19,7 @@ using namespace std;
 
 int main() {
 	vector<Communities2D> vect2d;
- //sdfsdfsfsdfsfd
- //comentario andres
+
 	int comm_id;
 	double xPoint, yPoint; //They will store the casted value from the input file.
 	char line[255], *ncom, *xval, *yval;
