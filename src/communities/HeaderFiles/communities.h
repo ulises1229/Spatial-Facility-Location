@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
 struct Communities2D {
     int communityID;
@@ -18,16 +19,11 @@ struct Communities3D {
     double zValue;
 };
 
-struct Neighbors {
-  	int NeighborID;
-  	double Distance;
+struct Community {
+    int communityID;
+    double xValue;
+    double yValue;
+    std::map<double, int> NeighborsMap;
 
-    Neighbors(int NeighID, double dist) : NeighborID(NeighID), Distance(dist) {}
-};
-
-struct CommunitiesInfo {
-  	struct Communities2D communities2D;
-  	struct Neighbors neighbors;
-
-    CommunitiesInfo(const Communities2D comms2D, const Neighbors neighs) : communities2D(comms2D), neighbors(neighs) {}
+    Community(int commID, double x, double y, std::map<double, int> neighsmap) : communityID(commID), xValue(x), yValue(y), NeighborsMap(neighsmap) {}
 };

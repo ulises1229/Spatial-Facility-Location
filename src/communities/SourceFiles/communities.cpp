@@ -13,6 +13,8 @@
 #include <float.h>
 #include <math.h>
 #include <vector>
+#include <map>
+#include <iterator>
 #include "../HeaderFiles/communities.h"
 
 using namespace std;
@@ -39,53 +41,41 @@ vector<Communities2D> csv_to_vector() {
 		    yPoint = strtod(yval, NULL);
 
 		    //Store the casted values in the Struct.
-		    //vect2d.push_back({comm_id, xPoint, yPoint});
+		    //vect2d.push_back({comm_id, xPoint, yPoint})
 		    vect2d.emplace_back(comm_id, xPoint, yPoint);
 		  }
 		fclose(fp);
 	 	return vect2d;
 }
 
-vector<Neighbors> neighbors_distance(vector<Communities2D> vect2d) {
-		vector<Neighbors> neighborsVect;
+vector<Community> neighbors_distance(vector<Communities2D> vect2d) {
+		vector<Community> communityVect;
 		double dist;
 		for (Communities2D const& community: vect2d) {
+			map<double, int> neighborsMap;
 			for (Communities2D const& neighbors: vect2d) {
 				if (community.communityID == neighbors.communityID) {
 					dist = 0.0;
 				} else {
 					dist = sqrt( pow((neighbors.xValue - community.xValue), 2.0)  + pow((neighbors.yValue - community.yValue), 2.0) );
 				}
-				neighborsVect.emplace_back(neighbors.communityID, dist);
+				neighborsMap[dist] = neighbors.communityID;
+				//neighborsVect.emplace_back(neighbors.communityID, dist);
 			}
+			communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
 		}
-		return neighborsVect;
-}
-
-vector<CommunitiesInfo> population(vector<Communities2D> vect2d, vector<Neighbors> neighborsVect) {
-		vector<CommunitiesInfo> populationVect;
-		populationVect.emplace_back(vect2d, neighborsVect);
-
-		return populationVect;
+		return communityVect;
 }
 
 int main() {
 		vector<Communities2D> vect2d = csv_to_vector();
-		vector<Neighbors> neighborsVect = neighbors_distance(vect2d);
-		vector<CommunitiesInfo> populationVect = population(vect2d, neighborsVect);
+		vector<Community> communityVect = neighbors_distance(vect2d);
 
-
-		for (CommunitiesInfo const& pop: populationVect) {
-			 cout << pop.neighbors.Distance << endl;
-		}
-		/*for (Neighbors const& neigh: neighborsVect) {
-				cout << neigh.NeighborID << "\t" << neigh.Distance << endl;
+		/*for (Community const& info: communityVect) {
+			 cout << info.communityID << ":\n";
+			 for(auto const& it : info.NeighborsMap) {
+				 	cout << it.first << " - " << it.second << endl;
+			 }
 		}*/
-
-	  /*for (Communities2D const& community: vect2d) {
-			cout << std::fixed;
-		  cout << community.communityID << "\t" << community.xValue << "\t" << community.yValue << endl;
-	  }*/
-
 	return 0;
 }
