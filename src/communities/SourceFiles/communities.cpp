@@ -19,6 +19,8 @@
 
 using namespace std;
 
+double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
+
 vector<Communities2D> csv_to_vector() {
 		vector<Communities2D> vect2d;
 		int comm_id;
@@ -39,6 +41,16 @@ vector<Communities2D> csv_to_vector() {
 		    comm_id = atoi(ncom);
 		    xPoint = strtod(xval, NULL);
 		    yPoint = strtod(yval, NULL);
+
+				if (xPoint > maxX)
+						maxX = xPoint;
+				if (yPoint > maxY)
+						maxY = yPoint;
+
+				if (xPoint < minX)
+						minX = xPoint;
+				if (yPoint < minY)
+						minY = yPoint;
 
 		    //Store the casted values in the Struct.
 		    //vect2d.push_back({comm_id, xPoint, yPoint})
@@ -77,5 +89,7 @@ int main() {
 				 	cout << it.first << " - " << it.second << endl;
 			 }
 		}*/
+		cout << fixed;
+		cout << "Min X: " << minX << "\tMin Y: " << minY << "\nMax X: " << maxX << "\tMax Y: " << maxY << endl;
 	return 0;
 }
