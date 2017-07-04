@@ -2,17 +2,17 @@
 #include <vector>
 #include <map>
 
-struct Communities2D {
+struct Point2D {
     int communityID;
     double xValue;
     double yValue;
 
-    Communities2D(int commID, double x, double y)
+    Point2D(int commID, double x, double y)
     	: communityID(commID), xValue(x), yValue(y)
       {}
 };
 
-struct Communities3D {
+struct Point3D {
     int communityID;
     double xValue;
     double yValue;
@@ -26,4 +26,9 @@ struct Community {
     std::map<double, int> NeighborsMap;
 
     Community(int commID, double x, double y, std::map<double, int> neighsmap) : communityID(commID), xValue(x), yValue(y), NeighborsMap(neighsmap) {}
+};
+
+struct Comm2D{
+  int communityID;
+  struct Point2D;
 };

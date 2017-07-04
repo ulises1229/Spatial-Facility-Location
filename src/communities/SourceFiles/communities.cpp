@@ -18,11 +18,30 @@
 #include "../HeaderFiles/communities.h"
 
 using namespace std;
+class cCommunity{
+		public:
+			double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
+			vector<Point2D> csv_to_vector();
+			vector<Community> neighbors_distance(vector<Point2D> vect2d);
+			void get_communities_and_neighbors(vector<Community> communityVect);
+			void get_min_max();
+};
 
-double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
+void cCommunity::get_min_max(){
+	cout << fixed << "Min X: " << minX << "\tMin Y: " << minY << "\nMax X: " << maxX << "\tMax Y: " << maxY << endl;
+}
 
-vector<Communities2D> csv_to_vector() {
-		vector<Communities2D> vect2d;
+void cCommunity::get_communities_and_neighbors(vector<Community> communityVect){
+	for (Community const& info: communityVect) {
+		 cout << info.communityID << ":\n";
+		 for(auto const& it : info.NeighborsMap) {
+				cout << it.first << " - " << it.second << endl;
+		 }
+	}
+}
+
+vector<Point2D> cCommunity::csv_to_vector() {
+		vector<Point2D> vect2d;
 		int comm_id;
 		double xPoint, yPoint; //They will store the casted value from the input file.
 		char line[255], *ncom, *xval, *yval;
@@ -60,12 +79,12 @@ vector<Communities2D> csv_to_vector() {
 	 	return vect2d;
 }
 
-vector<Community> neighbors_distance(vector<Communities2D> vect2d) {
+vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 		vector<Community> communityVect;
 		double dist;
-		for (Communities2D const& community: vect2d) {
+		for (Point2D const& community: vect2d) {
 			map<double, int> neighborsMap;
-			for (Communities2D const& neighbors: vect2d) {
+			for (Point2D const& neighbors: vect2d) {
 				if (community.communityID == neighbors.communityID) {
 					dist = 0.0;
 				} else {
@@ -77,19 +96,4 @@ vector<Community> neighbors_distance(vector<Communities2D> vect2d) {
 			communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
 		}
 		return communityVect;
-}
-
-int main() {
-		vector<Communities2D> vect2d = csv_to_vector();
-		vector<Community> communityVect = neighbors_distance(vect2d);
-
-		/*for (Community const& info: communityVect) {
-			 cout << info.communityID << ":\n";
-			 for(auto const& it : info.NeighborsMap) {
-				 	cout << it.first << " - " << it.second << endl;
-			 }
-		}*/
-		cout << fixed;
-		cout << "Min X: " << minX << "\tMin Y: " << minY << "\nMax X: " << maxX << "\tMax Y: " << maxY << endl;
-	return 0;
 }
