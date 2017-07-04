@@ -19,11 +19,15 @@ struct Communities3D {
 };
 
 struct Neighbors {
-	int NeighborID;
-	double Distance;
+  	int NeighborID;
+  	double Distance;
+
+    Neighbors(int NeighID, double dist) : NeighborID(NeighID), Distance(dist) {}
 };
 
 struct CommunitiesInfo {
-	struct Communities2D;
-	struct Neighbors;
+  	struct Communities2D communities2D;
+  	struct Neighbors neighbors;
+
+    CommunitiesInfo(const Communities2D comms2D, const Neighbors neighs) : communities2D(comms2D), neighbors(neighs) {}
 };
