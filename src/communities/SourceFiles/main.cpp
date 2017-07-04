@@ -9,6 +9,7 @@ int main() {
 
     c.get_communities_and_neighbors(communityVect);
 		c.get_min_max();
+    c.get_costs_to_neighbors(communityVect);
 
 	return 0;
 }

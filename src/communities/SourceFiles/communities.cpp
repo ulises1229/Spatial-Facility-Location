@@ -25,10 +25,22 @@ class cCommunity{
 			vector<Community> neighbors_distance(vector<Point2D> vect2d);
 			void get_communities_and_neighbors(vector<Community> communityVect);
 			void get_min_max();
+			void get_costs_to_neighbors(vector<Community> communityVect);
 };
 
 void cCommunity::get_min_max(){
 	cout << fixed << "Min X: " << minX << "\tMin Y: " << minY << "\nMax X: " << maxX << "\tMax Y: " << maxY << endl;
+}
+
+void cCommunity::get_costs_to_neighbors(vector<Community> communityVect){
+	for (Community const& info: communityVect) {
+		 double cost = 0.0;
+		 cout << "Community " << info.communityID << " - ";
+		 for(auto const& it : info.NeighborsMap) {
+			 cost += it.first;
+		 }
+		 cout << "Cost to all its neighbors: " << cost << endl;
+	}
 }
 
 void cCommunity::get_communities_and_neighbors(vector<Community> communityVect){
