@@ -12,7 +12,7 @@
 #include <string.h>
 #include <float.h>
 #include <vector>
-#include "/src/communities/HeaderFiles/communities.h"
+#include "../HeaderFiles/communities.h"
 
 using namespace std;
 
