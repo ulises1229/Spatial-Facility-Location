@@ -14,6 +14,7 @@
 #include <math.h>
 #include <vector>
 #include <map>
+#include <random>
 #include <iterator>
 #include "../HeaderFiles/communities.h"
 
@@ -26,6 +27,8 @@ class cCommunity{
 			void get_communities_and_neighbors(vector<Community> communityVect);
 			void get_min_max();
 			void get_costs_to_neighbors(vector<Community> communityVect);
+			vector<Point2D> random_point();
+			void get_random_points_total_cost(vector<Point2D> communitiesPts, vector<Point2D> randomPts);
 };
 
 void cCommunity::get_min_max(){
@@ -108,4 +111,29 @@ vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 			communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
 		}
 		return communityVect;
+}
+
+vector<Point2D> cCommunity::random_point() {
+		vector<Point2D> rpVect;
+		random_device rd;
+		mt19937 eng(rd());
+		uniform_real_distribution<double> pointX(minX, maxX);
+		uniform_real_distribution<double> pointY(minY, maxY);
+		for (int x = 0; x < 10; x++) {
+				rpVect.emplace_back(x + 1, pointX(eng), pointY(eng));
+		}
+		for (Point2D const& rp: rpVect) {
+			cout << "RP " << rp.communityID << ": " << rp.xValue << "   -   " << rp.yValue << endl;
+		}
+		return rpVect;
+}
+
+void cCommunity::get_random_points_total_cost(vector<Point2D> communitiesPts, vector<Point2D> randomPts) {
+		for (Point2D const& rp: randomPts) {
+			 double cost = 0.0;
+			 for (Point2D const& community: communitiesPts) {
+				  cost += sqrt( pow((community.xValue - rp.xValue), 2.0)  + pow((community.yValue - rp.yValue), 2.0) );
+			 }
+			 cout << "Total cost of Point " << rp.communityID << ": " << cost << endl;
+		}
 }
