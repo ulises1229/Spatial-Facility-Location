@@ -116,7 +116,7 @@ vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 vector<Point2D> cCommunity::random_point() {
 		vector<Point2D> rpVect;
 		random_device rd;
-		mt19937 eng(rd());
+		static default_random_engine eng(rd());
 		uniform_real_distribution<double> pointX(minX, maxX);
 		uniform_real_distribution<double> pointY(minY, maxY);
 		for (int x = 0; x < 10; x++) {
