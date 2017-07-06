@@ -15,6 +15,7 @@
 #include <vector>
 #include <map>
 #include <random>
+#include <chrono>
 #include <iterator>
 #include "../HeaderFiles/communities.h"
 
@@ -115,8 +116,9 @@ vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 
 vector<Point2D> cCommunity::random_point() {
 		vector<Point2D> rpVect;
-		random_device rd;
-		static default_random_engine eng(rd());
+		//random_device rd;
+		unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+		default_random_engine eng(seed);
 		uniform_real_distribution<double> pointX(minX, maxX);
 		uniform_real_distribution<double> pointY(minY, maxY);
 		for (int x = 0; x < 10; x++) {
