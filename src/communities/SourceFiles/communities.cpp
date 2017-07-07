@@ -96,20 +96,46 @@ vector<Point2D> cCommunity::csv_to_vector() {
 }
 
 vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
+		Point2D* pStruct;
+		Point2D* pNeigh;
 		vector<Community> communityVect;
-		double dist;
-		for (Point2D const& community: vect2d) {
-			map<double, int> neighborsMap;
-			for (Point2D const& neighbors: vect2d) {
-				if (community.communityID == neighbors.communityID) {
+		float dist;
+		vector<Point2D>::iterator it;
+		vector<Point2D>::iterator it_2;
+
+		/*for(int i = 0; i < vect2d.size(); i++) {
+				pStruct  = &vect2d[i];
+				map<double, int> neighborsMap;
+				for (int j = 0; j < vect2d.size(); j++) {
+					pNeigh = &vect2d[j];
+					if (pStruct->communityID == pNeigh->communityID) {
+						 dist = 0.0;
+					} else {
+						 dist = sqrt( pow((pNeigh->xValue - pStruct->xValue), 2.0) + pow((pNeigh->yValue - pStruct->yValue), 2.0) );
+					}
+					neighborsMap[dist] = pNeigh->communityID;
+				}
+				//cout << fixed;
+				//cout << "ID: " << pStruct->communityID << "\tX: " << pStruct->xValue << "\tY: " << pStruct->yValue << endl;
+				//communityVect.emplace_back(pStruct->communityID, pStruct->xValue, pStruct->yValue, neighborsMap);
+				communityVect.emplace_back(pStruct->communityID, neighborsMap);
+		}*/
+
+		for (it = vect2d.begin(); it != vect2d.end(); it++) {
+			map<float, int> neighborsMap;
+			for (it_2 = vect2d.begin(); it_2 != vect2d.end(); it_2++) {
+				if (it->communityID == it_2->communityID) {
 					dist = 0.0;
 				} else {
-					dist = sqrt( pow((neighbors.xValue - community.xValue), 2.0)  + pow((neighbors.yValue - community.yValue), 2.0) );
+					dist = sqrt( pow((it_2->xValue - it->xValue), 2.0)  + pow((it_2->yValue - it->yValue), 2.0) );
 				}
-				neighborsMap[dist] = neighbors.communityID;
+				neighborsMap[dist] = it_2->communityID;
+				/*if (dist < 15000.00)
+					neighborsMap[dist] = it_2->communityID;*/
 				//neighborsVect.emplace_back(neighbors.communityID, dist);
 			}
-			communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
+			//communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
+			communityVect.emplace_back(it->communityID, neighborsMap);
 		}
 		return communityVect;
 }

@@ -21,11 +21,11 @@ struct Point3D {
 
 struct Community {
     int communityID;
-    double xValue;
-    double yValue;
-    std::map<double, int> NeighborsMap;
+    //double xValue;
+    //double yValue;
+    std::map<float, int> NeighborsMap;
 
-    Community(int commID, double x, double y, std::map<double, int> neighsmap) : communityID(commID), xValue(x), yValue(y), NeighborsMap(neighsmap) {}
+    Community(int commID, /*double x, double y,*/ std::map<float, int> neighsmap) : communityID(commID), /*xValue(x), yValue(y),*/ NeighborsMap(neighsmap) {}
 };
 
 struct Comm2D{
