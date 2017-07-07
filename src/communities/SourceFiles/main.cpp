@@ -1,6 +1,8 @@
 #include <iostream>
 #include "communities.cpp"
-using namespace std;
+#include "kmeans.cpp"
+
+//using namespace std;
 
 int main() {
     cCommunity c;
@@ -11,6 +13,9 @@ int main() {
 		c.get_min_max();
     c.get_costs_to_neighbors(communityVect);
     vector<Point2D> rpVect = c.random_point();
-    c.get_random_points_total_cost(vect2d, rpVect);
+    //c.get_random_points_total_cost(vect2d, rpVect);
+
+    KMeans k;
+    k.kmeans_k(rpVect);
 	return 0;
 }
