@@ -2,6 +2,7 @@
 //using namespace std;
 
 #include <algorithm>
+#include <math.h>
 
 class Point_kmeans{
 private:
@@ -213,7 +214,8 @@ public:
 		// shows elements of clusters
             cout << "shows elements of clusters" << endl;
   		for(int i = 0; i < K; i++){
-  			int total_points_cluster =  clusters[i].getTotalPoints();
+  			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
+				float dev = 0.0, sdev = 0.0, var, sdx, sdy;
   			cout << "Cluster " << clusters[i].getID() + 1 << endl;
   			for(int j = 0; j < total_points_cluster; j++){
   				cout << "Point " << clusters[i].getPoint(j).getID() + 1 << ": ";
@@ -226,18 +228,44 @@ public:
   			for(int j = 0; j < total_values; j++)
   				cout << clusters[i].getCentralValue(j) << " ";
 
-  			cout << "\n\n";
+				cout << "\n\n";	
+
+				/*cout << endl;
+
+				// Store the "X mean" & "Y mean" values
+				float xMean = clusters[i].getCentralValue(0);
+				float yMean = clusters[i].getCentralValue(1);
+
+				// Get the sum of the X Point values for each Cluster
+				for (int p = 0; p < total_points_cluster; p++) {
+	 			 	//cout << clusters[i].getPoint(p).getValue(0) << endl;
+				  dev = (clusters[i].getPoint(p).getValue(0) - xMean) * (clusters[i].getPoint(p).getValue(0) - xMean);
+					sdev = sdev + dev;
+					count++;
+	 		  }
+
+				var = sdev / count;
+				//sdx = sqrt(var);
+				//cout << "Standard Deviation: " << sdx << " ";
+
+				// Get the sum of the Y Point values for each Cluster
+				for (int p = 0; p < total_points_cluster; p++) {
+	 			 	//cout << clusters[i].getPoint(p).getValue(0) << endl;
+				  dev = (clusters[i].getPoint(p).getValue(1) - yMean) * (clusters[i].getPoint(p).getValue(1) - yMean);
+					sdev = sdev + dev;
+	 		  }*/
 
   	 }
   }
 
-  void kmeans_k(vector<Point2D> rpVect){
+  void kmeans_k(vector<Point2D> rpVect, int sample){
   	//srand (time(NULL));
 
   	int total_points, coords, K, max_iterations;
 
-    cout << "Number of clusters (K): ";
-    cin >> K;
+		K = round(1 + log2 (sample));
+    cout << "Number of clusters (K): " << K << endl;
+    //cin >> K;
     cout << "Max number of iterations: ";
     cin >> max_iterations;
 

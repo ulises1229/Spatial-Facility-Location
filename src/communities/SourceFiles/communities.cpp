@@ -22,6 +22,7 @@
 using namespace std;
 class cCommunity{
 		public:
+			int number_of_communities;
 			double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
 			vector<Point2D> csv_to_vector();
 			vector<Community> neighbors_distance(vector<Point2D> vect2d);
@@ -58,6 +59,7 @@ void cCommunity::get_communities_and_neighbors(vector<Community> communityVect){
 
 vector<Point2D> cCommunity::csv_to_vector() {
 		vector<Point2D> vect2d;
+		number_of_communities = 0;
 		int comm_id;
 		double xPoint, yPoint; //They will store the casted value from the input file.
 		char line[255], *ncom, *xval, *yval;
@@ -90,6 +92,8 @@ vector<Point2D> cCommunity::csv_to_vector() {
 		    //Store the casted values in the Struct.
 		    //vect2d.push_back({comm_id, xPoint, yPoint})
 		    vect2d.emplace_back(comm_id, xPoint, yPoint);
+
+				number_of_communities++;
 		  }
 		fclose(fp);
 	 	return vect2d;
