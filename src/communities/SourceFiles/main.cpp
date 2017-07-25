@@ -1,10 +1,10 @@
 #include <iostream>
 #include "communities.cpp"
 #include "kmeans.cpp"
-#include "test.cpp"
+
 
 //using namespace std;
-Test testObj;
+//Test testObj;
 
 int main() {
     cCommunity c;
@@ -15,10 +15,13 @@ int main() {
 		c.get_min_max();
     c.get_costs_to_neighbors(communityVect);
     vector<Point2D> rpVect = c.random_point();
-    int sample = c.number_of_communities;
+    int sample = vect2d.size();
+    cout << sample << endl;
+    cout << vect2d.size() << endl;
     //c.get_random_points_total_cost(vect2d, rpVect);
 
     KMeans k;
-    k.kmeans_k(rpVect, sample);
+    k.kmeans_k(vect2d, sample);
+
 	  return 0;
 }

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <math.h>
 
+
 class Point_kmeans{
 private:
 	int id_point, id_cluster;
@@ -51,6 +52,12 @@ private:
 	vector<Point_kmeans> points;
 
 public:
+	struct comm{
+		int communityID;
+    std::map<float, int> NeighborsMap;
+    comm(int commID, /*double x, double y,*/ std::map<float, int> neighsmap) : communityID(commID), /*xValue(x), yValue(y),*/ NeighborsMap(neighsmap) {}
+	};
+
 	Cluster(int id_cluster, Point_kmeans point){
     cout << "contructor Cluster" << endl;
 		this->id_cluster = id_cluster;
@@ -89,6 +96,8 @@ public:
 	Point_kmeans getPoint(int index){
 		return points[index];
 	}
+
+
 
 	int getTotalPoints(){
 		return points.size();
@@ -212,6 +221,7 @@ public:
 		}
 
 		// shows elements of clusters
+		map<float, int> neighborsMap;
             cout << "shows elements of clusters" << endl;
   		for(int i = 0; i < K; i++){
   			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
@@ -228,7 +238,9 @@ public:
   			for(int j = 0; j < total_values; j++)
   				cout << clusters[i].getCentralValue(j) << " ";
 
-				cout << "\n\n";	
+				cout << "\n\n";
+
+
 
 				/*cout << endl;
 
@@ -258,6 +270,63 @@ public:
   	 }
   }
 
+	vector<Community_clusters> set_costs_per_cluster(vector<Point_kmeans> & points){
+		vector<Community_clusters> costsVect;
+		float dist;
+		vector<Point_kmeans>::iterator it;
+		vector<Point_kmeans>::iterator it_2;
+
+		for (it = points.begin(); it != points.end(); it++) {
+			map<float, int> neighborsMap;
+			int cluster = it->getCluster();
+			for (it_2 = points.begin(); it_2 != points.end(); it_2++) {
+				if(cluster == it_2->getCluster()){
+					if (it->getID() == it_2->getID()) {
+						dist = 0.0;
+					} else {
+						dist = sqrt( pow((it_2->getValue(0) - it->getValue(0)), 2.0)  + pow((it_2->getValue(1) - it->getValue(1)), 2.0) );
+					}
+					neighborsMap[dist] = it_2->getID();
+				}
+			}
+			costsVect.emplace_back(it->getID(), cluster, neighborsMap);
+		}
+
+
+		/*for(int i = 0; i < K; i++){
+  			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
+				cout << "Cluster " << clusters[i].getID() + 1 << endl;
+  			for(int j = 0; j < total_points_cluster; j++){
+  				cout << "Point " << clusters[i].getPoint(j).getID() + 1 << ": ";
+
+				}
+		}*/
+		return costsVect;
+	}
+
+	void get_costs_per_cluster(vector<Community_clusters> communityVect){
+		for(int i = 0; i < K; i++){
+
+  			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
+				cout << "Cluster " << clusters[i].getID() + 1 << endl;
+  			for(int j = 0; j < total_points_cluster; j++){
+					double cost = 0.0;
+  				cout << "Point " << clusters[i].getPoint(j).getID() + 1 << ": ";
+					for(auto const& it : communityVect[clusters[i].getPoint(j).getID()].NeighborsMap) {
+ 						//cout << it.first << " - " << it.second+1 << endl;
+						cost += it.first;
+ 				 }
+				 cout << "Cost to all its neighbors: " << cost << endl;
+				}
+			}
+			/*for (Community_clusters const& info: communityVect) {
+				 cout << info.communityID+1 << ":\n";
+				 for(auto const& it : info.NeighborsMap) {
+						cout << it.first << " - " << it.second+1 << endl;
+				 }
+			}*/
+	}
+
   void kmeans_k(vector<Point2D> rpVect, int sample){
   	//srand (time(NULL));
 
@@ -284,6 +353,8 @@ public:
   	KMeans kmeans(K, points.size(), 2, max_iterations);//2 cause X,Y.
     //cout << "sdfs";
   	kmeans.run(points);
+		vector<Community_clusters> communityClustersVect = kmeans.set_costs_per_cluster(points);
+		kmeans.get_costs_per_cluster(communityClustersVect);
   }
 
 };
