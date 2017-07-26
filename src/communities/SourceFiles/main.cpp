@@ -1,14 +1,16 @@
 #include <iostream>
 #include "communities.cpp"
 #include "kmeans.cpp"
+#include "morton.cpp"
 
 
-//using namespace std;
+using namespace std;
 //Test testObj;
 
-int main() {
+int main(int argc, char* argv[]) {
+    string fileName = argv[1];
     cCommunity c;
-		vector<Point2D> vect2d = c.csv_to_vector();
+		vector<Point2D> vect2d = c.csv_to_vector(argv[1]);
 		vector<Community> communityVect = c.neighbors_distance(vect2d);
 
     c.get_communities_and_neighbors(communityVect);
@@ -23,5 +25,7 @@ int main() {
     KMeans k;
     k.kmeans_k(vect2d, sample);
 
+    Morton m;
+    m.read_csv(fileName);
 	  return 0;
 }

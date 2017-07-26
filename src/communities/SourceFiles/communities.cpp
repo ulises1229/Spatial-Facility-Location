@@ -24,7 +24,7 @@ class cCommunity{
 		public:
 			int number_of_communities;
 			double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
-			vector<Point2D> csv_to_vector();
+			vector<Point2D> csv_to_vector(char* fileName);
 			vector<Community> neighbors_distance(vector<Point2D> vect2d);
 			void get_communities_and_neighbors(vector<Community> communityVect);
 			void get_min_max();
@@ -57,7 +57,7 @@ void cCommunity::get_communities_and_neighbors(vector<Community> communityVect){
 	}
 }
 
-vector<Point2D> cCommunity::csv_to_vector() {
+vector<Point2D> cCommunity::csv_to_vector(char* fileName) {
 		vector<Point2D> vect2d;
 		number_of_communities = 0;
 		int comm_id;
@@ -65,8 +65,8 @@ vector<Point2D> cCommunity::csv_to_vector() {
 		char line[255], *ncom, *xval, *yval;
 
 		FILE *fp;
-	  fp = fopen("test.csv", "r");
-	  fgets(line, sizeof(line), fp); //Skips the first line.
+	  fp = fopen(fileName, "r");
+	  //fgets(line, sizeof(line), fp); //Skips the first line.
 
 	  while(fgets(line, sizeof(line), fp)) {
 		    //Get the number of community, X & Y values from each line.
