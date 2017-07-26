@@ -28,15 +28,6 @@ struct Community {
     Community(int commID, /*double x, double y,*/ std::map<float, int> neighsmap) : communityID(commID), /*xValue(x), yValue(y),*/ NeighborsMap(neighsmap) {}
 };
 
-struct Community_clusters {
-    int communityID;
-    int cluster_id;
-    std::map<float, int> NeighborsMap;
-
-    Community_clusters(int commID, int cluster, /*double x, double y,*/ std::map<float, int> neighsmap) : communityID(commID), cluster_id(cluster), /*xValue(x), yValue(y),*/ NeighborsMap(neighsmap) {}
-};
-
-
 struct Comm2D{
   int communityID;
   struct Point2D;
