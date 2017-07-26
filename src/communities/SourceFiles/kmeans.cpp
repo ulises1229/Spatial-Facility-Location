@@ -52,12 +52,6 @@ private:
 	vector<Point_kmeans> points;
 
 public:
-	struct comm{
-		int communityID;
-    std::map<float, int> NeighborsMap;
-    comm(int commID, /*double x, double y,*/ std::map<float, int> neighsmap) : communityID(commID), /*xValue(x), yValue(y),*/ NeighborsMap(neighsmap) {}
-	};
-
 	Cluster(int id_cluster, Point_kmeans point){
     cout << "contructor Cluster" << endl;
 		this->id_cluster = id_cluster;
@@ -96,8 +90,6 @@ public:
 	Point_kmeans getPoint(int index){
 		return points[index];
 	}
-
-
 
 	int getTotalPoints(){
 		return points.size();
@@ -239,9 +231,6 @@ public:
   				cout << clusters[i].getCentralValue(j) << " ";
 
 				cout << "\n\n";
-
-
-
 				/*cout << endl;
 
 				// Store the "X mean" & "Y mean" values
@@ -266,12 +255,11 @@ public:
 				  dev = (clusters[i].getPoint(p).getValue(1) - yMean) * (clusters[i].getPoint(p).getValue(1) - yMean);
 					sdev = sdev + dev;
 	 		  }*/
-
   	 }
   }
 
-	vector<Community_clusters> set_costs_per_cluster(vector<Point_kmeans> & points){
-		vector<Community_clusters> costsVect;
+	vector<Community> set_costs_per_cluster(vector<Point_kmeans> & points){
+		vector<Community> costsVect;
 		float dist;
 		vector<Point_kmeans>::iterator it;
 		vector<Point_kmeans>::iterator it_2;
@@ -289,7 +277,7 @@ public:
 					neighborsMap[dist] = it_2->getID();
 				}
 			}
-			costsVect.emplace_back(it->getID(), cluster, neighborsMap);
+			costsVect.emplace_back(it->getID(), neighborsMap);
 		}
 
 
@@ -304,7 +292,7 @@ public:
 		return costsVect;
 	}
 
-	void get_costs_per_cluster(vector<Community_clusters> communityVect){
+	void get_costs_per_cluster(vector<Community> communityVect){
 		for(int i = 0; i < K; i++){
 
   			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
@@ -319,7 +307,7 @@ public:
 				 cout << "Cost to all its neighbors: " << cost << endl;
 				}
 			}
-			/*for (Community_clusters const& info: communityVect) {
+			/*for (Community const& info: communityVect) {
 				 cout << info.communityID+1 << ":\n";
 				 for(auto const& it : info.NeighborsMap) {
 						cout << it.first << " - " << it.second+1 << endl;
@@ -353,7 +341,7 @@ public:
   	KMeans kmeans(K, points.size(), 2, max_iterations);//2 cause X,Y.
     //cout << "sdfs";
   	kmeans.run(points);
-		vector<Community_clusters> communityClustersVect = kmeans.set_costs_per_cluster(points);
+		vector<Community> communityClustersVect = kmeans.set_costs_per_cluster(points);
 		kmeans.get_costs_per_cluster(communityClustersVect);
   }
 
