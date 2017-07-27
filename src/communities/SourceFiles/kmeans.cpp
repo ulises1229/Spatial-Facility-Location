@@ -50,6 +50,7 @@ private:
 	int id_cluster;
 	vector<double> central_values;
 	vector<Point_kmeans> points;
+	double avg, var, std_dev;
 
 public:
 	Cluster(int id_cluster, Point_kmeans point){
@@ -97,6 +98,30 @@ public:
 
 	int getID(){
 		return id_cluster;
+	}
+
+	void setAvg(double a){
+		avg = a;
+	}
+
+	double getAvg(){
+		return avg;
+	}
+
+	double getVar(){
+		return var;
+	}
+
+	void setVar(double v){
+		var = v;
+	}
+
+	double getStd_dev(){
+		return std_dev;
+	}
+
+	void setStd_dev(double std){
+		std_dev = std;
 	}
 };
 
@@ -294,9 +319,11 @@ public:
 
 	void get_costs_per_cluster(vector<Community> communityVect){
 		for(int i = 0; i < K; i++){
-
-  			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
+  			int total_points_cluster =  clusters[i].getTotalPoints();
 				cout << "Cluster " << clusters[i].getID() + 1 << endl;
+				double sum = 0.0, avg = 0.0;
+				double dev=0, var=0, sd=0, sdev = 0;
+				std::vector<double> costs;
   			for(int j = 0; j < total_points_cluster; j++){
 					double cost = 0.0;
   				cout << "Point " << clusters[i].getPoint(j).getID() + 1 << ": ";
@@ -305,7 +332,22 @@ public:
 						cost += it.first;
  				 }
 				 cout << "Cost to all its neighbors: " << cost << endl;
+				 sum += cost;
+				 costs.push_back(cost);
 				}
+				avg = sum / costs.size();
+				cout << "CLuster sum: " << sum << endl;
+				cout << "Cluster avg:" << avg << endl;
+				clusters[i].setAvg(avg);
+				for (int i = 0; i < costs.size(); i++) {
+					dev = (costs[i] - avg) * (costs[i] - avg);
+					sdev += dev;
+				}
+				var = sdev / (costs.size());
+				sd = sqrt(var);
+				clusters[i].setVar(var);
+				clusters[i].setStd_dev(sd);
+				cout << "Std Dev: " << sd << endl << "Var: " << var << endl;
 			}
 			/*for (Community const& info: communityVect) {
 				 cout << info.communityID+1 << ":\n";
