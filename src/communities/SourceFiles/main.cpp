@@ -22,10 +22,10 @@ int main(int argc, char* argv[]) {
     //cout << vect2d.size() << endl;
     //c.get_random_points_total_cost(vect2d, rpVect);
 
-    KMeans k;
-    k.kmeans_k(vect2d, sample);
+    //KMeans k;
+    //k.kmeans_k(vect2d, sample);
 
     Morton m;
-    //m.read_csv(fileName);
+    m.read_csv(fileName);
 	  return 0;
 }

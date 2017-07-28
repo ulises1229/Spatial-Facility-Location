@@ -83,7 +83,34 @@ void MortonCode::importCoordinates(string fileName){
 
 //Group communities by populaion
 void MortonCode::groupCommunities(){
-	for(unsigned int i =0; i< sortedCommunities.size(); i++){
+	int k, n, elementsPerCluster, i = 1, elemsCount = 1;
+	n = allCommunities.size();
+	k = 1 + log2(n);
+	elementsPerCluster = n / k;
+	cout << "Clusters: " << k << "   Element Per Cluster: " << elementsPerCluster << endl;
+	std::map<long long, int>::iterator it;
+	clusterInfo.emplace_back(i, 0, 0, 0, 0);
+
+	for (it = sortedCommunities.begin(); it != sortedCommunities.end(); it++) {
+		if (elemsCount > elementsPerCluster) {
+			elemsCount = 1;
+			i++;
+			clusterInfo.emplace_back(i, 0, 0, 0, 0);
+		}
+		if (i <= k) {
+			clstElements.emplace_back(i, it->first);
+			elemsCount++;
+		} else {
+			clstElements.emplace_back(i - 1, it->first);
+		}
+	}
+
+	for(cluster const& info: clusterInfo) {
+		cout << "Cluster " << info.clusterID << " :" << endl;
+		for (clusterElems const& elem: clstElements) {
+			if (elem.clusterID == info.clusterID)
+				cout << "\t" << elem.MortonCode << endl;
+		}
 	}
 }
 
@@ -107,39 +134,46 @@ void MortonCode::writeCommunities()
 	std::ofstream myfile;
 	myfile.open ("sortedCommunities.csv");
 	myfile << "Id," <<"X," <<" Y," << "Pop,"<<endl;
-	long long sum = 0;
-	double dev, avg, var, sd, sdev = 0;
+	long long sum, diff;
+	double dev, avg, var, sd, sdev;
 	int n;
 	std::vector<double> results;
+	std::vector<cluster>::iterator clustInfo;
+	std::vector<clusterElems>::iterator clustElem;
 	std::map<long long, int>::iterator secIt;
 	std::map<int, community>::iterator tmpIt;
 	std::map<long long, int>::iterator it = sortedCommunities.begin();
 	for(it = sortedCommunities.begin(); it!=sortedCommunities.end(); ++it){
 		tmpIt = communities.find(it->second);
 		myfile << std::setprecision(17) << it-> second << "," << tmpIt->second.x << "," << tmpIt->second.y<<"," /*<< tmpIt->second.pop*/ <<endl ;
-		cout << it->first << ", ";
+		//cout << it->first << ", ";
 	}
 	myfile.close();
 	std::cout<<"File was written correctly!"<<std::endl;
 
-	//std::map<long long, int>::iterator secIt = sortedCommunities.begin();
-
-	for (it = next(sortedCommunities.begin()); it!=sortedCommunities.end(); it++) {
-
-		sum += it->first - prev(it)->first;
-		results.push_back(it->first - prev(it)->first);
-		//printf("%lld - %lld = %lld\n", it->first, prev(it)->first, it->first - prev(it)->first);
-		cout << it->first - prev(it)->first << ", " << endl;
+	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
+		sum = 0; sdev = 0;
+		cout << "Cluster " << clustInfo->clusterID << ":" << endl;
+		for (clustElem = next(clstElements.begin()); clustElem != clstElements.end(); clustElem++) {
+			if ( (clustElem->clusterID == clustInfo->clusterID) && (prev(clustElem)->clusterID == clustInfo->clusterID) ) {
+				diff = clustElem->MortonCode - prev(clustElem)->MortonCode;
+				sum += diff;
+				results.push_back(diff);
+			}
+		}
+		avg = sum / (double) results.size();
+		for (int i = 0; i < results.size(); i++) {
+			dev = (results[i] - avg) * (results[i] - avg);
+			sdev += dev;
+			cout << setprecision(20) << "\t" << results[i] << "," << endl;
+		}
+		var = sdev / results.size();
+		sd = sqrt(var);
+		clustInfo->sum = sum; clustInfo->avg = avg; clustInfo->var = var; clustInfo->stdDev = sd;
+		results.clear();
 	}
-	avg = sum / (results.size());
-	//cout << "Avg: " << avg << endl;
-	for (int i = 0; i < results.size(); i++) {
-		dev = (results[i] - avg) * (results[i] - avg);
-		sdev += dev;
+
+	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
+		cout << setprecision(25) <<  "Cluster " << clustInfo->clusterID << ":   Avg: " << clustInfo->avg << "  Var: " << clustInfo->var << "  Std Dev: " << clustInfo->stdDev << endl;
 	}
-	var = sdev / (results.size());
-	sd = sqrt(var);
-	//printf(" Avg: %f\nStd Dev: %f\nVar: %f ", avg, sd, var);
-	cout << setprecision(17) << "Avg: " << avg << endl << "Std Dev: " << sd << endl << "Var: " << var << endl;
-	//cout << "\n" << endl;
 }

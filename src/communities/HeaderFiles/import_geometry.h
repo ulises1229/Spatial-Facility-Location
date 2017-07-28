@@ -42,10 +42,31 @@ public:
 		//int pop;
 	};
 
+	struct clusterElems
+	{
+		int clusterID;
+		long long MortonCode;
+
+		clusterElems(int clusterID, long long MortonCode) : clusterID(clusterID), MortonCode(MortonCode) {}
+	};
+
+	struct cluster
+	{
+		int clusterID;
+		long long sum;
+		double avg;
+		double var;
+		double stdDev;
+
+		cluster(int clusterID, long long sum, double avg, double var, double stdDev): clusterID(clusterID), sum(sum), avg(avg), var(var), stdDev(stdDev) {}
+	};
+
 private:
 	unsigned int numCommunities;
 	int tmpMorton;
-	std::vector<community> allCommunities;					//temporally stores all communities
+	std::vector<clusterElems> clstElements;
+	std::vector<cluster> clusterInfo;
+ 	std::vector<community> allCommunities;					//temporally stores all communities
 	std::map<long long, int> sortedCommunities;
 	std::map<int, community> communities;
 };
