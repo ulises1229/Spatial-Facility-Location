@@ -3,7 +3,8 @@
 
 #include <algorithm>
 #include <math.h>
-
+#include <fstream>
+#include <iomanip>
 
 class Point_kmeans{
 private:
@@ -177,15 +178,15 @@ public:
 
 		vector<int> prohibited_indexes;
 		// choose K distinct values for the centers of the clusters
-    cout << "choose K distinct values for the centers of the clusters" << endl;
+    //cout << "choose K distinct values for the centers of the clusters" << endl;
 		for(int i = 0; i < K; i++){
 			while(true){
 				int index_point = rand() % total_points;
-        cout << index_point << endl;
+        //cout << index_point << endl;
 				if(find(prohibited_indexes.begin(), prohibited_indexes.end(), index_point) == prohibited_indexes.end()){//not found
 					prohibited_indexes.push_back(index_point);
 					points[index_point].setCluster(i);
-          cout << "point " << points[index_point].getID() << " asignado a cluster " << i+1 << endl;
+          //cout << "point " << points[index_point].getID() << " asignado a cluster " << i+1 << endl;
 					Cluster cluster(i, points[index_point]);
 					clusters.push_back(cluster);
 
@@ -200,7 +201,7 @@ public:
 			bool done = true;
 
 			// associates each point to the nearest center
-      cout << "associates each point to the nearest center" << endl;
+      //cout << "associates each point to the nearest center" << endl;
 			for(int i = 0; i < total_points; i++){
 				int id_old_cluster = points[i].getCluster();
 				int id_nearest_center = getIDNearestCenter(points[i]);
@@ -216,7 +217,7 @@ public:
 			}
 
 			// recalculating the center of each cluster
-            cout << "recalculating the center of each cluster" << endl;
+          //cout << "recalculating the center of each cluster" << endl;
 			for(int i = 0; i < K; i++){
 				for(int j = 0; j < total_values; j++){
 					int total_points_cluster = clusters[i].getTotalPoints();
@@ -238,8 +239,8 @@ public:
 		}
 
 		// shows elements of clusters
-		map<float, int> neighborsMap;
-            cout << "shows elements of clusters" << endl;
+		//map<float, int> neighborsMap;
+    	/*cout << "shows elements of clusters" << endl;
   		for(int i = 0; i < K; i++){
   			int total_points_cluster =  clusters[i].getTotalPoints(), count = 0;
 				float dev = 0.0, sdev = 0.0, var, sdx, sdy;
@@ -256,31 +257,8 @@ public:
   				cout << clusters[i].getCentralValue(j) << " ";
 
 				cout << "\n\n";
-				/*cout << endl;
 
-				// Store the "X mean" & "Y mean" values
-				float xMean = clusters[i].getCentralValue(0);
-				float yMean = clusters[i].getCentralValue(1);
-
-				// Get the sum of the X Point values for each Cluster
-				for (int p = 0; p < total_points_cluster; p++) {
-	 			 	//cout << clusters[i].getPoint(p).getValue(0) << endl;
-				  dev = (clusters[i].getPoint(p).getValue(0) - xMean) * (clusters[i].getPoint(p).getValue(0) - xMean);
-					sdev = sdev + dev;
-					count++;
-	 		  }
-
-				var = sdev / count;
-				//sdx = sqrt(var);
-				//cout << "Standard Deviation: " << sdx << " ";
-
-				// Get the sum of the Y Point values for each Cluster
-				for (int p = 0; p < total_points_cluster; p++) {
-	 			 	//cout << clusters[i].getPoint(p).getValue(0) << endl;
-				  dev = (clusters[i].getPoint(p).getValue(1) - yMean) * (clusters[i].getPoint(p).getValue(1) - yMean);
-					sdev = sdev + dev;
-	 		  }*/
-  	 }
+  	 }*/
   }
 
 	vector<Community> set_costs_per_cluster(vector<Point_kmeans> & points){
@@ -383,8 +361,31 @@ public:
   	KMeans kmeans(K, points.size(), 2, max_iterations);//2 cause X,Y.
     //cout << "sdfs";
   	kmeans.run(points);
-		vector<Community> communityClustersVect = kmeans.set_costs_per_cluster(points);
-		kmeans.get_costs_per_cluster(communityClustersVect);
+		//vector<Community> communityClustersVect = kmeans.set_costs_per_cluster(points);
+		//kmeans.get_costs_per_cluster(communityClustersVect);
+		//mandar a csv puntos con cluster id. id,x,y,id_cluster
+		kmeans.writeCommunities();
   }
+
+	void writeCommunities(){
+	//std::cout<<"Writing output file..."<<std::endl;
+	std::ofstream myFile;
+	myFile.open ("ClusterCommunitiesKMeans.csv");
+	myFile << "Id," <<"X," <<" Y," << "Cluster,"<<endl;
+
+	for(int i = 0; i < K; i++){
+		int total_points_cluster =  clusters[i].getTotalPoints();
+		for(int j = 0; j < total_points_cluster; j++){
+			myFile <<  std::setprecision(17) << clusters[i].getPoint(j).getID() + 1 << ",";
+			for(int p = 0; p < total_values; p++)
+				myFile << clusters[i].getPoint(j).getValue(p) << ",";
+			myFile << clusters[i].getID() << endl;
+		}
+	}
+
+	myFile.close();
+	std::cout<<"File ClusterCommunitiesKMeans was written correctly!"<<std::endl;
+}
+
 
 };
