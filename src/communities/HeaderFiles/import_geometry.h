@@ -32,6 +32,7 @@ public:
 	void calculateMortonCodes();				//this function calculate morton codes for a given communities
 	void writeCommunities();
 	void groupCommunities();
+	void calculateStats();
 
 
 	 struct community
