@@ -149,9 +149,7 @@ void MortonCode::writeCommunities()
 	std::cout<<"File was written correctly!"<<std::endl;
 }
 
-<<<<<<< HEAD
-	/*for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
-=======
+
 void MortonCode::calculateStats()
 {
 	long long sum, diff;
@@ -161,7 +159,6 @@ void MortonCode::calculateStats()
 	std::vector<cluster>::iterator clustInfo;
 	std::vector<clusterElems>::iterator clustElem;
 	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
->>>>>>> 4ed75bfc81f6f305736fe5c3de3439872a6afbe8
 		sum = 0; sdev = 0;
 		for (clustElem = next(clstElements.begin()); clustElem != clstElements.end(); clustElem++) {
 			if ( (clustElem->clusterID == clustInfo->clusterID) && (prev(clustElem)->clusterID == clustInfo->clusterID) ) {
@@ -180,11 +177,4 @@ void MortonCode::calculateStats()
 		clustInfo->sum = sum; clustInfo->avg = avg; clustInfo->var = var; clustInfo->stdDev = sd;
 		results.clear();
 	}
-<<<<<<< HEAD
-
-	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
-		cout << setprecision(25) <<  "Cluster " << clustInfo->clusterID << ":   Avg: " << clustInfo->avg << "  Var: " << clustInfo->var << "  Std Dev: " << clustInfo->stdDev << endl;
-	}*/
-=======
->>>>>>> 4ed75bfc81f6f305736fe5c3de3439872a6afbe8
 }
