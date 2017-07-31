@@ -79,6 +79,9 @@ void MortonCode::importCoordinates(string fileName){
 
 	//write csv file with results
 	writeCommunities();
+
+	//Calculate the Statistics of the MortonCodes, such as Average (Mean), Variance & Standard Deviation
+	calculateStats();
 }
 
 //Group communities by populaion
@@ -134,12 +137,6 @@ void MortonCode::writeCommunities()
 	std::ofstream myfile;
 	myfile.open ("sortedCommunities.csv");
 	myfile << "Id," <<"X," <<" Y," << "Pop,"<<endl;
-	long long sum, diff;
-	double dev, avg, var, sd, sdev;
-	int n;
-	std::vector<double> results;
-	std::vector<cluster>::iterator clustInfo;
-	std::vector<clusterElems>::iterator clustElem;
 	std::map<long long, int>::iterator secIt;
 	std::map<int, community>::iterator tmpIt;
 	std::map<long long, int>::iterator it = sortedCommunities.begin();
@@ -150,10 +147,18 @@ void MortonCode::writeCommunities()
 	}
 	myfile.close();
 	std::cout<<"File was written correctly!"<<std::endl;
+}
 
+void MortonCode::calculateStats()
+{
+	long long sum, diff;
+	double dev, avg, var, sd, sdev;
+	int n;
+	std::vector<double> results;
+	std::vector<cluster>::iterator clustInfo;
+	std::vector<clusterElems>::iterator clustElem;
 	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
 		sum = 0; sdev = 0;
-		cout << "Cluster " << clustInfo->clusterID << ":" << endl;
 		for (clustElem = next(clstElements.begin()); clustElem != clstElements.end(); clustElem++) {
 			if ( (clustElem->clusterID == clustInfo->clusterID) && (prev(clustElem)->clusterID == clustInfo->clusterID) ) {
 				diff = clustElem->MortonCode - prev(clustElem)->MortonCode;
@@ -165,15 +170,10 @@ void MortonCode::writeCommunities()
 		for (int i = 0; i < results.size(); i++) {
 			dev = (results[i] - avg) * (results[i] - avg);
 			sdev += dev;
-			cout << setprecision(20) << "\t" << results[i] << "," << endl;
 		}
 		var = sdev / results.size();
 		sd = sqrt(var);
 		clustInfo->sum = sum; clustInfo->avg = avg; clustInfo->var = var; clustInfo->stdDev = sd;
 		results.clear();
-	}
-
-	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
-		cout << setprecision(25) <<  "Cluster " << clustInfo->clusterID << ":   Avg: " << clustInfo->avg << "  Var: " << clustInfo->var << "  Std Dev: " << clustInfo->stdDev << endl;
 	}
 }
