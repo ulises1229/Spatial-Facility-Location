@@ -85,7 +85,7 @@ void MortonCode::importCoordinates(string fileName){
 void MortonCode::groupCommunities(){
 	int k, n, elementsPerCluster, i = 1, elemsCount = 1;
 	n = allCommunities.size();
-	k = 1 + log2(n);
+	k = round(1 + log2(n));
 	elementsPerCluster = n / k;
 	cout << "Clusters: " << k << "   Element Per Cluster: " << elementsPerCluster << endl;
 	std::map<long long, int>::iterator it;
@@ -105,13 +105,13 @@ void MortonCode::groupCommunities(){
 		}
 	}
 
-	for(cluster const& info: clusterInfo) {
+	/*for(cluster const& info: clusterInfo) {
 		cout << "Cluster " << info.clusterID << " :" << endl;
 		for (clusterElems const& elem: clstElements) {
 			if (elem.clusterID == info.clusterID)
 				cout << "\t" << elem.MortonCode << endl;
 		}
-	}
+	}*/
 }
 
 //Calculate morton codes of all communities
@@ -151,7 +151,7 @@ void MortonCode::writeCommunities()
 	myfile.close();
 	std::cout<<"File was written correctly!"<<std::endl;
 
-	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
+	/*for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
 		sum = 0; sdev = 0;
 		cout << "Cluster " << clustInfo->clusterID << ":" << endl;
 		for (clustElem = next(clstElements.begin()); clustElem != clstElements.end(); clustElem++) {
@@ -175,5 +175,5 @@ void MortonCode::writeCommunities()
 
 	for(clustInfo = clusterInfo.begin(); clustInfo != clusterInfo.end(); clustInfo++) {
 		cout << setprecision(25) <<  "Cluster " << clustInfo->clusterID << ":   Avg: " << clustInfo->avg << "  Var: " << clustInfo->var << "  Std Dev: " << clustInfo->stdDev << endl;
-	}
+	}*/
 }
