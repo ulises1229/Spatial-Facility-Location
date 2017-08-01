@@ -46,7 +46,7 @@ void MortonCode::importCoordinates(string fileName){
 			case 0:
 				tmp.id = stoi (cell);
 				break;
-			case 1:
+			case 1: 
 				tmp.x = std::stod(cell);
 				break;
 			case 2:

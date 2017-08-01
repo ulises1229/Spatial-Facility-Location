@@ -10,14 +10,14 @@ using namespace std;
 int main(int argc, char* argv[]) {
     string fileName = argv[1];
     cCommunity c;
-		vector<Point2D> vect2d = c.csv_to_vector(argv[1]);
-		vector<Community> communityVect = c.neighbors_distance(vect2d);
+		//vector<Point2D> vect2d = c.csv_to_vector(argv[1]);
+		//vector<Community> communityVect = c.neighbors_distance(vect2d);
 
     //c.get_communities_and_neighbors(communityVect);
 		//c.get_min_max();
     //c.get_costs_to_neighbors(communityVect);
     //vector<Point2D> rpVect = c.random_point();
-    int sample = vect2d.size();
+    //int sample = vect2d.size();
     //cout << sample << endl;
     //cout << vect2d.size() << endl;
     //c.get_random_points_total_cost(vect2d, rpVect);
