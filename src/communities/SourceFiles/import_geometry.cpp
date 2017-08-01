@@ -25,14 +25,15 @@ MortonCode::~MortonCode(){
 
 }*/
 
-void MortonCode::importCoordinates(string fileName){
+void MortonCode::importCoordinates(string fileName, int v){
 	cout<<"File name is: " << fileName <<endl;
 	ifstream file (fileName);
 	string line;
 	std::cout<<"Reading CSV File..."<<std::endl;
 	clock_t begin = clock();
+	int num_lines = 0;
 	//Loading files from CSV
-	for(int i=0; getline(file, line); i++)
+	for(int i=0; getline(file, line) && num_lines < 20000 * v; i++, num_lines++)
 	{
 		stringstream  lineStream(line);
 		string cell;
@@ -46,7 +47,7 @@ void MortonCode::importCoordinates(string fileName){
 			case 0:
 				tmp.id = stoi (cell);
 				break;
-			case 1: 
+			case 1:
 				tmp.x = std::stod(cell);
 				break;
 			case 2:

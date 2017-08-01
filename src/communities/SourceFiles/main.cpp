@@ -8,13 +8,13 @@ using namespace std;
 //Test testObj;
 
 int main(int argc, char* argv[]) {
-  vector<double> tiempos;
+    vector<double> tiempos;
     string fileName = argv[1];
     cCommunity c;
 		//vector<Point2D> vect2d = c.csv_to_vector(argv[1]);
     int i = ceil(573740/(double)20000);
     cout<< i << endl;
-    for(int v = 1; v <= i; v++){
+    /*for(int v = 1; v <= i; v++){
 		  vector<Point2D> vect2d = c.csv_to_vector(fileName, v);
 		//vector<Community> communityVect = c.neighbors_distance(vect2d);
 
@@ -37,14 +37,22 @@ int main(int argc, char* argv[]) {
   	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   	//cout<<"Time:" << elapsed_secs <<endl;
     tiempos.push_back(elapsed_secs);
-  }
-  vector<double>::iterator it;
-  int a=1;
-  for (it = tiempos.begin(); it != tiempos.end(); it++) {
-    cout << a++ << " - " << *it << endl;
-  }
+  }*/
 
-    //Morton m;
-    //m.read_csv(fileName);
+    for (int v = 1; v <= i; v++) {
+      Morton m;
+      clock_t begin = clock();
+      m.read_csv(fileName);
+      clock_t end = clock();
+      cout << "Morton Codes: " << v << " done\n" << endl;
+      double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+      tiempos.push_back(elapsed_secs);
+    }
+
+    vector<double>::iterator it;
+    int a=1;
+    for (it = tiempos.begin(); it != tiempos.end(); it++) {
+      cout << a++ << " - " << *it << endl;
+    }
 	  return 0;
 }
