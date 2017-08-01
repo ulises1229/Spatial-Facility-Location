@@ -11,27 +11,21 @@ int main(int argc, char* argv[]) {
   vector<double> tiempos;
     string fileName = argv[1];
     cCommunity c;
-<<<<<<< HEAD
 		//vector<Point2D> vect2d = c.csv_to_vector(argv[1]);
-=======
     int i = ceil(573740/(double)20000);
     cout<< i << endl;
     for(int v = 1; v <= i; v++){
 		  vector<Point2D> vect2d = c.csv_to_vector(fileName, v);
->>>>>>> ddb63144d3820a44dd3c139aadc9920523b38d42
 		//vector<Community> communityVect = c.neighbors_distance(vect2d);
 
     //c.get_communities_and_neighbors(communityVect);
 		//c.get_min_max();
     //c.get_costs_to_neighbors(communityVect);
     //vector<Point2D> rpVect = c.random_point();
-<<<<<<< HEAD
     //int sample = vect2d.size();
     //cout << sample << endl;
-=======
     int sample = vect2d.size();
     cout << sample << endl;
->>>>>>> ddb63144d3820a44dd3c139aadc9920523b38d42
     //cout << vect2d.size() << endl;
     //c.get_random_points_total_cost(vect2d, rpVect);
 
