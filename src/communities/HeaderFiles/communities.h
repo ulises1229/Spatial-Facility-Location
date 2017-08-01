@@ -6,7 +6,7 @@ struct Point2D {
     int communityID;
     double xValue;
     double yValue;
-
+    Point2D(){}
     Point2D(int commID, double x, double y)
     	: communityID(commID), xValue(x), yValue(y)
       {}

@@ -55,13 +55,10 @@ private:
 
 public:
 	Cluster(int id_cluster, Point_kmeans point){
-    cout << "contructor Cluster" << endl;
 		this->id_cluster = id_cluster;
 		int total_values = point.getTotalValues();
-    cout << "total_values" << total_values << endl;
 		for(int i = 0; i < total_values; i++)
 			central_values.push_back(point.getValue(i));//mete coordenadas a central_values.
-    cout << "push_back point" << endl;
 		points.push_back(point);
 	}
 
@@ -232,7 +229,7 @@ public:
 			}
 
 			if(done == true || iter >= max_iterations){
-				cout << "Break in iteration " << iter << "\n\n";
+				cout << "Break in iteration " << iter << "\n";
 				break;
 			}
 			iter++;
@@ -343,8 +340,9 @@ public:
 		K = round(1 + log2 (sample));
     cout << "Number of clusters (K): " << K << endl;
     //cin >> K;
-    cout << "Max number of iterations: ";
-    cin >> max_iterations;
+    cout << "Max number of iterations: 10000 " << endl;
+    //cin >> max_iterations;
+		max_iterations = 10000;
 
   	vector<Point_kmeans> points;
   	string point_name;
@@ -364,7 +362,7 @@ public:
 		//vector<Community> communityClustersVect = kmeans.set_costs_per_cluster(points);
 		//kmeans.get_costs_per_cluster(communityClustersVect);
 		//mandar a csv puntos con cluster id. id,x,y,id_cluster
-		kmeans.writeCommunities();
+		//kmeans.writeCommunities();
   }
 
 	void writeCommunities(){

@@ -7,6 +7,8 @@
 //============================================================================
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +26,7 @@ class cCommunity{
 		public:
 			int number_of_communities;
 			double minX = DBL_MAX, minY = DBL_MAX, maxX = -DBL_MAX, maxY = -DBL_MAX;
-			vector<Point2D> csv_to_vector(char* fileName);
+			vector<Point2D> csv_to_vector(string fileName, int v);
 			vector<Community> neighbors_distance(vector<Point2D> vect2d);
 			void get_communities_and_neighbors(vector<Community> communityVect);
 			void get_min_max();
@@ -57,73 +59,60 @@ void cCommunity::get_communities_and_neighbors(vector<Community> communityVect){
 	}
 }
 
-vector<Point2D> cCommunity::csv_to_vector(char* fileName) {
-		vector<Point2D> vect2d;
-		number_of_communities = 0;
-		int comm_id;
-		double xPoint, yPoint; //They will store the casted value from the input file.
-		char line[255], *ncom, *xval, *yval;
+vector<Point2D> cCommunity::csv_to_vector(string fileName, int v){
+	vector<Point2D> allCommunities;
+	cout<<"File name is: " << fileName <<endl;
+	ifstream file (fileName);
+	string line;
+	std::cout<<"Reading CSV File..."<<std::endl;
+	clock_t begin = clock();
+	int num_lines = 0;
+	//Loading files from CSV
+	for(int i=0; getline(file, line) && num_lines<20000*v; i++, num_lines++){
+		stringstream  lineStream(line);
+		string cell;
+		//temporal community to store tmp id, x and y values
+		Point2D tmp;
 
-		FILE *fp;
-	  fp = fopen(fileName, "r");
-	  //fgets(line, sizeof(line), fp); //Skips the first line.
+		for(int j=0; getline(lineStream, cell, ','); j++)
+		{
+			switch(j)
+			{
+			case 0:
+				tmp.communityID = stoi (cell);
+				break;
+			case 1:
+				tmp.xValue = std::stod(cell);
+				break;
+			case 2:
+				tmp.yValue = stod (cell);
+				break;
+			/*case 3:
+				tmp.pop = stoi(cell);
+				break;*/
+			}
 
-	  while(fgets(line, sizeof(line), fp)) {
-		    //Get the number of community, X & Y values from each line.
-		    ncom = strtok(line,",");
-		    xval = strtok(NULL, ",");
-		    yval = strtok(NULL, ",");
+		}
+		allCommunities.push_back(tmp);
 
-		    //Cast the values from the input file.
-		    comm_id = atoi(ncom);
-		    xPoint = strtod(xval, NULL);
-		    yPoint = strtod(yval, NULL);
-
-				if (xPoint > maxX)
-						maxX = xPoint;
-				if (yPoint > maxY)
-						maxY = yPoint;
-
-				if (xPoint < minX)
-						minX = xPoint;
-				if (yPoint < minY)
-						minY = yPoint;
-
-		    //Store the casted values in the Struct.
-		    //vect2d.push_back({comm_id, xPoint, yPoint})
-		    vect2d.emplace_back(comm_id, xPoint, yPoint);
-
-				number_of_communities++;
-		  }
-		fclose(fp);
-	 	return vect2d;
+		//Store all coordinates in a map to avoid sorting later
+		//communities.insert(std::pair<int, community>(tmp.id,tmp));
+	}
+	clock_t end = clock();
+	std::cout<<"CSV file has parsed correctly."<<std::endl;
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout<<"Time to import a CSV files was:" << elapsed_secs <<endl;
+	return allCommunities;
 }
 
 vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
+	cout << "Calculate distances " << endl;
 		Point2D* pStruct;
 		Point2D* pNeigh;
 		vector<Community> communityVect;
 		float dist;
 		vector<Point2D>::iterator it;
 		vector<Point2D>::iterator it_2;
-
-		/*for(int i = 0; i < vect2d.size(); i++) {
-				pStruct  = &vect2d[i];
-				map<double, int> neighborsMap;
-				for (int j = 0; j < vect2d.size(); j++) {
-					pNeigh = &vect2d[j];
-					if (pStruct->communityID == pNeigh->communityID) {
-						 dist = 0.0;
-					} else {
-						 dist = sqrt( pow((pNeigh->xValue - pStruct->xValue), 2.0) + pow((pNeigh->yValue - pStruct->yValue), 2.0) );
-					}
-					neighborsMap[dist] = pNeigh->communityID;
-				}
-				//cout << fixed;
-				//cout << "ID: " << pStruct->communityID << "\tX: " << pStruct->xValue << "\tY: " << pStruct->yValue << endl;
-				//communityVect.emplace_back(pStruct->communityID, pStruct->xValue, pStruct->yValue, neighborsMap);
-				communityVect.emplace_back(pStruct->communityID, neighborsMap);
-		}*/
 
 		for (it = vect2d.begin(); it != vect2d.end(); it++) {
 			map<float, int> neighborsMap;
@@ -133,7 +122,8 @@ vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 				} else {
 					dist = sqrt( pow((it_2->xValue - it->xValue), 2.0)  + pow((it_2->yValue - it->yValue), 2.0) );
 				}
-				neighborsMap[dist] = it_2->communityID;
+				//neighborsMap[dist] = it_2->communityID;
+				neighborsMap.insert(pair<float, int>(dist,it_2->communityID));
 				/*if (dist < 15000.00)
 					neighborsMap[dist] = it_2->communityID;*/
 				//neighborsVect.emplace_back(neighbors.communityID, dist);
@@ -141,6 +131,7 @@ vector<Community> cCommunity::neighbors_distance(vector<Point2D> vect2d) {
 			//communityVect.emplace_back(community.communityID, community.xValue, community.yValue, neighborsMap);
 			communityVect.emplace_back(it->communityID, neighborsMap);
 		}
+		cout << "Finish calculating distances between neighbors" << '\n';
 		return communityVect;
 }
 
