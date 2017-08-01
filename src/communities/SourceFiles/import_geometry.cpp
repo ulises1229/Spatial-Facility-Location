@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <sys/time.h>
 using namespace std;
 
 /*MortonCode::MortonCode(){
@@ -35,7 +36,6 @@ void MortonCode::importCoordinates(string fileName){
 	{
 		stringstream  lineStream(line);
 		string cell;
-		clock_t begin = clock();
 		//temporal community to store tmp id, x and y values
 		community tmp;
 
@@ -73,11 +73,11 @@ void MortonCode::importCoordinates(string fileName){
 
 	//calculate morton codes of all input communities
 	calculateMortonCodes();
-
 	//Organize communities by poopulation limits
 	groupCommunities();
 
 	//write csv file with results
+
 	writeCommunities();
 
 	//Calculate the Statistics of the MortonCodes, such as Average (Mean), Variance & Standard Deviation
@@ -133,6 +133,7 @@ void MortonCode::calculateMortonCodes(){
 
 void MortonCode::writeCommunities()
 {
+	clock_t begin = clock();
 	std::cout<<"Writing output file..."<<std::endl;
 	std::ofstream myfile;
 	myfile.open ("sortedCommunities.csv");
@@ -147,6 +148,9 @@ void MortonCode::writeCommunities()
 	}
 	myfile.close();
 	std::cout<<"File was written correctly!"<<std::endl;
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout<<"Time to write csv with sorted communities:" << elapsed_secs <<endl;
 }
 
 
