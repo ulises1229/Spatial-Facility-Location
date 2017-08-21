@@ -1,0 +1,35 @@
+33
+insert en set<cell>(cell(1,1,0))
+dis[1][1] = 1  grid[1][1] = 1
+k.x = 3 k.y = 3 k.distance = 0
+x = 2 y = 3
+x = 2 y = 4
+x = 3 y = 4
+x = 4 y = 4
+x = 4 y = 3
+x = 4 y = 2
+x = 3 y = 2
+x = 2 y = 2
+4, 3 - 1
+4, 4 - 2.12132
+2, 3 - 3
+3, 2 - 3
+3, 4 - 3
+4, 2 - 4.24264
+2, 4 - 4.94975
+2, 2 - 5.65686
+33 0
+active_raster[5][3]0
+34 1
+active_raster[5][3]0
+44 1
+active_raster[5][3]0
+54 0
+active_raster[5][3]0
+entre 5, 4 3 0
+2
+4.5
+7
+9
+53 0
+active_raster[5][3]0
