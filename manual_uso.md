@@ -10,7 +10,7 @@ Uso:
 
 Donde: 
 
-   -s <float>,  --demand <float>
+   -s (<float>),  --demand <float>
      (requerido)  Demanda de biomasa.
          -- OR --
    -w <float>,  --watts <float>
