@@ -10,7 +10,7 @@ Uso:
 ```
 
 Donde: 
-
+``` bash
    -s <float>,  --demand <float>
      (requerido)  Demanda de biomasa.
          -- OR --
@@ -63,3 +63,5 @@ Donde:
 
    -h,  --help
      Despliega información de uso. 
+```     
+
