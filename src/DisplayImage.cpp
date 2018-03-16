@@ -1,6 +1,3 @@
-//#include <Python.h>
-//#include <gdal_utils.h>
-//#include "/usr/lib64/python2.7/site-packages/numpy/core/include/numpy/arrayobject.h"
 #include <stdlib.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -15,11 +12,8 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include "/usr/include/gdal/gdal.h"
-#include "/usr/include/gdal/gdal_priv.h"
-/*#include <cpl_conv.h>
-#include <cpl_port.h>
-#include <cpl_conv.h>*/
+#include <gdal.h>
+#include <gdal_priv.h>
 
 
 #define INTERVALS 125 //50  5376
