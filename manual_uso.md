@@ -1,7 +1,7 @@
 # Manual de uso en terminal
 
 Uso:
-  {-s <float>|-w <float>} [-p <float>] 
+ ´´´bash {-s <float>|-w <float>} [-p <float>] 
   [-l <float>] [-i <float>]
   [-g <int>] -v <int> [-r <string>]
   [-u <char>] -a <char> -f <string>
@@ -10,7 +10,7 @@ Uso:
 
 Donde: 
 
-   -s (<float>),  --demand <float>
+   -s <float>,  --demand <float>
      (requerido)  Demanda de biomasa.
          -- OR --
    -w <float>,  --watts <float>
