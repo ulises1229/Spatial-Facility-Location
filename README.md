@@ -73,7 +73,7 @@
   $ make
   $ make install
   ```
-  **Nota:** en esta parte, se puede demorar varios minutos.
+  **Nota:** en esta parte se puede demorar varios minutos.
   
   8. Crear un enlace hacia la librería para evitar problemas con la misma:
    ``` bash
