@@ -64,4 +64,22 @@ Donde:
    -h,  --help
      Despliega información de uso. 
 ```     
+ Ejemplo
+ ``` bash
+Ejecución del programa con un mapa de Haiti, algoritmo: A*, validación: 1, heuristica: Diagonal, demanda en watts: 30, eficiencia de planta: 40, producción de planta: 80, porcentaje de pérdida en planta: 30. 
+ ./Curso -b ./Haiti_biomass.tif -f ./Haiti_fricc.tif -a a -r Haiti -v 1 -u d -w 30 -i 40 -p 80 -l 30
+ 
+    TIFF to matrix = 0.22 secs. 
+    Relation: 1167.22
+    No. 1 / 1
+    Source = 1943, 1479
+    Cost Distance time = 0.46 secs.
+    Size: 1775
+    Sum: 100168.125000
+    Total Cost: 434142.562500
+    A* Search time = 0.120000 secs.
+    Creating the final route image took 0.200000 secs.
+    
+    
+``` 
 
