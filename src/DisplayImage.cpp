@@ -12,8 +12,8 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include <gdal.h>
-#include <gdal_priv.h>
+#include "/usr/include/gdal/gdal.h"
+#include "/usr/include/gdal/gdal_priv.h"
 
 
 #define INTERVALS 125 //50  5376
