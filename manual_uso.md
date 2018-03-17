@@ -66,13 +66,13 @@ Donde:
 ```     
  Ejemplo
  
- Ejecucion de imagen en docker
+ Ejecución de imagen en docker
  ``` bash
  docker build -t curso_optimizacion .
  docker images (obtener ID del contenedor creado "curso_optimizacion")
  docker run -it id_contenedor
  ```
-Ejecución del programa con un mapa de Haiti, algoritmo: A*, validación: 1, heuristica: Diagonal, demanda en watts: 30, eficiencia de planta: 40, producción de planta: 80, porcentaje de pérdida en planta: 30. 
+Ejecución del programa con un mapa de Haití, algoritmo: A*, validación: 1, heurística: Diagonal, demanda en watts: 30, eficiencia de planta: 40, producción de planta: 80, porcentaje de pérdida en planta: 30. 
 ``` bash
  ./Curso -b ./Haiti_biomass.tif -f ./Haiti_fricc.tif -a a -r Haiti -v 1 -u d -w 30 -i 40 -p 80 -l 30
  
