@@ -262,7 +262,7 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 
 
 // Driver program to test above function
-void Explore::explore(float** friction, float** friction_puro, int src_X, int src_Y, float stop, ofstream& info, char heuristic){
+void Explore::explore(float** friction, int src_X, int src_Y, float stop, ofstream& info, char heuristic){
 	this->friction = new float*[this->ROW];
 	for(int i = 0; i< ROW; ++i){
 		this->friction[i] = new float[COL];
