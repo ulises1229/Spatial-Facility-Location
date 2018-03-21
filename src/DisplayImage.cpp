@@ -12,19 +12,12 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include "/usr/include/gdal/gdal.h"
-#include "/usr/include/gdal/gdal_priv.h"
+#include <gdal.h>
+#include <gdal_priv.h>
 
-
-#define INTERVALS 125 //50  5376
 
 using namespace cv;
 using namespace std;
-
-/*cv::Point2d topLeft( -122.441017, 37.815664 );
-cv::Point2d topRight( -122.370919, 37.815311 );
-cv::Point2d bottomLeft( -122.441533, 37.747167 );
-cv::Point2d bottomRight( -122.3715,   37.746814 );*/
 
 
 struct Point2D {
@@ -81,9 +74,7 @@ public:
 	vector<Point2D> active_raster;
 	float** costos;
 	map<float,Grid> gridsMap;
-	//float** friccion;
 	vector<float> tokens;
-    //vector<float> tokens_fricc;
 
 	bool isInsideGrid(int i, int j){
 			return (i >= 0 && i < ROWS && j >= 0 && j < COLS);
@@ -92,10 +83,8 @@ public:
 
 	    float** tiff_to_matrix_gdal(string file, bool flag) {
 		GDALDataset *dataset;
-		//GDALInfoOptions* GDALInfoOptionsNew("/home/lanase/workspace/distance/Debug/Haiti_biomass.tif");
 		char **MD;
 		char *info;
-		//char *dsInfo;
 		GDALAllRegister();
 		string ds = file;
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
@@ -107,56 +96,14 @@ public:
 		}
 
 		double adfGeoTransform[6];
-		//GDALInfo(dataset, NULL);
-
-		/*printf( "Driver: %s/%s\n",
-		        dataset->GetDriver()->GetDescription(),
-		        dataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ) );
-		printf( "Size is %dx%dx%d\n",
-		        dataset->GetRasterXSize(), dataset->GetRasterYSize(),
-		        dataset->GetRasterCount() );
-
-		if( dataset->GetProjectionRef()  != NULL )
-		    printf( "Projection is `%s'\n", dataset->GetProjectionRef() );
-
-		if( dataset->GetGeoTransform( adfGeoTransform ) == CE_None )
-		{
-		    printf( "Origin = (%.6f,%.6f)\n",
-		            adfGeoTransform[0], adfGeoTransform[3] );
-		    printf( "Pixel Size = (%.6f,%.6f)\n",
-		            adfGeoTransform[1], adfGeoTransform[5] );
-		}
-		cout << "Top Left X: " << adfGeoTransform[0] << endl;
-		cout << fixed << "Top Left Y: " << adfGeoTransform[3] << endl;*/
 		GDALRasterBand  *poBand;
 		int             nBlockXSize, nBlockYSize;
 		int             bGotMin, bGotMax;
 		double          adfMinMax[2];
 		poBand = dataset->GetRasterBand(1);
-		/*poBand->GetBlockSize( &nBlockXSize, &nBlockYSize );
-		printf( "Block=%dx%d Type=%s, ColorInterp=%s\n",
-		        nBlockXSize, nBlockYSize,
-		        GDALGetDataTypeName(poBand->GetRasterDataType()),
-		        GDALGetColorInterpretationName(
-		            poBand->GetColorInterpretation()) );
-		adfMinMax[0] = poBand->GetMinimum( &bGotMin );
-		adfMinMax[1] = poBand->GetMaximum( &bGotMax );
-		if( ! (bGotMin && bGotMax) )
-		    GDALComputeRasterMinMax((GDALRasterBandH)poBand, TRUE, adfMinMax);
-		printf( "Min=%.3fd, Max=%.3f\n", adfMinMax[0], adfMinMax[1] );
-		if( poBand->GetOverviewCount() > 0 )
-		    printf( "Band has %d overviews.\n", poBand->GetOverviewCount() );
-		if( poBand->GetColorTable() != NULL )
-		   printf( "Band has a color table with %d entries.\n",
-		             poBand->GetColorTable()->GetColorEntryCount() );*/
-
-		//float *pafScanline;
-		//float *pafScanlineY;
 
 		int nXSize = poBand->GetXSize();
 		int nYSize = poBand->GetYSize();
-
-		//cout << nXSize << " -- " << nYSize << endl;
 
 		ROWS = nYSize; COLS = nXSize;
 
@@ -190,8 +137,8 @@ public:
 			}
 		}
 		if(flag){
-			//cout << "Biomasa = " << biomass << endl;
-			//cout << "AVG = " << biomass / (cont) << endl;
+			cout << "Biomasa = " << biomass << endl;
+			cout << "AVG = " << biomass / (cont) << endl;
 			this->avg_biomasa = biomass / (cont);
 		}
 		//exit(0);
@@ -213,8 +160,10 @@ public:
 		}
 		Mat matrix = Mat(rows, cols, CV_32FC1, arr);
 		Mat outMatrix;
+		//cvtColor(matrix, outMatrix, CV_GRAY2RGB);
 		Mat im_color = Mat::zeros(rows, cols, CV_32FC4);
 
+		//matrix.convertTo(im_color, CV_32FC3);
 		vector<Mat> planes;
 		vector<Mat>::iterator itMat;
 		for(int i = 0; i < 4; i++)
@@ -224,13 +173,12 @@ public:
 		for(int i = 0; i < n_pixels; i++) {
 			Vec4f &v = im_color.at<Vec4f>(i/cols, i%cols);
 			if(v[0] > 0) {
-				v.val[0] = v[0] / channelDiv;
-				v.val[1] = v[1] / channelDiv;
-				v.val[2] = v[2] / channelDiv;
+				v.val[0] = v[0] / channelDiv*248;
+				v.val[1] = v[1] / channelDiv*0.8;
+				v.val[2] = v[2] / channelDiv*0.8;
 				v.val[3] = 255;
 			}
 		}
-
 		std::ostringstream ostr;
 		ostr << stop;
 		string sStop = ostr.str();
@@ -239,20 +187,93 @@ public:
 	}
 
 
+	float** tiff_to_matrix(string file){
 
+			int imageWidth, imageHeight;
+
+			ofstream indata;
+			indata.open("input_data.txt");
+
+			Mat image;
+			try {
+				image = imread(file, CV_LOAD_IMAGE_ANYDEPTH);   // Read the file
+			} catch (cv::Exception& e) {
+				const char* err_msg = e.what();
+				std::cout << "exception caught: " << err_msg << std::endl;
+			}
+			if(! image.data ){
+				cout <<  "Could not open or find the image" << std::endl ;
+				exit(0);
+			}
+
+			imageWidth = image.size().width;
+			imageHeight = image.size().height;
+
+			ROWS = imageHeight; COLS = imageWidth;
+
+			indata << image << endl;
+			indata.close();
+
+			ifstream infile;
+			infile.open("input_data.txt");
+			string semicol, com;
+			vector<float> tokens;
+
+			while(getline(infile, semicol, ';')) {
+				semicol.erase(remove(semicol.begin(), semicol.end(), ' '), semicol.end());
+				semicol.erase(remove(semicol.begin(), semicol.end(), '['), semicol.end());
+				semicol.erase(remove(semicol.begin(), semicol.end(), ']'), semicol.end());
+				semicol.erase(remove(semicol.begin(), semicol.end(), '\n'), semicol.end());
+				istringstream split(semicol);
+				for (string each; getline(split, each, ','); tokens.push_back(atof(each.c_str())));
+				//cout << semicol << endl;
+			}
+
+			int cCols = 0, cRows = 0;
+			costos = new float*[ROWS];
+			//active_raster = new bool*[ROWS];
+			for(int i = 0; i< ROWS; ++i) {
+				costos[i] = new float[COLS];
+				// FIXME: make a list instead of a matrix
+			}
+
+			for (int j = 0; j < ROWS; j++) {
+				for (int k = 0; k < COLS; k++) {
+					costos[j][k] = -9999;
+				}
+			}
+
+
+			for (int i = 0; i < tokens.size(); i++) {
+				if (cCols == COLS - 1) {
+					//cout << cCols << endl;
+					cCols = 0;
+					cRows++;
+				}
+				else {
+					costos[cRows][cCols] = tokens.at(i);
+					cCols++;
+				}
+			}
+			tokens.clear();
+			return costos;
+	}
 
 	void define_intervals(int stop, int &xIntervals, int &yIntervals) {
 
 		pixels_necesarios = ceil(stop / avg_biomasa);
 
 		intervals = ceil(sqrt(pixels_necesarios));
+		cout << "pixels_necesarios = " << pixels_necesarios << endl;
+		cout << "intervals = " << intervals << endl;
 
 		yIntervals = ceil(COLS / (double) intervals);
 		xIntervals = ceil(ROWS / (double) intervals);
-		}
+	}
 
 	map<float,Grid> define_grids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
 			int xPosGrid, yPosGrid, id = 1, c = 0, cont = 0, contValid = 0;
+			//int xRange = ceil(rows / (double) xIntervals), yRange = ceil(cols / (double) yIntervals);
 			Grid** totalGrids = new Grid*[xIntervals];
 			for (int i = 0; i< xIntervals; i++) {
 				totalGrids[i] = new Grid[yIntervals];
@@ -263,6 +284,7 @@ public:
 				for(int j = 0; j < cols; j++) {
 					xPosGrid = floor(i / intervals);
 					yPosGrid = floor(j / intervals);
+					//cout << "i: " << i << "  j: " << j << endl;
 					//FIXME: Change tmp
 					tmp.x = i;
 					tmp.y = j;
@@ -301,27 +323,23 @@ public:
 					}
 				}
 			totValidGrids = cont;
+			ofstream inFile;
+			inFile.open("grids.txt");
+
+			map<float,Grid>::iterator it;
+			map<float,Grid>::iterator it2;
 			return gridsMap;
 		}
 
 	Point2D find_centroid(map<float,Grid> grids, float** biomass, float** friction) {
 		map<float,Grid>::iterator it;
 		float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-		/*map<float,Grid>::iterator it2;
-		for ( it = gridsMap.begin(); it != gridsMap.end(); ++it) {
-			float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-			cout << it->second.elements.size() + it->second.invalidCells << "\t Relation: " << it->first  << "\t Biomass: " << it->second.biomass << "\t Friction: " << it->second.friction << endl;
-		}
-		cout << "Finished. " << gridsMap.size() << endl;
-		exit(0);*/
 		if (!grids.empty()) {
 			it = (--grids.end());
 		} else {
 			flag = false;
 		}
-
 		Point2D centroid;
-
 		if(flag){
 			cout << "Relation: " << it->first << endl;
 			for (int i = 0; i < it->second.elements.size(); i++) {
@@ -338,6 +356,7 @@ public:
 					yMin = it->second.elements.at(i).y;
 			}
 
+
 			centroid.x = xMin + round((xMax - xMin) / 2) ;
 			centroid.y = yMin + round((yMax - yMin) / 2);
 			this->xMax = xMax; this->xMin = xMin;
@@ -349,7 +368,6 @@ public:
 				set<cellVecinos> celdas;
 				celdas.insert(cellVecinos(centroid.x, centroid.y, 0));
 				set <cellVecinos> :: iterator itr;
-
 					while(found) {
 						for (itr = vecinos.begin(); itr != vecinos.end(); ++itr){
 							cout << (*itr).x << ", " << (*itr).y << endl;
@@ -446,45 +464,5 @@ public:
 			return distancias;
 		}
 
-/*	void matrix_to_tiff(float** output_raster, int rows, int cols) {
-
-
-			setenv("PYTHONPATH",".",1);
-			Py_Initialize();
-
-			PyObject *pName, *pModule, *pDict, *pFunc;
-
-
-			PyObject* pArgs = PyTuple_New(rows*cols + 2);
-			PyTuple_SetItem(pArgs, 0, Py_BuildValue("i", rows));
-			PyTuple_SetItem(pArgs, 1, Py_BuildValue("i", cols));
-
-			int c = 2;
-
-			for (int i = 0; i < rows; i++)
-				for (int j = 0; j < cols; j++, c++)
-					PyTuple_SetItem(pArgs, c, Py_BuildValue("f", output_raster[i][j]));
-
-			pName = PyString_FromString((char*)"write_array");
-
-			pModule = PyImport_Import(pName);
-
-			pDict = PyModule_GetDict(pModule);
-
-			pFunc = PyDict_GetItemString(pDict, (char*)"writeArray");
-
-
-		   if (PyCallable_Check(pFunc)){
-			   PyErr_Print();
-			   PyObject_CallObject(pFunc, pArgs);
-			   //cout << "Done" << endl;
-			   //PyObject_CallFunctionObjArgs(pFunc, pRows, pCols, pArgs);
-			   //PyErr_Print();
-		   } else {
-			   printf("Err\n");
-			   PyErr_Print();
-		   }
-		   //cout << "Done" << endl;
-		}  */
 };
 
