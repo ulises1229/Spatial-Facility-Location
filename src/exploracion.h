@@ -63,7 +63,7 @@ public:
 	bool checkFutureInsert(int x, int y, float acum, float parada);
 	void printPath2(vector<info_ruta> p, ofstream& info, Pair src);
 	void aStarSearch(Pair src, float stop, ofstream& info, char heuristic);
-	void explore(float** friction, float** friction_puro, int src_X, int src_Y, float stop, ofstream& info, char heuristic);
+	void explore(float** friction, int src_X, int src_Y, float stop, ofstream& info, char heuristic);
 	void freeMem();
 	void inicio(float** biomass);
 
