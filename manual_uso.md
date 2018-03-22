@@ -93,7 +93,7 @@ Donde:
    -a <char>,  --algorithm <char>
      (requerido)  Algoritmo de búsqueda.
      * A, a = Algoritmo A*
-     * D, d = Búsqueda en profundidad
+     * B, b = Búsqueda en profundidad
 
    -f <string>,  --friction <string>
      (requerido)  Ruta absoluta a mapa de fricción friction_map.tif
