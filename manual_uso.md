@@ -1,7 +1,46 @@
 ![PROBIOMASA 01](/images/probiomasa01.png)![PROBIOMASA 01](/images/probiomasa02.png)![PROBIOMASA 01](/images/probiomasa03.png)
 
 # Manual de uso en terminal
+ 
+ Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
+ https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
+ 
+ Creación de un contenedor de docker
+ ``` bash
+ -Descargar el Dockerfile de la página del curso
+ -Abrir una terminal y cambiarse a la capeta donde se descargo el Dockerfile con el comando #cd
+ -Utilizar el siguiente comando para ejecutar el contenedor de docker
+ 
+ docker build -t curso_optimizacion .
+ 
+ Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora)
+ 
+ docker images (obtener ID del contenedor creado "curso_optimizacion")
+ 
+ docker run -it id_contenedor
+ ```
+ 
+ Crear un volumen en docker
+ ```
+ docker volume create optimization
+ 
+ - Mostrar el volúmen
+ 
+ docker volume ls 
+ 
+ - Ver detalles del volúmen
+ 
+ docker volume inspect optimization
+ ```
 
+- Correr el contenedor utilizando el volúmen que se creo
+ ```
+docker run -it  --name optimization_test -v optimization:/storage curso_optimizacion:latest 
+ ```
+ 
+ 
+ # Uso de la herramienta a través de linea de comandos
+ 
 Uso:
  ``` bash
  {-s <float>|-w <float>} [-p <float>] 
@@ -66,14 +105,7 @@ Donde:
    -h,  --help
      Despliega información de uso. 
 ```     
- Ejemplo
  
- Ejecución de imagen en docker
- ``` bash
- docker build -t curso_optimizacion .
- docker images (obtener ID del contenedor creado "curso_optimizacion")
- docker run -it id_contenedor
- ```
 Ejecución del programa con un mapa de Haití, algoritmo: A*, validación: 1, heurística: Diagonal, demanda en watts: 30, eficiencia de planta: 40, producción de planta: 80, porcentaje de pérdida en planta: 30. 
 ``` bash
  ./optimization -b ./Haiti_biomass.tif -f ./Haiti_fricc.tif -a a -r Haiti -v 1 -u d -w 30 -i 40 -p 80 -l 30
