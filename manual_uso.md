@@ -1,6 +1,8 @@
 ![PROBIOMASA 01](/images/probiomasa01.png)![PROBIOMASA 01](/images/probiomasa02.png)![PROBIOMASA 01](/images/probiomasa03.png)
 
-# Manual de uso en terminal
+# Manual de Uso
+
+# Instalación de un contenedor de Docker
  
  Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
@@ -35,7 +37,7 @@
 
 - Correr el contenedor utilizando el volúmen que se creo
  ```
-docker run -it  --name optimization_test -v optimization:/storage curso_optimizacion:latest 
+docker run -it  --name optimization_1 -v optimization:/storage curso_optimizacion:latest 
  ```
  
  
