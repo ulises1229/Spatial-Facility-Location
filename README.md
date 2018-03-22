@@ -1,4 +1,6 @@
-# Instalación del Sistema
+
+
+# Instalación de la herramienta
 
 ## Requerimientos del sistema
 
