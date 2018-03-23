@@ -8,9 +8,9 @@
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
  
  ## Creación de un contenedor de docker
- ``` bash
- -Descargar el Dockerfile de la página del curso
- ```
+ 
+ Descargar el Dockerfile de la página del curso
+ 
  http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
  
  -Abrir una terminal y cambiarse a la capeta donde se descargo el Dockerfile con el comando #cd
