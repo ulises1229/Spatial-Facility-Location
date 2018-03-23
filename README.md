@@ -18,16 +18,18 @@
  ![PROBIOMASA 01](/images/quick.png) 
  
  Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
- ``` bash
- Ejemplo: 
  
+ Ejemplo:
+
+ ![PROBIOMASA 01](/images/terminal.png) 
+ 
+ ``` bash
  cd C:\Users\Ulises\Desktop\Docker
  ``` 
  Utilizar el siguiente comando para ejecutar el contenedor de docker
  
  ``` bash
  docker build -t curso_optimizacion .
- 
   ```
  
  Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora).
@@ -37,6 +39,8 @@
   ``` bash
  docker images 
   ```
+  
+![PROBIOMASA 01](/images/terminal.png) 
   
  Crear un volumen en docker
  
@@ -61,9 +65,10 @@
 Correr el contenedor utilizando el volumen que se creo
 
  ```
-docker run -it  --name optimization_1 -v optimization:/storage curso_optimizacion:latest 
+docker run -it  --name optimizacion_1 -v optimizacion:/storage curso_optimizacion:latest 
  ```
  
+ ![PROBIOMASA 01](/images/run.png) 
  
  # Uso de la herramienta a través de linea de comandos
  
