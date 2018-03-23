@@ -46,7 +46,17 @@ http://www.mofuss.unam.mx/optimization
   ``` bash
  docker images 
   ```
-  
+ 
+ ### Copiar datos de fricción y biomasa
+ Ubicar las capas de ficción y biomasa en un directorio y utilizar el comando de docker cp para copiar las capas dentro del contenedor.
+ 
+  ``` bash
+ docker cp  -r C:\Users\Ulises\Desktop\Docker\capas\Honduras_biomass.tif 622bdc51d747:storage 
+ docker cp  -r C:\Users\Ulises\Desktop\Docker\capas\Honduras_fricc.tif 622bdc51d747:storage 
+  ```
+ 
+ 
+### Crear un volumen (Opcional)
 ![PROBIOMASA 01](/images/images.png) 
   
  Crear un volumen en docker
