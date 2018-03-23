@@ -40,7 +40,7 @@
  docker images 
   ```
   
-![PROBIOMASA 01](/images/terminal.png) 
+![PROBIOMASA 01](/images/images.png) 
   
  Crear un volumen en docker
  
