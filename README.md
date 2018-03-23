@@ -15,7 +15,9 @@
  
  Abrir una terminal y cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
  
- Ejemplo: C:\Users\Ulises\Desktop\Docker
+ Ejemplo: 
+ 
+ cd C:\Users\Ulises\Desktop\Docker
  
  Utilizar el siguiente comando para ejecutar el contenedor de docker
  
