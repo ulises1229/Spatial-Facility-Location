@@ -22,6 +22,8 @@ http://www.mofuss.unam.mx/optimization
  
  Abrir la terminal de docker 
  
+ ![PROBIOMASA 01](/images/quick.png) 
+ 
  Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
  
  Ejemplo:
