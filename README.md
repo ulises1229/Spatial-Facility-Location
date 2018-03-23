@@ -47,6 +47,15 @@ http://www.mofuss.unam.mx/optimization
  docker images 
   ```
  
+
+### Correr el contenedor utilizando el volumen que se creo
+
+ ```
+docker run -it  --name optimizacion_1 -v optimizacion:/storage curso_optimizacion:latest 
+ ```
+ 
+ ![PROBIOMASA 01](/images/run.png) 
+ 
  ### Copiar datos de fricción y biomasa
  Ubicar las capas de ficción y biomasa en un directorio y utilizar el comando de docker cp para copiar las capas dentro del contenedor.
  
@@ -79,13 +88,6 @@ http://www.mofuss.unam.mx/optimization
  
  ```
 
-Correr el contenedor utilizando el volumen que se creo
-
- ```
-docker run -it  --name optimizacion_1 -v optimizacion:/storage curso_optimizacion:latest 
- ```
- 
- ![PROBIOMASA 01](/images/run.png) 
  
  # Uso de la herramienta a través de linea de comandos
  
