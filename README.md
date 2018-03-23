@@ -13,7 +13,7 @@
  
  http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
  
- Abrir una terminal y cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
+ Abrir la terminal de docker ![PROBIOMASA 01](/images/quick.png) y cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
  
  Ejemplo: 
  
@@ -26,13 +26,12 @@
  
   ```
  
- 
  Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora).
  
  Unz vez completada la instlación, verificar el ID del contenedor a través del siguiente comando.
  
   ``` bash
- docker images (obtener ID del contenedor creado "curso_optimizacion")
+ docker images 
   ```
   
  Crear un volumen en docker
