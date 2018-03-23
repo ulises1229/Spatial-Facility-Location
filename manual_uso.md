@@ -10,6 +10,11 @@
  Creación de un contenedor de docker
  ``` bash
  -Descargar el Dockerfile de la página del curso
+ ```
+ http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
+ 
+ ``` bash
+ 
  -Abrir una terminal y cambiarse a la capeta donde se descargo el Dockerfile con el comando #cd
  -Utilizar el siguiente comando para ejecutar el contenedor de docker
  
