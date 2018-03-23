@@ -13,12 +13,16 @@
  
  http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
  
- Abrir la terminal de docker ![PROBIOMASA 01](/images/quick.png) y cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
+ Abrir la terminal de docker 
  
+ ![PROBIOMASA 01](/images/quick.png) 
+ 
+ Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
+ ``` bash
  Ejemplo: 
  
  cd C:\Users\Ulises\Desktop\Docker
- 
+ ``` 
  Utilizar el siguiente comando para ejecutar el contenedor de docker
  
  ``` bash
