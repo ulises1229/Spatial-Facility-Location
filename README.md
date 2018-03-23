@@ -22,7 +22,7 @@
  Utilizar el siguiente comando para ejecutar el contenedor de docker
  
  ``` bash
- docker build -t curso_optimizacion.
+ docker build -t curso_optimizacion .
  
   ```
  
