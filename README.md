@@ -2,7 +2,14 @@
 
 # Manual de Uso
 
-# Instalación de un contenedor de Docker
+### Los algoritmos se optimización de pueden utilizar de dos formas.
+
+## 1. Interfaz web 
+http://www.mofuss.unam.mx/optimization
+ ![PROBIOMASA 01](/images/webpage.png) 
+
+## 2. Contenedor de Docker 
+#### Contenedor de Docker - Instalación
  
  Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
@@ -14,8 +21,6 @@
  http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
  
  Abrir la terminal de docker 
- 
- ![PROBIOMASA 01](/images/quick.png) 
  
  Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
  
