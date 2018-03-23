@@ -7,7 +7,7 @@
  Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
  
- Creación de un contenedor de docker
+ ## Creación de un contenedor de docker
  ``` bash
  -Descargar el Dockerfile de la página del curso
  ```
@@ -22,7 +22,9 @@
   ```
  
  
- Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora)
+ Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora).
+ 
+ Unz vez completada la instlación, verificar el ID del contenedor a través del siguiente comando.
  
   ``` bash
  docker images (obtener ID del contenedor creado "curso_optimizacion")
@@ -30,19 +32,26 @@
   
  Crear un volumen en docker
  
- ```
+ ``` bash
  docker volume create optimization
  
- - Mostrar el volúmen
+  ```
+ Mostrar el volúmen
  
+ ``` bash
  docker volume ls 
+ ```
  
- - Ver detalles del volúmen
+ Ver detalles del volúmen
+ 
+ ``` bash
  
  docker volume inspect optimization
+ 
  ```
 
-- Correr el contenedor utilizando el volúmen que se creo
+Correr el contenedor utilizando el volumen que se creo
+
  ```
 docker run -it  --name optimization_1 -v optimization:/storage curso_optimizacion:latest 
  ```
