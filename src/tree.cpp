@@ -34,7 +34,8 @@ void Tree::printMatrix(vector<nodeInfo> nodes, Node src){
 	}
 
 	for (vector<nodeInfo>::iterator it = nodes.begin(); it != nodes.end(); it++) {
-		matrix_path[it->x][it->y] = it->acum_biomass;
+		//if(it->fricc > 0)
+		matrix_path[it->x][it->y] = it->fricc;
 	}
 }
 
@@ -105,10 +106,10 @@ void Tree::rutas(Node src, float stop, ofstream& info, char heuristic){
 	TreeNode *node = new TreeNode(1, biomass[src.x][src.y], src.x, src.y);
 	int id = 2;
 	int id_child = 0;
-	float totalAcum = biomass[src.x][src.y], costoTot = friction[src.x][src.y], heuristicResult = 0;
+	float totalAcum = biomass[src.x][src.y] / 40, costoTot = friction[src.x][src.y], heuristicResult = 0;
 	TreeNode *node_dest;
 
-	path.push_back(nodeInfo(biomass[src.x][src.y], friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
+	path.push_back(nodeInfo(biomass[src.x][src.y] / 40, friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
 	//visitedNodes.push_back(findElement(src.x, src.y));
 	visitedNodes[src.x][src.y] = true;
 	sortedNodes.insert(nodeInfo(biomass[src.x][src.y], friction[src.x][src.y], 0.0, src.x, src.y, id, true, 0, 0));
@@ -174,14 +175,16 @@ void Tree::rutas(Node src, float stop, ofstream& info, char heuristic){
 		int x = itSorted->x;
 		int y = itSorted->y;
 		int last_id = itSorted->id;
+		float usable_b;
 		//cout << biomass[x][y] << "  -  " << friction[x][y] << endl;
 		if (biomass[x][y] > 0 && friction[x][y] >= 0) {
 			node->appendChild(new TreeNode(last_id, node->getAcum() + biomass[x][y], x, y));
 			if(visitedNodes[x][y] == false) {
-				totalAcum += biomass[x][y];
-				costoTot += biomass[x][y] / friction[x][y];
+				usable_b = biomass[x][y] / 40;
+				totalAcum += usable_b; //biomass[x][y];
+				costoTot += usable_b / friction[x][y];
 				//cout << totalAcum << endl;
-				path.push_back(nodeInfo(biomass[x][y], friction[x][y], itSorted->relation, x, y, last_id, true, totalAcum, itSorted->heuristic));
+				path.push_back(nodeInfo(usable_b, friction[x][y], itSorted->relation, x, y, last_id, true, totalAcum, itSorted->heuristic));
 				if( totalAcum >= stop){
 					node_dest = node->getChild(id_child);
 					//visitedNodes.clear();

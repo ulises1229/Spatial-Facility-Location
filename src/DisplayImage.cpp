@@ -12,11 +12,18 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <array>
+#include <memory>
+#include <stdexcept>
+#include <cstdio>
 #include <algorithm>
 #include <map>
 #include <set>
 #include "/usr/include/gdal/gdal.h"
 #include "/usr/include/gdal/gdal_priv.h"
+#include "/usr/include/gdal/gdalwarper.h"
+#include "/usr/include/gdal/ogr_spatialref.h"
+#include "/usr/include/gdal/ogr_geometry.h"
 
 using namespace cv;
 using namespace std;
@@ -70,8 +77,10 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 class Display_image{
 public:
 	float avg_biomasa, pixels_necesarios = 0, xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-	int ROWS, COLS, intervals = 0, totValidGrids = 0, totGridsAvg = 0;
+	int ROWS, COLS, intervals = 0, totValidGrids = 0, totGridsAvg = 0, valid_points = 0;
 	bool flag = true;
+	double projection;
+	string proj, epsg;
 	vector<Point2D> active_raster;
 	float** costos;
 	map<float,Grid> gridsMap;
@@ -89,7 +98,7 @@ public:
 		GDALAllRegister();
 		string ds = file;
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
-		double ndv;
+		double ndv, adfGeoTransform[6];
 
 
 		if(dataset == NULL) {
@@ -98,7 +107,25 @@ public:
 		}
 
 		GDALRasterBand  *poBand;
+
 		poBand = dataset->GetRasterBand(1);
+
+		dataset->GetGeoTransform( adfGeoTransform );
+		projection = adfGeoTransform[1];
+
+		proj = dataset->GetProjectionRef();
+
+		//cout << proj << endl;
+
+		string tail = proj.substr(proj.size() - 20);
+
+		int d1, d2;
+
+		d1 = tail.find(",");
+		d2 = tail.find("\"", d1 + 2);
+
+		epsg = tail.substr(d1 + 2, d2 - d1 - 2);
+
 
 		int nXSize = poBand->GetXSize();
 		int nYSize = poBand->GetYSize();
@@ -117,7 +144,7 @@ public:
 
 		float biomass = 0;
 		float pxVal = 0;
-		int cCols = 0, cRows = 0, cont = 0;
+		int cCols = 0, cRows = 0;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				int location = (nXSize * (i)) + j;
@@ -128,7 +155,7 @@ public:
 				else {
 					costos[cRows][cCols] = *(pBuf+location);
 					if(*(pBuf+location) > 0 && flag){
-						cont++;
+						valid_points++;
 						biomass += *(pBuf+location);
 					}
 					cCols++;
@@ -136,7 +163,7 @@ public:
 			}
 		}
 		if(flag){
-			this->avg_biomasa = biomass / (cont);
+			this->avg_biomasa = biomass / (valid_points);
 		}
 		//cout << avg_biomasa << endl;
 		//exit(0);
@@ -148,12 +175,13 @@ public:
 		int n_pixels = rows * cols, channelDiv = round(stop /255);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if(output_raster[i][j] > 0 && output_raster[i][j] < 0.1)
+				arr[i * cols + j] = output_raster[i][j];
+				/*if(output_raster[i][j] > 0 && output_raster[i][j] < 0.1)
 					arr[i * cols + j] = output_raster[i][j] * 3;
 				else if(output_raster[i][j] >= 0.1)
 					arr[i * cols + j] = output_raster[i][j];
 				else
-					arr[i * cols + j] = 0;
+					arr[i * cols + j] = 0;*/
 			}
 		}
 		Mat matrix = Mat(rows, cols, CV_32FC1, arr);
@@ -169,10 +197,11 @@ public:
 		for(int i = 0; i < n_pixels; i++) {
 			Vec4f &v = im_color.at<Vec4f>(i/cols, i%cols);
 			if(v[0] > 0) {
-				v.val[0] = v[0] / channelDiv * 248;
-				v.val[1] = v[1] / channelDiv * 0.8;
-				v.val[2] = v[2] / channelDiv * 0.8;
+				v.val[0] = v[0] / (projection * projection) * 1050;
+				v.val[1] = v[1] / (projection * projection) * 450;// / channelDiv;
+				v.val[2] = v[2] / (projection * projection) * 150;// / channelDiv;
 				v.val[3] = 255;
+				//cout << v.val[2] << endl;
 			}
 		}
 
@@ -194,7 +223,7 @@ public:
 
 		yIntervals = ceil(COLS / (double) intervals);
 		xIntervals = ceil(ROWS / (double) intervals);
-		}
+	}
 
 	map<float,Grid> define_grids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
 			int xPosGrid, yPosGrid, id = 1, c = 0, cont = 0, contValid = 0;
@@ -388,26 +417,80 @@ public:
 			return distancias;
 		}
 
-		void matrix_to_tiff(float** output_raster, int rows, int cols) {
+		void matrix_to_tiff(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
 			GDALDataset *poDstDS;
 			//char **papszOptions = NULL;
 			GDALDriver *poDriver;
+			std::ostringstream ostr;
+			ostr << stop;
+			string sStop = ostr.str();
+			string fileName = "final_route_"+map+"_"+algName+"_"+sStop+"_"+heuristic+".tiff";
 			poDriver = GetGDALDriverManager()->GetDriverByName("Gtiff");
-			poDstDS = poDriver->Create( "final_route.tiff", cols, rows, 1, GDT_Float32, NULL);
+			poDstDS = poDriver->Create( fileName.c_str(), cols, rows, 1, GDT_Float32, NULL);
 
 			GDALRasterBand *poBand;
-			float *pBuf = new float[rows * cols];
+			float *pBuf = new float[rows * cols], maxVal = 0;
 			for(int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					pBuf[i * cols + j] = output_raster[i][j];
+					/*if(output_raster[i][j] <= 2000)
+						pBuf[i * cols + j] = output_raster[i][j];
+					else
+						pBuf[i * cols + j] = -9999;*/
+					if(output_raster[i][j] > maxVal)
+						maxVal = output_raster[i][j];
 				}
 			}
 
 			poBand = poDstDS->GetRasterBand(1);
+			poDstDS->GetRasterBand(1)->SetNoDataValue(-9999);
 			poBand->RasterIO( GF_Write, 0, 0, cols, rows,
 			                  pBuf, cols, rows, GDT_Float32, 0, 0 );
 			GDALClose( (GDALDatasetH) poDstDS );
+			cout << "Max Val: " << maxVal << endl;
 		}
+
+		void check_npa(float** npa_matrix, float** &biomass_matrix) {
+			for (int i = 0; i < ROWS; i++) {
+				for (int j = 0; j < COLS; j++) {
+					if (npa_matrix[i][j] > 0) {
+						biomass_matrix[i][j] = biomass_matrix[i][j] / 80;
+					}
+				}
+			}
+		}
+
+		void check_waterbodies(float** water_matrix, float** &biomass_matrix) {
+			for (int i = 0; i < ROWS; i++) {
+				for (int j = 0; j < COLS; j++) {
+					if (water_matrix[i][j] > 0) {
+						biomass_matrix[i][j] = biomass_matrix[i][j] / 80;
+					}
+				}
+			}
+		}
+
+		void reproject_coords(string map_biomass) {
+			string coords = "coords.txt", cmd = "gdaltransform " + map_biomass + " -t_srs EPSG:4326 -s_srs EPSG:" + epsg + " < " + coords;
+			array<char, 128> buffer;
+			string result;
+			shared_ptr<FILE> pipe(popen(cmd.c_str(), "r"), pclose);
+			if (!pipe) throw std::runtime_error("popen() failed!");
+			while (!feof(pipe.get())) {
+				if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+					result += buffer.data();
+			}
+			cout << "Source = " << result << endl;
+			//exit(0);
+		}
+
+		/*void divide_biomass(float** &biomass_matrix) {
+			for (int i = 0; i < ROWS; i++) {
+				for (int j = 0; j < COLS; j++) {
+					biomass_matrix[i][j] = biomass_matrix[i][j] / 40;
+				}
+			}
+		}*/
 
 /*	void matrix_to_tiff(float** output_raster, int rows, int cols) {
 

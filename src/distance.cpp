@@ -183,7 +183,7 @@
 
 
 
-	void costDistance::inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax) {
+	void costDistance::inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax, double projection) {
 		//cout << COL << " " << ROW << endl;
 		this->cost_raster = new float*[this->ROW];
 		this->output_raster = new float*[this->ROW];
@@ -198,7 +198,7 @@
 
 		for(int x = 0; x < ROW; x++){
 			for(int y = 0; y < COL; y++){
-				this->cost_raster[x][y] = grid[x][y];
+				this->cost_raster[x][y] = grid[x][y] * projection;
 				this->active_raster[x][y] = false;
 				this->output_raster[x][y] = INT_MAX;
 			}

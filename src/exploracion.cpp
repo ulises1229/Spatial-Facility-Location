@@ -54,15 +54,17 @@ bool Explore::checkFutureInsert(int x, int y, float acum, float parada){
 	for(int i = 0; i < 8; i++){
 		xx = x + dx[i];
 		yy = y + dy[i];
-		if (closedList[xx][yy] == false && biomass[xx][yy] != -9999 ){
-			return true;
+		if (isValid(xx, yy)) {
+			if (closedList[xx][yy] == false && biomass[xx][yy] != -9999 ){
+				return true;
+			}
 		}
 	}
 	return false;
 }
 
 void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
-	float biomass = 0, cost = 0, frict = 0;
+	float biomass = 0, cost = 0, frict = 0, normalCost = 0;
 	int size = 0;
 	this->X = src.first; this->Y = src.second;
 	this->matrix_path = new float*[this->ROW];
@@ -77,10 +79,11 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 
 	for (vector<info_ruta>::iterator it = p.begin(); it != p.end(); it++) {
 		if(it->x == src.first && it->y == src.second) {
-			matrix_path[it->x][it->y] = this->biomass[it->x][it->y];
+			//matrix_path[it->x][it->y] = this->biomass[it->x][it->y];
+			matrix_path[it->x][it->y] = it->friction;
 		}
 		else {
-			matrix_path[it->x][it->y] = it->biomass_acum;
+			matrix_path[it->x][it->y] = it->friction;
 			cost += (it->biomass / it->friction);
 		}
 		biomass += it->biomass;
@@ -98,6 +101,7 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 		cout << "Size: " << size << endl;
 		cout << fixed <<  "Sum: " << biomass << endl;
 		cout << "Total Cost: " << cost << endl;
+		cout << "Normal Cost: " << frict << endl;
 		info << size << ",";
 		info << biomass << ",";
 		info  << cost << endl;
@@ -142,7 +146,7 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 
     // Put the starting cell on the open list and set its
     // 'f' as 0
-    cell_info co; co.biomass_acum = biomass[i][j]; co.friction = friction[i][j]; co.relation = biomass[i][j]; co.i = i; co.j = j; co.heuristic = 0;
+    cell_info co; co.biomass_acum = biomass[i][j] / 40; co.friction = friction[i][j]; co.relation = biomass[i][j] / 40; co.i = i; co.j = j; co.heuristic = 0;
     openList.insert(co);
 
     float parada = stop;
@@ -155,7 +159,7 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 	int x, y;
 	int dx[] = { -1, 1, 0, 0, -1, -1, 1, 1 };
 	int dy[] = {  0, 0, 1, -1, 1, -1, 1, -1 };
-	float biomasa_total = 0, friction_total = 0, heuristicResult = 0;;
+	float biomasa_total = 0, friction_total = 0, heuristicResult = 0, usable_b;
 	vector<info_ruta> ruta;
 	int pushes = 0;
     while (!openList.empty()){
@@ -163,9 +167,10 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
     	i = p.i;
 		j = p.j;
 
-		biomasa_total += biomass[i][j];
+		usable_b = biomass[i][j] / 40;
+		biomasa_total += usable_b; //biomass[i][j];
 		friction_total += friction[i][j];
-		ruta.push_back(info_ruta(i, j, biomass[i][j], friction[i][j], biomasa_total, p.heuristic));
+		ruta.push_back(info_ruta(i, j, usable_b, friction[i][j], biomasa_total, p.heuristic));
 		pushes++;
         	if(biomasa_total >= parada){
         		openList.clear();
@@ -209,45 +214,47 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 			// If the successor is already on the closed
 			// list or if it is blocked, then ignore it.
 			// Else do the following
-			if (closedList[x][y] == false && closedopenList[x][y] == false){
-				// If it isn’t on the open list, add it to
-				// the open list. Make the current square
-				// the parent of this square. Record the
-				// f, g, and h costs of the square cell
-				//                OR
-				// If it is on the open list already, check
-				// to see if this path to that square is better,
-				// using 'f' cost as the measure.
+			if (isValid(x, y)) {
+				if (closedList[x][y] == false && closedopenList[x][y] == false){
+					// If it isn’t on the open list, add it to
+					// the open list. Make the current square
+					// the parent of this square. Record the
+					// f, g, and h costs of the square cell
+					//                OR
+					// If it is on the open list already, check
+					// to see if this path to that square is better,
+					// using 'f' cost as the measure.
 
-				//cout << cellDetails[i-1][j].f << " " << fNew << " "  << endl;
-				if ( (cellDetails[x][y].f == FLT_MIN) &&  biomass[x][y] != -9999 && friction[x][y] != -9999)
-				{
-					if (heuristic == 'e') {
-						heuristicResult = sqrt(pow((src.first - x), 2) + pow((src.second - y), 2));
-					}
-					else if (heuristic == 'm') {
-						heuristicResult = abs(src.first - x) + abs(src.second - y);
-					}
-					else if(heuristic == 'd') {
-						heuristicResult = max(abs(src.first - x), abs(src.second - y));
-					}
-					gNew = acum;
-					if (heuristicResult > 0)
-						hNew = biomass[x][y] / (friction[x][y] + heuristicResult);
-					else
-						hNew = biomass[x][y] / friction[x][y];
-					fNew = gNew + biomass[x][y];
-					//cout << "multiples" << endl;
-					if(checkFutureInsert(x, y, acum, parada)){
-						co.biomass_acum = fNew; co.friction = friction[x][y]; co.relation = hNew; co.i = x; co.j = y; co.heuristic = heuristicResult;
-						openList.insert(co);
-						closedopenList[x][y] = true;
-						// Update the details of this cell
-						cellDetails[x][y].f = fNew;
-						cellDetails[x][y].g = gNew;
-						cellDetails[x][y].h = hNew;
-						cellDetails[x][y].parent_i = i;
-						cellDetails[x][y].parent_j = j;
+					//cout << cellDetails[i-1][j].f << " " << fNew << " "  << endl;
+					if ( (cellDetails[x][y].f == FLT_MIN) &&  biomass[x][y] != -9999 && friction[x][y] != -9999)
+					{
+						if (heuristic == 'e') {
+							heuristicResult = sqrt(pow((src.first - x), 2) + pow((src.second - y), 2));
+						}
+						else if (heuristic == 'm') {
+							heuristicResult = abs(src.first - x) + abs(src.second - y);
+						}
+						else if(heuristic == 'd') {
+							heuristicResult = max(abs(src.first - x), abs(src.second - y));
+						}
+						gNew = acum;
+						if (heuristicResult > 0)
+							hNew = biomass[x][y] / (friction[x][y] + heuristicResult);
+						else
+							hNew = biomass[x][y] / friction[x][y];
+						fNew = gNew + (biomass[x][y] / 40);
+						//cout << "multiples" << endl;
+						if(checkFutureInsert(x, y, acum, parada)){
+							co.biomass_acum = fNew; co.friction = friction[x][y]; co.relation = hNew; co.i = x; co.j = y; co.heuristic = heuristicResult;
+							openList.insert(co);
+							closedopenList[x][y] = true;
+							// Update the details of this cell
+							cellDetails[x][y].f = fNew;
+							cellDetails[x][y].g = gNew;
+							cellDetails[x][y].h = hNew;
+							cellDetails[x][y].parent_i = i;
+							cellDetails[x][y].parent_j = j;
+						}
 					}
 				}
 			}

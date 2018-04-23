@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <algorithm>
 #include <list>
+#include <math.h>
 #include "treenode.h"
 
 using namespace std;
