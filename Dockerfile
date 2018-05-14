@@ -69,6 +69,6 @@ RUN mv tclap /usr/include/
 
 WORKDIR  /Curso/Curso-Optimizacion/src/
 
-RUN g++ main.cpp -o optimization -L/usr/local/lib -L/usr/include -lopencv_core -lgdal -lopencv_imgproc -lopencv_flann -lopencv_highgui -lopencv_imgcodecs bellford.o dijkstra.o DisplayImage.o distance.o exploracion.o tree.o
+RUN g++ -std=c++11 main.cpp -o optimization -L/usr/local/lib -L/usr/include -lopencv_core -lgdal -lopencv_imgproc -lopencv_flann -lopencv_highgui -lopencv_imgcodecs bellford.o dijkstra.o DisplayImage.o distance.o exploracion.o tree.o
 
 RUN export PATH=$PATH:/Curso/Curso-Optimizacion/src/optimization
