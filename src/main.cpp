@@ -21,10 +21,12 @@
 #include "dijkstra.cpp" //Dijkstra
 #include "bellford.cpp" //Bellman-Ford
 #include <tclap/CmdLine.h>
+#include <omp.h>
 
 struct points_export{
 	int x, y, xMin, xMax, yMin, yMax;
 };
+char is_usable;
 
 int main(int argc, const char** argv){
 	string map_biomass, map_friction, hName, region, map_npa, map_waterbodies;
@@ -60,6 +62,7 @@ int main(int argc, const char** argv){
 		TCLAP::ValueArg<std::string> export_p("o","export_points","Export a number of points",false,"4","int");
 		TCLAP::ValueArg<std::string> npa("n","npa","Map of Natural Protected Areas (NPA)",false,"/path/to/npa_map.tif","int");
 		TCLAP::ValueArg<std::string> waterbody("m","waterbody","Map of Water bodies",false,"/path/to/water_bodies_map.tif","int");
+		TCLAP::ValueArg<std::string> usable("e","usable","Biomass' info represents usable biomass",true,"y/n","char");
 		// Add the argument nameArg to the CmdLine object. The CmdLine object
 		// uses this Arg to parse the command line.
 		cmd.xorAdd(stop, watts);
@@ -76,6 +79,7 @@ int main(int argc, const char** argv){
 		cmd.add(export_p);
 		cmd.add(npa);
 		cmd.add(waterbody);
+		cmd.add(usable);
 
 		// Parse the argv array.
 		cmd.parse( argc, argv );
@@ -95,6 +99,8 @@ int main(int argc, const char** argv){
 		string exp = export_p.getValue();
 		export_points = atoi(exp.c_str());
 		string demand;
+		string usa = usable.getValue();
+		is_usable = usa[0];
 
 		if(optValidation > 4 || optValidation < 1) {
 			cerr << "Please verify the validation option. (-v):\n 1 -- Best-candidate search.\n 2 -- Candidates where relation >= average validation.\n 3 -- Custom validation.\n 4 -- All-points validation." << endl;
@@ -193,9 +199,11 @@ int main(int argc, const char** argv){
 
 	Display_image di;
 
+	// Import biomass and friction
 	clock_t begin = clock();
 	float** biomass = di.tiff_to_matrix_gdal(map_biomass, true);
 	float** friction = di.tiff_to_matrix_gdal(map_friction, false);
+	cout << di.epsg << endl;
 	//di.reproject_coords(map_biomass);
 	//exit(0);
 	clock_t end = clock();
@@ -233,83 +241,93 @@ int main(int argc, const char** argv){
 		float bestCost = 0, bestxMin, bestxMax, bestyMin, bestyMax;
 		int bestX, bestY, cont = 1;
 
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				centroid.x = i; centroid.y = j;
-				if (biomass[i][j] > 0) {
-					cout << biomass[i][j] << endl;
-					coords.open("coords.txt");
-					cout << centroid.x << ", " << centroid.y << endl;
-					cout << "No. " << cont << " / " << di.valid_points << endl;
-					coords << centroid.y << " " << centroid.x;
-					coords.close();
-					di.reproject_coords(map_biomass);
-					clock_t begin_cd = clock();
-					d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
-					clock_t end_cd = clock();
-					double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
+		int i=0, j=0;
 
-					cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
-					switch(algorithm) {
-						case 'B': //Binary search
-						case 'b': {
-							string algName = "Breadth_First_Search";
-							Tree rn;
-							rn.COL = cols;
-							rn.ROW = rows;
-							clock_t begin2 = clock();
-							rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-							clock_t end2 = clock();
-							double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-							cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
+		cout<<"Parallel region"<<endl;
 
-							if(rn.cost > bestCost) {
-								bestCost = rn.cost;
-								bestX = rn.x;
-								bestY = rn.y;
-								bestxMin = i - 50;
-								bestxMax = i + 50;
-								bestyMin = j - 50;
-								bestyMax = j + 50;
-							}
+        #pragma omp parallel for collapse(2) private(i,j)
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    centroid.x = i; centroid.y = j;
+                    if (biomass[i][j] > 0) {
+                        cout << biomass[i][j] << endl;
+                        coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
+                        cout << centroid.x << ", " << centroid.y << endl;
+                        cout << "No. " << cont << " / " << di.valid_points << endl;
+                        coords << centroid.y << " " << centroid.x;
+                        coords.close();
+                        di.reproject_coords(map_biomass);
+                        clock_t begin_cd = clock();
 
-							d.freeMem();
-							rn.freeMem();
-							break;
-						}
+                        d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
 
-						case 'A': //A* search
-						case 'a': {
-							Explore e;
-							string algName = "AStar";
-							e.COL = cols;
-							e.ROW = rows;
-							e.inicio(biomass);
-							clock_t begin2 = clock();
-							e.explore(d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-							clock_t end2 = clock();
-							double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-							cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 
-							if(e.cost > bestCost) {
-								bestCost = e.cost;
-								bestX = e.X;
-								bestY = e.Y;
-								bestxMin = i - 50;
-								bestxMax = i + 50;
-								bestyMin = j - 50;
-								bestyMax = j + 50;
-							}
+                        /*clock_t end_cd = clock();
+                        double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
 
-							e.freeMem();
-							d.freeMem();
-							break;
+                        cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
+                        switch(algorithm) {
+                            case 'B': //Binary search
+                            case 'b': {
+                                string algName = "Breadth_First_Search";
+                                Tree rn;
+                                rn.COL = cols;
+                                rn.ROW = rows;
+                                cout<< "Thread id: " << omp_get_thread_num() <<endl;
+                                clock_t begin2 = clock();
+                                rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
+                                clock_t end2 = clock();
+                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                                cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
-						}
-					}
-					cont++;
-				}
-			}
+                                if(rn.cost > bestCost) {
+                                    bestCost = rn.cost;
+                                    bestX = rn.x;
+                                    bestY = rn.y;
+                                    bestxMin = i - 50;
+                                    bestxMax = i + 50;
+                                    bestyMin = j - 50;
+                                    bestyMax = j + 50;
+                                }
+
+                                d.freeMem();
+                                rn.freeMem();
+                                break;
+                            }
+
+                            case 'A': //A* search
+                            case 'a': {
+                                Explore e;
+                                string algName = "AStar";
+                                e.COL = cols;
+                                e.ROW = rows;
+                                e.inicio(biomass);
+                                clock_t begin2 = clock();
+                                e.explore(d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
+                                clock_t end2 = clock();
+                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                                cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
+
+                                if(e.cost > bestCost) {
+                                    bestCost = e.cost;
+                                    bestX = e.X;
+                                    bestY = e.Y;
+                                    bestxMin = i - 50;
+                                    bestxMax = i + 50;
+                                    bestyMin = j - 50;
+                                    bestyMax = j + 50;
+                                }
+
+                                e.freeMem();
+                                d.freeMem();
+                                break;
+
+                            }
+                        }
+                        cont++;
+                    */}
+                }
+            //}
 		}
 		cout << "*** Best point ***" << endl;
 		coords.open("coords.txt");
@@ -409,7 +427,7 @@ int main(int argc, const char** argv){
 
 			clock_t begin_cd = clock();
 			d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, di.xMin, di.xMax, di.yMin, di.yMax, di.projection);
-			cout << centroid.x << ", " << centroid.y << " - " << di.xMin << " - " << di.xMax << " - " << di.yMin << " - " << di.yMax << endl;
+			//cout << centroid.x << ", " << centroid.y << " - " << di.xMin << " - " << di.xMax << " - " << di.yMin << " - " << di.yMax << endl;
 			//d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, 0, 498, 0, 256, di.projection);
 			clock_t end_cd = clock();
 			double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
@@ -658,7 +676,8 @@ int main(int argc, const char** argv){
 						clock_t begin2 = clock();
 						rn.inicio_rutas(biomass, d.output_raster, itr->second.x, itr->second.y, demanda, bestInfo, heuristic);
 						clock_t end2 = clock();
-						double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+					ls
+                    double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 						cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
 						clock_t begin3 = clock();
