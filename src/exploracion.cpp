@@ -100,8 +100,8 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 		}
 		cout << "Size: " << size << endl;
 		cout << fixed <<  "Sum: " << biomass << endl;
-		cout << "Total Cost: " << cost << endl;
-		cout << "Normal Cost: " << frict << endl;
+		cout << "Cost (B/F): " << cost << endl;
+		cout << "Cost ($): " << frict << endl;
 		info << size << ",";
 		info << biomass << ",";
 		info  << cost << endl;
@@ -146,7 +146,16 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 
     // Put the starting cell on the open list and set its
     // 'f' as 0
-    cell_info co; co.biomass_acum = biomass[i][j] / 40; co.friction = friction[i][j]; co.relation = biomass[i][j] / 40; co.i = i; co.j = j; co.heuristic = 0;
+    extern char is_usable;
+    cell_info co;  co.friction = friction[i][j];  co.i = i; co.j = j; co.heuristic = 0;
+    if(is_usable == 'n'){
+        co.biomass_acum = biomass[i][j] / 40;
+        co.relation = biomass[i][j] / 40;
+    }
+    else{
+		co.biomass_acum = biomass[i][j];
+		co.relation = biomass[i][j];
+    }
     openList.insert(co);
 
     float parada = stop;
@@ -166,8 +175,10 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
     	p = *(--openList.end());//tomar el ultimo? seria el mas costoso
     	i = p.i;
 		j = p.j;
-
-		usable_b = biomass[i][j] / 40;
+		if(is_usable == 'n')
+			usable_b = biomass[i][j] / 40;
+		else
+			usable_b = biomass[i][j];
 		biomasa_total += usable_b; //biomass[i][j];
 		friction_total += friction[i][j];
 		ruta.push_back(info_ruta(i, j, usable_b, friction[i][j], biomasa_total, p.heuristic));
@@ -242,7 +253,10 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
 							hNew = biomass[x][y] / (friction[x][y] + heuristicResult);
 						else
 							hNew = biomass[x][y] / friction[x][y];
-						fNew = gNew + (biomass[x][y] / 40);
+						if(is_usable == 'n')
+							fNew = gNew + (biomass[x][y] / 40);
+						else
+							fNew = gNew + biomass[x][y];
 						//cout << "multiples" << endl;
 						if(checkFutureInsert(x, y, acum, parada)){
 							co.biomass_acum = fNew; co.friction = friction[x][y]; co.relation = hNew; co.i = x; co.j = y; co.heuristic = heuristicResult;

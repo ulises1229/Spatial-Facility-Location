@@ -73,13 +73,12 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 	return (a.distance < b.distance);
 }
 
-
 class Display_image{
 public:
 	float avg_biomasa, pixels_necesarios = 0, xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
 	int ROWS, COLS, intervals = 0, totValidGrids = 0, totGridsAvg = 0, valid_points = 0;
 	bool flag = true;
-	double projection;
+	double projection, adfGeoTransform[6];
 	string proj, epsg;
 	vector<Point2D> active_raster;
 	float** costos;
@@ -98,7 +97,7 @@ public:
 		GDALAllRegister();
 		string ds = file;
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
-		double ndv, adfGeoTransform[6];
+		double ndv;
 
 
 		if(dataset == NULL) {
@@ -115,7 +114,7 @@ public:
 
 		proj = dataset->GetProjectionRef();
 
-		//cout << proj << endl;
+		cout << projection << endl;
 
 		string tail = proj.substr(proj.size() - 20);
 
@@ -154,15 +153,19 @@ public:
 				}
 				else {
 					costos[cRows][cCols] = *(pBuf+location);
-					if(*(pBuf+location) > 0 && flag){
+					//if(costos[cRows][cCols])
+					//	cout << costos[cRows][cCols] << endl;
+					if(costos[cRows][cCols] > 0 && flag){
 						valid_points++;
-						biomass += *(pBuf+location);
+						biomass += costos[cRows][cCols];
 					}
 					cCols++;
 				}
 			}
 		}
 		if(flag){
+			//cout << fixed << "Total B: " << biomass << endl;
+			//cout << "valid: " << valid_points << endl;
 			this->avg_biomasa = biomass / (valid_points);
 		}
 		//cout << avg_biomasa << endl;
@@ -217,12 +220,21 @@ public:
 
 	void define_intervals(int stop, int &xIntervals, int &yIntervals) {
 
+		//cout << "Stop: " << stop << "  -  Avg Biom: " << avg_biomasa << endl;
 		pixels_necesarios = ceil(stop / avg_biomasa);
+
+		//cout << "Pixels necesarios: " << pixels_necesarios << endl;
 
 		intervals = ceil(sqrt(pixels_necesarios));
 
+		//cout << "Intervals: " << intervals << endl;
+
 		yIntervals = ceil(COLS / (double) intervals);
 		xIntervals = ceil(ROWS / (double) intervals);
+
+		//cout << "xIntervals: " << xIntervals << "  -  yIntervals: " << yIntervals << endl;
+		//cout << "R: " << ROWS << "  C: " << COLS << endl;
+		//exit(0);
 	}
 
 	map<float,Grid> define_grids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
@@ -241,12 +253,13 @@ public:
 					tmp.x = i;
 					tmp.y = j;
 					totalGrids[xPosGrid][yPosGrid].noElements++;
-					if (biomass[i][j] > 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
+					if (biomass[i][j] >= 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
 						totalGrids[xPosGrid][yPosGrid].elements.push_back(tmp);
 						totalGrids[xPosGrid][yPosGrid].sum += biomass[i][j] / friction[i][j];
 						totalGrids[xPosGrid][yPosGrid].value = biomass[i][j];
 						totalGrids[xPosGrid][yPosGrid].biomass += biomass[i][j];
 						totalGrids[xPosGrid][yPosGrid].friction += friction[i][j];
+						//cout << totalGrids[xPosGrid][yPosGrid].sum << endl;
 						contValid++;
 
 					}
@@ -256,11 +269,17 @@ public:
 					}
 
 					c++;
+					//cout << intervals << endl;
+					/*if(totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == 974169) {
+						cout << totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
+						cout << totalGrids[xPosGrid][yPosGrid].elements.size() << " - " << totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
+					}*/
 					if (totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == (intervals * intervals)
 					    && totalGrids[xPosGrid][yPosGrid].biomass > 0 && totalGrids[xPosGrid][yPosGrid].friction > 0
 						&& totalGrids[xPosGrid][yPosGrid].biomass > totalGrids[xPosGrid][yPosGrid].friction
-
-						&& totalGrids[xPosGrid][yPosGrid].elements.size() > totalGrids[xPosGrid][yPosGrid].invalidCells) {
+						/*&& totalGrids[xPosGrid][yPosGrid].elements.size() > totalGrids[xPosGrid][yPosGrid].invalidCells*/) {
+							//cout << totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
+							//cout << totalGrids[xPosGrid][yPosGrid].sum << endl;
 							totalGrids[xPosGrid][yPosGrid].id = id;
 							totalGrids[xPosGrid][yPosGrid].biomassAvg = totalGrids[xPosGrid][yPosGrid].biomass / totalGrids[xPosGrid][yPosGrid].elements.size();
 							if(totalGrids[xPosGrid][yPosGrid].biomassAvg >= avg_biomasa)
@@ -284,7 +303,7 @@ public:
 			cout << it->second.elements.size() + it->second.invalidCells << "\t Relation: " << it->first  << "\t Biomass: " << it->second.biomass << "\t Friction: " << it->second.friction << endl;
 		}
 		cout << "Finished. " << gridsMap.size() << endl;
-		exit(0);*/
+		//exit(0);*/
 		if (!grids.empty()) {
 			it = (--grids.end());
 		} else {
@@ -311,6 +330,7 @@ public:
 
 			centroid.x = xMin + round((xMax - xMin) / 2) ;
 			centroid.y = yMin + round((yMax - yMin) / 2);
+			//cout << xMin << " - " << xMax << " - " << yMin << " - " << yMax << endl;
 			this->xMax = xMax; this->xMin = xMin;
 			this->yMax = yMax; this->yMin = yMin;
 			if(biomass[centroid.x][centroid.y] < 0 || biomass[centroid.x][centroid.y] < friction[centroid.x][centroid.y]){
@@ -323,7 +343,7 @@ public:
 
 					while(found) {
 						for (itr = vecinos.begin(); itr != vecinos.end(); ++itr){
-							cout << (*itr).x << ", " << (*itr).y << endl;
+							//cout << (*itr).x << ", " << (*itr).y << endl;
 							if(biomass[(*itr).x][(*itr).y] > 0 &&  biomass[(*itr).x][(*itr).y] > friction[(*itr).x][(*itr).y]){
 								//cout << biomass[(*itr).x][(*itr).y] << " " << friction[(*itr).x][(*itr).y] << endl;
 								centroid.x = (*itr).x;
@@ -421,12 +441,17 @@ public:
 			GDALDataset *poDstDS;
 			//char **papszOptions = NULL;
 			GDALDriver *poDriver;
+			OGRSpatialReference oSRS;
 			std::ostringstream ostr;
 			ostr << stop;
 			string sStop = ostr.str();
 			string fileName = "final_route_"+map+"_"+algName+"_"+sStop+"_"+heuristic+".tiff";
+			string proyeccion = "EPSG:" + epsg;
+			cout << proyeccion << endl;
 			poDriver = GetGDALDriverManager()->GetDriverByName("Gtiff");
 			poDstDS = poDriver->Create( fileName.c_str(), cols, rows, 1, GDT_Float32, NULL);
+			poDstDS->SetGeoTransform(adfGeoTransform);
+			oSRS.SetWellKnownGeogCS(proyeccion.c_str());
 
 			GDALRasterBand *poBand;
 			float *pBuf = new float[rows * cols], maxVal = 0;
@@ -447,7 +472,7 @@ public:
 			poBand->RasterIO( GF_Write, 0, 0, cols, rows,
 			                  pBuf, cols, rows, GDT_Float32, 0, 0 );
 			GDALClose( (GDALDatasetH) poDstDS );
-			cout << "Max Val: " << maxVal << endl;
+			cout << fixed << "Max Val: " << maxVal << endl;
 		}
 
 		void check_npa(float** npa_matrix, float** &biomass_matrix) {
@@ -481,6 +506,8 @@ public:
 					result += buffer.data();
 			}
 			cout << "Source = " << result << endl;
+			//memset(&buffer[0], 0, sizeof(buffer));
+			//pipe.reset();
 			//exit(0);
 		}
 

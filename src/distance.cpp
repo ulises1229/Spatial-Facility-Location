@@ -20,7 +20,7 @@
 	}
 
 	bool costDistance::isInsideGrid(int i, int j){
-		return (i >= 0 && i < ROW && j >= 0 && j < COL && cost_raster[i][j] > 0 && cost_raster[i][j] >= 0);
+		return (i >= 0 && i < ROW && j >= 0 && j < COL && cost_raster[i][j] >= 0);
 	}
 
 
@@ -89,11 +89,20 @@
 
 
 	void costDistance::acumulados(set<cell> active_costs, int origen_x, int origen_y, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax){
-			int exp = intervals * 4;
+			extern char is_usable;
+			int exp;
+
+			if(is_usable == 'y')
+				exp = intervals * 4;
+			else
+				exp = intervals * 8;
+
 			xMin = xMin - exp;
 			yMin = yMin - exp;
 			xMax = xMax + exp;
 			yMax = yMax + exp;
+
+			//cout << xMin << " - " << xMax << " - " << yMin << " - " << yMax << endl;
 
 			if(xMin < 0)
 				xMin = 0;
@@ -108,16 +117,16 @@
 				cell k = *active_costs.begin();//inicio con la distancia menor
 				active_costs.erase(active_costs.begin());
 
-
+				//cout << "Estoy en: " << k.x << " - " << k.y << " - " << k.distance << endl;
 				if(k.x >= xMin && k.x <= xMax && k.y >= yMin && k.y <= yMax){
 					cont++;
 					int x, y;
 					for (int i = 0; i < 8; i++){
 						x = k.x + dx[i];
 						y = k.y + dy[i];
-						//cout << x << ", " << y << " " << active_raster[x][y]<< endl;
+						//cout << x << ", " << y << " " << active_raster[x][y]<< " - " << biomass[x][y] << endl;
 						set<float>distancias;
-						if(isInsideGrid(x,y) && biomass[x][y] > 0) {
+						if(isInsideGrid(x,y)) {
 							if(i % 2 != 0){// si es movimiento diagonal
 								//cout << "Diagonal" << " "<< x << ", " << y << " " << cost_raster[x][y] << endl;
 								if((x != origen_x || y != origen_y) && active_raster[x][y] == 0){
@@ -153,6 +162,7 @@
 									float minimo = *distancias.begin();
 									//cout << minimo << endl;
 									if(minimo < output_raster[x][y] && minimo >= 0){
+										//cout << "Inserté " << x << ", " << y << " - " << minimo << endl;
 										output_raster[x][y] = minimo;
 										active_costs.insert(cell(x,y,minimo));
 									}
@@ -164,6 +174,7 @@
 								if((x != origen_x || y != origen_y) && active_raster[x][y] == 0 && isInsideGrid(x,y)){
 									dist = ((cost_raster[k.x][k.y] + cost_raster[x][y])/2) + output_raster[k.x][k.y];
 									if(dist < output_raster[x][y] && dist >= 0){
+										//cout << "Inserté " << x << ", " << y << " - " << dist << endl;
 										output_raster[x][y] = dist;
 										active_costs.insert(cell(x,y,dist));
 									}
@@ -188,17 +199,17 @@
 		this->cost_raster = new float*[this->ROW];
 		this->output_raster = new float*[this->ROW];
 		this->active_raster = new bool*[this->ROW];
-		this->locations = new int*[this->ROW];
 		for(int i = 0; i< ROW; ++i){
 			this->cost_raster[i] = new float[COL];
 			this->output_raster[i] = new float[COL];
 			this->active_raster[i] = new bool[COL];
-			this->locations[i] = new int[COL];
 		}
-
 		for(int x = 0; x < ROW; x++){
 			for(int y = 0; y < COL; y++){
-				this->cost_raster[x][y] = grid[x][y] * projection;
+				if(grid[x][y] == 999999)
+					grid[x][y] = -9999;
+
+				this->cost_raster[x][y] = grid[x][y];// * projection;
 				this->active_raster[x][y] = false;
 				this->output_raster[x][y] = INT_MAX;
 			}
@@ -206,6 +217,7 @@
 
 
 		// the position of a cell that you want to display its neighbours
+		cout << srcX << " - " << srcY << endl;
 		active_raster[srcX][srcY] = 1;
 
 		//se obtienen los vecinos proximos al origen y sus distancias calculadas. ordenas de menor a mayor
@@ -232,7 +244,6 @@
 			delete[] output_raster[m];
 			delete[] cost_raster[m];
 			delete[] active_raster[m];
-			delete[] locations[m];
 		}
 	}
 
