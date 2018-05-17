@@ -1,0 +1,3 @@
+/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir
