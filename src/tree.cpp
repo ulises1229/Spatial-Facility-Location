@@ -13,7 +13,7 @@ void Tree::printPath(vector<nodeInfo> nodes, ofstream& info){
 	for (it = nodes.begin(); it != nodes.end(); it++) {
 		sum += it->value;
 		if(it->fricc > 0)
-			cost += it->value / it->fricc;
+			cost += it->fricc;//it->value / it->fricc;
 		totNodes++;
 	}
 	cout << fixed << "Biomass: " << sum << "  Cost: " << cost << "  Nodes: " << totNodes << endl;
@@ -106,10 +106,20 @@ void Tree::rutas(Node src, float stop, ofstream& info, char heuristic){
 	TreeNode *node = new TreeNode(1, biomass[src.x][src.y], src.x, src.y);
 	int id = 2;
 	int id_child = 0;
-	float totalAcum = biomass[src.x][src.y] / 40, costoTot = friction[src.x][src.y], heuristicResult = 0;
+	extern char is_usable;
+	float totalAcum, costoTot = friction[src.x][src.y], heuristicResult = 0;
 	TreeNode *node_dest;
+	if(is_usable == 'n'){
+		totalAcum = biomass[src.x][src.y] / 40;
+		path.push_back(nodeInfo(biomass[src.x][src.y] / 40, friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
+	}
+	else{
+		totalAcum = biomass[src.x][src.y];
+		path.push_back(nodeInfo(biomass[src.x][src.y], friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
+	}
 
-	path.push_back(nodeInfo(biomass[src.x][src.y] / 40, friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
+
+	//path.push_back(nodeInfo(biomass[src.x][src.y] / 40, friction[src.x][src.y], 0.0, src.x, src.y, 1, true, 0, 0));
 	//visitedNodes.push_back(findElement(src.x, src.y));
 	visitedNodes[src.x][src.y] = true;
 	sortedNodes.insert(nodeInfo(biomass[src.x][src.y], friction[src.x][src.y], 0.0, src.x, src.y, id, true, 0, 0));
@@ -180,7 +190,10 @@ void Tree::rutas(Node src, float stop, ofstream& info, char heuristic){
 		if (biomass[x][y] > 0 && friction[x][y] >= 0) {
 			node->appendChild(new TreeNode(last_id, node->getAcum() + biomass[x][y], x, y));
 			if(visitedNodes[x][y] == false) {
-				usable_b = biomass[x][y] / 40;
+				if(is_usable == 'n')
+					usable_b = biomass[x][y] / 40;
+				else
+					usable_b = biomass[x][y];
 				totalAcum += usable_b; //biomass[x][y];
 				costoTot += usable_b / friction[x][y];
 				//cout << totalAcum << endl;
