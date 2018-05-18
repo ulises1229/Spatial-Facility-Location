@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/bin/cmake
+CMAKE_COMMAND = /opt/clion-2018.1.2/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /Applications/CLion.app/Contents/bin/cmake/bin/cmake -E remove -f
+RM = /opt/clion-2018.1.2/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src
+CMAKE_SOURCE_DIR = /home/uolivares/Documents/Optimization-2018/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug
+CMAKE_BINARY_DIR = /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/optimization.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/optimization.dir/flags.make
 
 CMakeFiles/optimization.dir/bellford.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/bellford.cpp.o: ../bellford.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/optimization.dir/bellford.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/bellford.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/bellford.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/optimization.dir/bellford.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/bellford.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/bellford.cpp
 
 CMakeFiles/optimization.dir/bellford.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/bellford.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/bellford.cpp > CMakeFiles/optimization.dir/bellford.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/bellford.cpp > CMakeFiles/optimization.dir/bellford.cpp.i
 
 CMakeFiles/optimization.dir/bellford.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/bellford.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/bellford.cpp -o CMakeFiles/optimization.dir/bellford.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/bellford.cpp -o CMakeFiles/optimization.dir/bellford.cpp.s
 
 CMakeFiles/optimization.dir/bellford.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/optimization.dir/bellford.cpp.o.provides.build: CMakeFiles/optimizati
 
 CMakeFiles/optimization.dir/dijkstra.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/dijkstra.cpp.o: ../dijkstra.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/dijkstra.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/dijkstra.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/dijkstra.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/dijkstra.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/dijkstra.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp
 
 CMakeFiles/optimization.dir/dijkstra.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/dijkstra.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/dijkstra.cpp > CMakeFiles/optimization.dir/dijkstra.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp > CMakeFiles/optimization.dir/dijkstra.cpp.i
 
 CMakeFiles/optimization.dir/dijkstra.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/dijkstra.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/dijkstra.cpp -o CMakeFiles/optimization.dir/dijkstra.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp -o CMakeFiles/optimization.dir/dijkstra.cpp.s
 
 CMakeFiles/optimization.dir/dijkstra.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/optimization.dir/dijkstra.cpp.o.provides.build: CMakeFiles/optimizati
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/DisplayImage.cpp.o: ../DisplayImage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/optimization.dir/DisplayImage.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/DisplayImage.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/DisplayImage.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/optimization.dir/DisplayImage.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/DisplayImage.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/DisplayImage.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/DisplayImage.cpp > CMakeFiles/optimization.dir/DisplayImage.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp > CMakeFiles/optimization.dir/DisplayImage.cpp.i
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/DisplayImage.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/DisplayImage.cpp -o CMakeFiles/optimization.dir/DisplayImage.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp -o CMakeFiles/optimization.dir/DisplayImage.cpp.s
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.o.requires:
 
@@ -131,16 +131,16 @@ CMakeFiles/optimization.dir/DisplayImage.cpp.o.provides.build: CMakeFiles/optimi
 
 CMakeFiles/optimization.dir/distance.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/distance.cpp.o: ../distance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/optimization.dir/distance.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/distance.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/distance.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/optimization.dir/distance.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/distance.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/distance.cpp
 
 CMakeFiles/optimization.dir/distance.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/distance.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/distance.cpp > CMakeFiles/optimization.dir/distance.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/distance.cpp > CMakeFiles/optimization.dir/distance.cpp.i
 
 CMakeFiles/optimization.dir/distance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/distance.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/distance.cpp -o CMakeFiles/optimization.dir/distance.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/distance.cpp -o CMakeFiles/optimization.dir/distance.cpp.s
 
 CMakeFiles/optimization.dir/distance.cpp.o.requires:
 
@@ -155,16 +155,16 @@ CMakeFiles/optimization.dir/distance.cpp.o.provides.build: CMakeFiles/optimizati
 
 CMakeFiles/optimization.dir/exploracion.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/exploracion.cpp.o: ../exploracion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/optimization.dir/exploracion.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/exploracion.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/exploracion.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/optimization.dir/exploracion.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/exploracion.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/exploracion.cpp
 
 CMakeFiles/optimization.dir/exploracion.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/exploracion.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/exploracion.cpp > CMakeFiles/optimization.dir/exploracion.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/exploracion.cpp > CMakeFiles/optimization.dir/exploracion.cpp.i
 
 CMakeFiles/optimization.dir/exploracion.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/exploracion.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/exploracion.cpp -o CMakeFiles/optimization.dir/exploracion.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/exploracion.cpp -o CMakeFiles/optimization.dir/exploracion.cpp.s
 
 CMakeFiles/optimization.dir/exploracion.cpp.o.requires:
 
@@ -179,16 +179,16 @@ CMakeFiles/optimization.dir/exploracion.cpp.o.provides.build: CMakeFiles/optimiz
 
 CMakeFiles/optimization.dir/main.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/optimization.dir/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/main.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/optimization.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/main.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/main.cpp
 
 CMakeFiles/optimization.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/main.cpp > CMakeFiles/optimization.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/main.cpp > CMakeFiles/optimization.dir/main.cpp.i
 
 CMakeFiles/optimization.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/main.cpp -o CMakeFiles/optimization.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/main.cpp -o CMakeFiles/optimization.dir/main.cpp.s
 
 CMakeFiles/optimization.dir/main.cpp.o.requires:
 
@@ -203,16 +203,16 @@ CMakeFiles/optimization.dir/main.cpp.o.provides.build: CMakeFiles/optimization.d
 
 CMakeFiles/optimization.dir/tree.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/tree.cpp.o: ../tree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/optimization.dir/tree.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/tree.cpp.o -c /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/tree.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/optimization.dir/tree.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/tree.cpp.o -c /home/uolivares/Documents/Optimization-2018/src/tree.cpp
 
 CMakeFiles/optimization.dir/tree.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/tree.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/tree.cpp > CMakeFiles/optimization.dir/tree.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/uolivares/Documents/Optimization-2018/src/tree.cpp > CMakeFiles/optimization.dir/tree.cpp.i
 
 CMakeFiles/optimization.dir/tree.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/tree.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/tree.cpp -o CMakeFiles/optimization.dir/tree.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/uolivares/Documents/Optimization-2018/src/tree.cpp -o CMakeFiles/optimization.dir/tree.cpp.s
 
 CMakeFiles/optimization.dir/tree.cpp.o.requires:
 
@@ -247,7 +247,7 @@ optimization: CMakeFiles/optimization.dir/main.cpp.o
 optimization: CMakeFiles/optimization.dir/tree.cpp.o
 optimization: CMakeFiles/optimization.dir/build.make
 optimization: CMakeFiles/optimization.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable optimization"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable optimization"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/optimization.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -270,6 +270,6 @@ CMakeFiles/optimization.dir/clean:
 .PHONY : CMakeFiles/optimization.dir/clean
 
 CMakeFiles/optimization.dir/depend:
-	cd /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug /Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/uolivares/Documents/Optimization-2018/src /home/uolivares/Documents/Optimization-2018/src /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/optimization.dir/depend
 

@@ -676,7 +676,6 @@ int main(int argc, const char** argv){
 						clock_t begin2 = clock();
 						rn.inicio_rutas(biomass, d.output_raster, itr->second.x, itr->second.y, demanda, bestInfo, heuristic);
 						clock_t end2 = clock();
-					ls
                     double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 						cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 

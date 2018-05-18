@@ -4,15 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/DisplayImage.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/bellford.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/dijkstra.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/distance.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/exploracion.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/main.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
-  "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/tree.cpp" "/Users/ulisesolivares/Documents/GitHub/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/bellford.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/distance.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/exploracion.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/main.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
+  "/home/uolivares/Documents/Optimization-2018/src/tree.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "AppleClang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
