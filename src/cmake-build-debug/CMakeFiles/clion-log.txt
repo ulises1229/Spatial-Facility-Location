@@ -1,20 +1,4 @@
 /opt/clion-2018.1.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/uolivares/Documents/Optimization-2018/src
-CMake Error at CMakeLists.txt:8 (find_package):
-  By not providing "Findgdal.cmake" in CMAKE_MODULE_PATH this project has
-  asked CMake to find a package configuration file provided by "gdal", but
-  CMake did not find one.
-
-  Could not find a package configuration file provided by "gdal" with any of
-  the following names:
-
-    gdalConfig.cmake
-    gdal-config.cmake
-
-  Add the installation prefix of "gdal" to CMAKE_PREFIX_PATH or set
-  "gdal_DIR" to a directory containing one of the above files.  If "gdal"
-  provides a separate development package or SDK, be sure it has been
-  installed.
-
-
--- Configuring incomplete, errors occurred!
-See also "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug
