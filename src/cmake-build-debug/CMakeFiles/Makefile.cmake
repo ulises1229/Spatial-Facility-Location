@@ -7,10 +7,6 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "../CMakeLists.txt"
-  "CMakeFiles/3.10.3/CMakeCCompiler.cmake"
-  "CMakeFiles/3.10.3/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.10.3/CMakeSystem.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/CMakeCInformation.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/CMakeCXXInformation.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/CMakeCommonLanguageInclude.cmake"
@@ -24,19 +20,16 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Compiler/GNU-C.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Compiler/GNU-CXX.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Compiler/GNU.cmake"
-  "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/FindGDAL.cmake"
-  "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake"
-  "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/FindPackageMessage.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Platform/Linux-GNU-C.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Platform/Linux-GNU-CXX.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Platform/Linux-GNU.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Platform/Linux.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/Platform/UnixPaths.cmake"
   "/opt/clion-2018.1.2/bin/cmake/share/cmake-3.10/Modules/ProcessorCount.cmake"
-  "/usr/share/OpenCV/OpenCVConfig-version.cmake"
-  "/usr/share/OpenCV/OpenCVConfig.cmake"
-  "/usr/share/OpenCV/OpenCVModules-release.cmake"
-  "/usr/share/OpenCV/OpenCVModules.cmake"
+  "../CMakeLists.txt"
+  "CMakeFiles/3.10.3/CMakeCCompiler.cmake"
+  "CMakeFiles/3.10.3/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.10.3/CMakeSystem.cmake"
   )
 
 # The corresponding makefile is:

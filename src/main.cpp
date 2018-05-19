@@ -239,96 +239,119 @@ int main(int argc, const char** argv){
 		d.ROW = rows;
 
 		float bestCost = 0, bestxMin, bestxMax, bestyMin, bestyMax;
-		int bestX, bestY, cont = 1;
+		int bestX, bestY, cont = 0;
 
 		int i=0, j=0;
 
 		cout<<"Parallel region"<<endl;
 
-        #pragma omp parallel for collapse(2) private(i,j)
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    centroid.x = i; centroid.y = j;
-                    if (biomass[i][j] > 0) {
-                        cout << biomass[i][j] << endl;
-                        coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
-                        cout << centroid.x << ", " << centroid.y << endl;
-                        cout << "No. " << cont << " / " << di.valid_points << endl;
-                        coords << centroid.y << " " << centroid.x;
-                        coords.close();
-                        di.reproject_coords(map_biomass);
-                        clock_t begin_cd = clock();
+        omp_set_num_threads(1);
 
-                        d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
+        // reproject biomass
+        di.reproject_coords(map_biomass);
 
+        #pragma omp parallel
+            #pragma omp for  collapse(2) private(i, j, centroid) schedule(dynamic) nowait
+                for (i = 0; i < rows; i++) {
+                    for (j = 0; j < cols; j++) {
+                        cout << "before IF: " << " biomass Value: " << biomass[i][j] << " ThreadID: " << omp_get_thread_num()<< endl;
+                        if (biomass[i][j] > 0) {
+                            cout << "AFTER IF: " << " biomass Value: " << biomass[i][j]  << " i: " << i << " j: " << j << " ThreadID: " << omp_get_thread_num()<< endl;
+                            centroid.x = i; centroid.y = j;
+                            cout << "Thread: " << omp_get_thread_num() << " Biomass: " << biomass[i][j] <<endl;
+                            cout << biomass[i][j] << endl;
+                            coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
+                            cout << centroid.x << ", " << centroid.y << endl;
 
-                        /*clock_t end_cd = clock();
-                        double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
+                            #pragma omp atomic
+                                cont ++;
 
-                        cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
-                        switch(algorithm) {
-                            case 'B': //Binary search
-                            case 'b': {
-                                string algName = "Breadth_First_Search";
-                                Tree rn;
-                                rn.COL = cols;
-                                rn.ROW = rows;
-                                cout<< "Thread id: " << omp_get_thread_num() <<endl;
-                                clock_t begin2 = clock();
-                                rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-                                clock_t end2 = clock();
-                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-                                cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
+                            cout << "No. " << cont << " / " << di.valid_points << endl;
+                            coords << centroid.y << " " << centroid.x << "Thread: " << omp_get_thread_num() << endl;
+                            coords.close();
 
-                                if(rn.cost > bestCost) {
-                                    bestCost = rn.cost;
-                                    bestX = rn.x;
-                                    bestY = rn.y;
-                                    bestxMin = i - 50;
-                                    bestxMax = i + 50;
-                                    bestyMin = j - 50;
-                                    bestyMax = j + 50;
+                            //di.reproject_coords(map_biomass);
+
+                            //clock_t begin_cd = clock();
+
+                            cout << "before execute cost distance Thread: "<< omp_get_thread_num()<< endl;
+
+                            d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
+
+                            cout << "AFTER execute cost distance"<< endl;
+
+                            cout << "FINISH" <<endl;
+
+                            exit(0);
+
+                            /*clock_t end_cd = clock();
+                            double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
+
+                            cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
+                            switch(algorithm) {
+                                case 'B': //Binary search
+                                case 'b': {
+                                    string algName = "Breadth_First_Search";
+                                    Tree rn;
+                                    rn.COL = cols;
+                                    rn.ROW = rows;
+                                    cout<< "Thread id: " << omp_get_thread_num() <<endl;
+                                    clock_t begin2 = clock();
+                                    rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
+                                    clock_t end2 = clock();
+                                    double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                                    cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
+
+                                    if(rn.cost > bestCost) {
+                                        bestCost = rn.cost;
+                                        bestX = rn.x;
+                                        bestY = rn.y;
+                                        bestxMin = i - 50;
+                                        bestxMax = i + 50;
+                                        bestyMin = j - 50;
+                                        bestyMax = j + 50;
+                                    }
+
+                                    d.freeMem();
+                                    rn.freeMem();
+                                    break;
                                 }
 
-                                d.freeMem();
-                                rn.freeMem();
-                                break;
-                            }
+                                case 'A': //A* search
+                                case 'a': {
+                                    Explore e;
+                                    string algName = "AStar";
+                                    e.COL = cols;
+                                    e.ROW = rows;
+                                    e.inicio(biomass);
+                                    clock_t begin2 = clock();
+                                    e.explore(d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
+                                    clock_t end2 = clock();
+                                    double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                                    cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 
-                            case 'A': //A* search
-                            case 'a': {
-                                Explore e;
-                                string algName = "AStar";
-                                e.COL = cols;
-                                e.ROW = rows;
-                                e.inicio(biomass);
-                                clock_t begin2 = clock();
-                                e.explore(d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-                                clock_t end2 = clock();
-                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-                                cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
+                                    if(e.cost > bestCost) {
+                                        bestCost = e.cost;
+                                        bestX = e.X;
+                                        bestY = e.Y;
+                                        bestxMin = i - 50;
+                                        bestxMax = i + 50;
+                                        bestyMin = j - 50;
+                                        bestyMax = j + 50;
+                                    }
 
-                                if(e.cost > bestCost) {
-                                    bestCost = e.cost;
-                                    bestX = e.X;
-                                    bestY = e.Y;
-                                    bestxMin = i - 50;
-                                    bestxMax = i + 50;
-                                    bestyMin = j - 50;
-                                    bestyMax = j + 50;
+                                    e.freeMem();
+                                    d.freeMem();
+                                    break;
+
                                 }
-
-                                e.freeMem();
-                                d.freeMem();
-                                break;
-
                             }
-                        }
-                        cont++;
-                    */}
-                }
-            //}
-		}
+                            cont++;
+                        */}
+                    }
+                //}
+            }
+
 		cout << "*** Best point ***" << endl;
 		coords.open("coords.txt");
 		coords << bestY << " " << bestX;
@@ -676,6 +699,7 @@ int main(int argc, const char** argv){
 						clock_t begin2 = clock();
 						rn.inicio_rutas(biomass, d.output_raster, itr->second.x, itr->second.y, demanda, bestInfo, heuristic);
 						clock_t end2 = clock();
+
                     double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 						cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 

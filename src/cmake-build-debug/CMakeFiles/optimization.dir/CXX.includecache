@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp
+/root/Desktop/Optimization-2018/src/DisplayImage.cpp
 stdlib.h
 -
 opencv2/core/core.hpp
@@ -54,7 +54,7 @@ set
 /usr/include/gdal/ogr_geometry.h
 -
 
-/home/uolivares/Documents/Optimization-2018/src/bellford.cpp
+/root/Desktop/Optimization-2018/src/bellford.cpp
 stdio.h
 -
 stdlib.h
@@ -82,7 +82,7 @@ queue
 math.h
 -
 
-/home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp
+/root/Desktop/Optimization-2018/src/dijkstra.cpp
 stdio.h
 -
 stdlib.h
@@ -110,11 +110,11 @@ fstream
 math.h
 -
 
-/home/uolivares/Documents/Optimization-2018/src/distance.cpp
+/root/Desktop/Optimization-2018/src/distance.cpp
 distance.h
-/home/uolivares/Documents/Optimization-2018/src/distance.h
+/root/Desktop/Optimization-2018/src/distance.h
 
-/home/uolivares/Documents/Optimization-2018/src/distance.h
+/root/Desktop/Optimization-2018/src/distance.h
 iostream
 -
 fstream
@@ -136,11 +136,11 @@ stdlib.h
 math.h
 -
 
-/home/uolivares/Documents/Optimization-2018/src/exploracion.cpp
+/root/Desktop/Optimization-2018/src/exploracion.cpp
 exploracion.h
-/home/uolivares/Documents/Optimization-2018/src/exploracion.h
+/root/Desktop/Optimization-2018/src/exploracion.h
 
-/home/uolivares/Documents/Optimization-2018/src/exploracion.h
+/root/Desktop/Optimization-2018/src/exploracion.h
 climits
 -
 iostream
@@ -168,7 +168,7 @@ utility
 vector
 -
 
-/home/uolivares/Documents/Optimization-2018/src/main.cpp
+/root/Desktop/Optimization-2018/src/main.cpp
 iostream
 -
 stdio.h
@@ -184,27 +184,27 @@ iterator
 map
 -
 DisplayImage.cpp
-/home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp
+/root/Desktop/Optimization-2018/src/DisplayImage.cpp
 distance.h
-/home/uolivares/Documents/Optimization-2018/src/distance.h
+/root/Desktop/Optimization-2018/src/distance.h
 exploracion.h
-/home/uolivares/Documents/Optimization-2018/src/exploracion.h
+/root/Desktop/Optimization-2018/src/exploracion.h
 tree.h
-/home/uolivares/Documents/Optimization-2018/src/tree.h
+/root/Desktop/Optimization-2018/src/tree.h
 dijkstra.cpp
-/home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp
+/root/Desktop/Optimization-2018/src/dijkstra.cpp
 bellford.cpp
-/home/uolivares/Documents/Optimization-2018/src/bellford.cpp
+/root/Desktop/Optimization-2018/src/bellford.cpp
 tclap/CmdLine.h
 -
 omp.h
 -
 
-/home/uolivares/Documents/Optimization-2018/src/tree.cpp
+/root/Desktop/Optimization-2018/src/tree.cpp
 tree.h
-/home/uolivares/Documents/Optimization-2018/src/tree.h
+/root/Desktop/Optimization-2018/src/tree.h
 
-/home/uolivares/Documents/Optimization-2018/src/tree.h
+/root/Desktop/Optimization-2018/src/tree.h
 iostream
 -
 fstream
@@ -228,9 +228,9 @@ list
 math.h
 -
 treenode.h
-/home/uolivares/Documents/Optimization-2018/src/treenode.h
+/root/Desktop/Optimization-2018/src/treenode.h
 
-/home/uolivares/Documents/Optimization-2018/src/treenode.h
+/root/Desktop/Optimization-2018/src/treenode.h
 iostream
 -
 fstream
@@ -250,15 +250,13 @@ algorithm
 list
 -
 
-/usr/include/gdal/cpl_atomic_ops.h
-cpl_port.h
-/usr/include/gdal/cpl_port.h
-
 /usr/include/gdal/cpl_config.h
-cpl_config_extras.h
-/usr/include/gdal/cpl_config_extras.h
-
-/usr/include/gdal/cpl_config_extras.h
+bits/wordsize.h
+-
+gdal/cpl_config-32.h
+/usr/include/gdal/gdal/cpl_config-32.h
+gdal/cpl_config-64.h
+/usr/include/gdal/gdal/cpl_config-64.h
 
 /usr/include/gdal/cpl_conv.h
 cpl_port.h
@@ -271,16 +269,8 @@ cpl_error.h
 /usr/include/gdal/cpl_error.h
 cpl_port.h
 /usr/include/gdal/cpl_port.h
-stdarg.h
--
-stddef.h
--
 
 /usr/include/gdal/cpl_minixml.h
-cpl_port.h
-/usr/include/gdal/cpl_port.h
-
-/usr/include/gdal/cpl_multiproc.h
 cpl_port.h
 /usr/include/gdal/cpl_port.h
 
@@ -303,6 +293,10 @@ limits.h
 -
 time.h
 -
+wce_time.h
+-
+wce_errno.h
+-
 errno.h
 -
 locale.h
@@ -315,69 +309,7 @@ dbmalloc.h
 -
 dmalloc.h
 -
-stdint.h
--
-locale.h
--
-unistd.h
--
-sys/types.h
--
-iconv.h
--
-sys/mman.h
--
-signal.h
--
-dlfcn.h
--
-netdb.h
--
-fcntl.h
--
-string
--
-cstdio
--
-cstdlib
--
-cstring
--
-cstddef
--
-ostream
--
-iostream
--
-sstream
--
 float.h
--
-cmath
--
-ieeefp.h
--
-x86intrin.h
--
-sal.h
--
-vector
--
-map
--
-set
--
-string
--
-cstddef
--
-limits
--
-sstream
--
-fstream
--
-algorithm
 -
 
 /usr/include/gdal/cpl_progress.h
@@ -385,18 +317,16 @@ cpl_port.h
 /usr/include/gdal/cpl_port.h
 
 /usr/include/gdal/cpl_string.h
+cpl_vsi.h
+/usr/include/gdal/cpl_vsi.h
 cpl_error.h
 /usr/include/gdal/cpl_error.h
 cpl_conv.h
 /usr/include/gdal/cpl_conv.h
-cpl_vsi.h
-/usr/include/gdal/cpl_vsi.h
 string
 -
 
 /usr/include/gdal/cpl_virtualmem.h
-stddef.h
--
 cpl_port.h
 /usr/include/gdal/cpl_port.h
 cpl_vsi.h
@@ -408,6 +338,8 @@ cpl_port.h
 unistd.h
 -
 sys/stat.h
+-
+wce_stat.h
 -
 cpl_error.h
 /usr/include/gdal/cpl_error.h
@@ -423,10 +355,6 @@ cpl_progress.h
 /usr/include/gdal/cpl_progress.h
 cpl_virtualmem.h
 /usr/include/gdal/cpl_virtualmem.h
-cpl_minixml.h
-/usr/include/gdal/cpl_minixml.h
-ogr_api.h
-/usr/include/gdal/ogr_api.h
 
 /usr/include/gdal/gdal_alg.h
 gdal.h
@@ -453,16 +381,8 @@ cpl_string.h
 /usr/include/gdal/cpl_string.h
 cpl_minixml.h
 /usr/include/gdal/cpl_minixml.h
-cpl_multiproc.h
-/usr/include/gdal/cpl_multiproc.h
-cpl_atomic_ops.h
-/usr/include/gdal/cpl_atomic_ops.h
 vector
 -
-map
--
-ogr_core.h
-/usr/include/gdal/ogr_core.h
 
 /usr/include/gdal/gdal_version.h
 
@@ -471,14 +391,10 @@ gdal_alg.h
 /usr/include/gdal/gdal_alg.h
 cpl_minixml.h
 /usr/include/gdal/cpl_minixml.h
-cpl_multiproc.h
-/usr/include/gdal/cpl_multiproc.h
 
 /usr/include/gdal/ogr_api.h
 cpl_progress.h
 /usr/include/gdal/cpl_progress.h
-cpl_minixml.h
-/usr/include/gdal/cpl_minixml.h
 ogr_core.h
 /usr/include/gdal/ogr_core.h
 
@@ -487,8 +403,6 @@ cpl_port.h
 /usr/include/gdal/cpl_port.h
 gdal_version.h
 /usr/include/gdal/gdal_version.h
-limits
--
 
 /usr/include/gdal/ogr_geometry.h
 ogr_core.h

@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/bellford.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/distance.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/exploracion.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/main.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
-  "/home/uolivares/Documents/Optimization-2018/src/tree.cpp" "/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
+  "/root/Desktop/Optimization-2018/src/DisplayImage.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
+  "/root/Desktop/Optimization-2018/src/bellford.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
+  "/root/Desktop/Optimization-2018/src/dijkstra.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
+  "/root/Desktop/Optimization-2018/src/distance.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
+  "/root/Desktop/Optimization-2018/src/exploracion.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
+  "/root/Desktop/Optimization-2018/src/main.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
+  "/root/Desktop/Optimization-2018/src/tree.cpp" "/root/Desktop/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

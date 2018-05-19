@@ -196,22 +196,28 @@
 
 	void costDistance::inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax, double projection) {
 		//cout << COL << " " << ROW << endl;
-		this->cost_raster = new float*[this->ROW];
+		/*this->cost_raster = new float*[this->ROW];
 		this->output_raster = new float*[this->ROW];
-		this->active_raster = new bool*[this->ROW];
+		this->active_raster = new bool*[this->ROW];*/
+
+		float ** cost_raster = new float*[this->ROW];
+		float ** output_raster = new float*[this->ROW];
+		bool ** active_raster = new bool*[this->ROW];
+
 		for(int i = 0; i< ROW; ++i){
-			this->cost_raster[i] = new float[COL];
-			this->output_raster[i] = new float[COL];
-			this->active_raster[i] = new bool[COL];
+			cost_raster[i] = new float[COL];
+			output_raster[i] = new float[COL];
+			active_raster[i] = new bool[COL];
 		}
 		for(int x = 0; x < ROW; x++){
 			for(int y = 0; y < COL; y++){
+				//FIXME: WHY THIS CONDITION? JUST TO DISCARD UNREACHABLE POINTS?
 				if(grid[x][y] == 999999)
 					grid[x][y] = -9999;
 
-				this->cost_raster[x][y] = grid[x][y];// * projection;
-				this->active_raster[x][y] = false;
-				this->output_raster[x][y] = INT_MAX;
+				cost_raster[x][y] = grid[x][y];// * projection;
+				active_raster[x][y] = false;
+				output_raster[x][y] = INT_MAX;
 			}
 		}
 
@@ -228,6 +234,9 @@
 			cout << (*itr).x << ", " << (*itr).y << " - dist =  " << (*itr).distance << endl;
 		}*/
 		//exit(0);
+
+		cout<<"before acumulados"<<endl;
+
 		acumulados(distancias, srcX, srcY, biomass, intervals, xMin, xMax, yMin, yMax);//metodo para calcular demas vecinos.
 		for(int r=0; r<ROW; r++){
 			for(int c=0; c<COL; c++){

@@ -46,9 +46,9 @@ public:
 	//variables
 	int ROW, COL;
 	int** locations;
-	float** output_raster;
+	/*float** output_raster;
 	float** cost_raster;
-	bool** active_raster;
+	bool** active_raster;*/
 	int rutas[8][8]{
 		{0,0,0,0,0,0,0,0},
 		{-1,0,0,1,0,1,-1,0},

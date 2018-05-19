@@ -5,135 +5,119 @@
 		<Option title="src"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\share\;CMake Files\..\..\..\..\..\usr\share\OpenCV\;"/>
+		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug"/>
+				<Option working_dir="/root/Desktop/Optimization-2018/src/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug"/>
+				<Option working_dir="/root/Desktop/Optimization-2018/src/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug"/>
+				<Option working_dir="/root/Desktop/Optimization-2018/src/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="optimization">
-				<Option output="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/optimization" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug"/>
+				<Option output="/root/Desktop/Optimization-2018/src/cmake-build-debug/optimization" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/root/Desktop/Optimization-2018/src/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 optimization"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 optimization"/>
+					<CompileFile command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="optimization/fast">
-				<Option output="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/optimization" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug"/>
+				<Option output="/root/Desktop/Optimization-2018/src/cmake-build-debug/optimization" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/root/Desktop/Optimization-2018/src/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 optimization/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 optimization/fast"/>
+					<CompileFile command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -j8 -f &quot;/root/Desktop/Optimization-2018/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/DisplayImage.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/DisplayImage.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/bellford.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/bellford.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/dijkstra.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/dijkstra.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/distance.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/distance.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/distance.h">
+		<Unit filename="/root/Desktop/Optimization-2018/src/distance.h">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/exploracion.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/exploracion.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/exploracion.h">
+		<Unit filename="/root/Desktop/Optimization-2018/src/exploracion.h">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/main.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/main.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/structure.h">
+		<Unit filename="/root/Desktop/Optimization-2018/src/structure.h">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/tree.cpp">
+		<Unit filename="/root/Desktop/Optimization-2018/src/tree.cpp">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/tree.h">
+		<Unit filename="/root/Desktop/Optimization-2018/src/tree.h">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/treenode.h">
+		<Unit filename="/root/Desktop/Optimization-2018/src/treenode.h">
 			<Option target="optimization"/>
 		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/CMakeLists.txt">
+		<Unit filename="/root/Desktop/Optimization-2018/src/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
-		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/../../../../../usr/share/OpenCV/OpenCVConfig-version.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\share\OpenCV\"/>
-		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/../../../../../usr/share/OpenCV/OpenCVConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\share\OpenCV\"/>
-		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/../../../../../usr/share/OpenCV/OpenCVModules-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\share\OpenCV\"/>
-		</Unit>
-		<Unit filename="/home/uolivares/Documents/Optimization-2018/src/../../../../../usr/share/OpenCV/OpenCVModules.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\share\OpenCV\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>
