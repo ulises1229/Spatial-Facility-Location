@@ -243,15 +243,12 @@ int main(int argc, const char** argv){
 
 		int i=0, j=0;
 
-		cout<<"Parallel region"<<endl;
-
-        #pragma omp parallel for collapse(2) private(i,j)
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     centroid.x = i; centroid.y = j;
                     if (biomass[i][j] > 0) {
                         cout << biomass[i][j] << endl;
-                        coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
+                        coords.open("coords.txt");
                         cout << centroid.x << ", " << centroid.y << endl;
                         cout << "No. " << cont << " / " << di.valid_points << endl;
                         coords << centroid.y << " " << centroid.x;
@@ -262,7 +259,7 @@ int main(int argc, const char** argv){
                         d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
 
 
-                        /*clock_t end_cd = clock();
+                        clock_t end_cd = clock();
                         double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
 
                         cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
@@ -273,7 +270,6 @@ int main(int argc, const char** argv){
                                 Tree rn;
                                 rn.COL = cols;
                                 rn.ROW = rows;
-                                cout<< "Thread id: " << omp_get_thread_num() <<endl;
                                 clock_t begin2 = clock();
                                 rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
                                 clock_t end2 = clock();
@@ -325,9 +321,8 @@ int main(int argc, const char** argv){
                             }
                         }
                         cont++;
-                    */}
+                    }
                 }
-            //}
 		}
 		cout << "*** Best point ***" << endl;
 		coords.open("coords.txt");
