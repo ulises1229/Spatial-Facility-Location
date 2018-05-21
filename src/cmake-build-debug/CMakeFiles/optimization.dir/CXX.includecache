@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/root/Desktop/Optimization-2018/src/DisplayImage.cpp
+/root/Documents/Optimization-2018/src/DisplayImage.cpp
 stdlib.h
 -
 opencv2/core/core.hpp
@@ -54,7 +54,7 @@ set
 /usr/include/gdal/ogr_geometry.h
 -
 
-/root/Desktop/Optimization-2018/src/bellford.cpp
+/root/Documents/Optimization-2018/src/bellford.cpp
 stdio.h
 -
 stdlib.h
@@ -82,7 +82,7 @@ queue
 math.h
 -
 
-/root/Desktop/Optimization-2018/src/dijkstra.cpp
+/root/Documents/Optimization-2018/src/dijkstra.cpp
 stdio.h
 -
 stdlib.h
@@ -110,11 +110,11 @@ fstream
 math.h
 -
 
-/root/Desktop/Optimization-2018/src/distance.cpp
+/root/Documents/Optimization-2018/src/distance.cpp
 distance.h
-/root/Desktop/Optimization-2018/src/distance.h
+/root/Documents/Optimization-2018/src/distance.h
 
-/root/Desktop/Optimization-2018/src/distance.h
+/root/Documents/Optimization-2018/src/distance.h
 iostream
 -
 fstream
@@ -136,11 +136,11 @@ stdlib.h
 math.h
 -
 
-/root/Desktop/Optimization-2018/src/exploracion.cpp
+/root/Documents/Optimization-2018/src/exploracion.cpp
 exploracion.h
-/root/Desktop/Optimization-2018/src/exploracion.h
+/root/Documents/Optimization-2018/src/exploracion.h
 
-/root/Desktop/Optimization-2018/src/exploracion.h
+/root/Documents/Optimization-2018/src/exploracion.h
 climits
 -
 iostream
@@ -168,7 +168,7 @@ utility
 vector
 -
 
-/root/Desktop/Optimization-2018/src/main.cpp
+/root/Documents/Optimization-2018/src/main.cpp
 iostream
 -
 stdio.h
@@ -184,27 +184,27 @@ iterator
 map
 -
 DisplayImage.cpp
-/root/Desktop/Optimization-2018/src/DisplayImage.cpp
+/root/Documents/Optimization-2018/src/DisplayImage.cpp
 distance.h
-/root/Desktop/Optimization-2018/src/distance.h
+/root/Documents/Optimization-2018/src/distance.h
 exploracion.h
-/root/Desktop/Optimization-2018/src/exploracion.h
+/root/Documents/Optimization-2018/src/exploracion.h
 tree.h
-/root/Desktop/Optimization-2018/src/tree.h
+/root/Documents/Optimization-2018/src/tree.h
 dijkstra.cpp
-/root/Desktop/Optimization-2018/src/dijkstra.cpp
+/root/Documents/Optimization-2018/src/dijkstra.cpp
 bellford.cpp
-/root/Desktop/Optimization-2018/src/bellford.cpp
+/root/Documents/Optimization-2018/src/bellford.cpp
 tclap/CmdLine.h
 -
 omp.h
 -
 
-/root/Desktop/Optimization-2018/src/tree.cpp
+/root/Documents/Optimization-2018/src/tree.cpp
 tree.h
-/root/Desktop/Optimization-2018/src/tree.h
+/root/Documents/Optimization-2018/src/tree.h
 
-/root/Desktop/Optimization-2018/src/tree.h
+/root/Documents/Optimization-2018/src/tree.h
 iostream
 -
 fstream
@@ -228,9 +228,9 @@ list
 math.h
 -
 treenode.h
-/root/Desktop/Optimization-2018/src/treenode.h
+/root/Documents/Optimization-2018/src/treenode.h
 
-/root/Desktop/Optimization-2018/src/treenode.h
+/root/Documents/Optimization-2018/src/treenode.h
 iostream
 -
 fstream
