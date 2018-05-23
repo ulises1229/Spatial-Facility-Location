@@ -22,4 +22,4 @@ add_executable(optimization
     structure.h
     tree.cpp
     tree.h
-    treenode.h)
+    treenode.h matrix.h)

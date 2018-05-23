@@ -104,6 +104,9 @@
 		<Unit filename="/root/Documents/Optimization-2018/src/main.cpp">
 			<Option target="optimization"/>
 		</Unit>
+		<Unit filename="/root/Documents/Optimization-2018/src/matrix.h">
+			<Option target="optimization"/>
+		</Unit>
 		<Unit filename="/root/Documents/Optimization-2018/src/structure.h">
 			<Option target="optimization"/>
 		</Unit>

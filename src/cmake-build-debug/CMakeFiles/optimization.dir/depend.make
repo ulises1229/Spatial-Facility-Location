@@ -29,6 +29,7 @@ CMakeFiles/optimization.dir/dijkstra.cpp.o: ../dijkstra.cpp
 
 CMakeFiles/optimization.dir/distance.cpp.o: ../distance.cpp
 CMakeFiles/optimization.dir/distance.cpp.o: ../distance.h
+CMakeFiles/optimization.dir/distance.cpp.o: ../matrix.h
 
 CMakeFiles/optimization.dir/exploracion.cpp.o: ../exploracion.cpp
 CMakeFiles/optimization.dir/exploracion.cpp.o: ../exploracion.h

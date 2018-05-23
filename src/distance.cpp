@@ -6,6 +6,7 @@
  */
 
 #include "distance.h"
+//#include "matrix.h"
 
 
 	// Utility method for comparing two cells
@@ -198,15 +199,34 @@
 		this->output_raster = new float*[this->ROW];
 		this->active_raster = new bool*[this->ROW];*/
 
-		float ** cost_raster2 = new float*[this->ROW];
-		float ** output_raster2 = new float*[this->ROW];
-		bool ** active_raster2 = new bool*[this->ROW];
+		cout << "Before declaration" << endl;
 
-		for(int i = 0; i< ROW; ++i){
+		//float ** cost_raster2 = new float*[this->ROW];
+		//float ** output_raster2 = new float*[this->ROW];
+		//bool ** active_raster2 = new bool*[this->ROW];
+
+		float cost_raster2[ROW][COL];
+		float output_raster2[ROW][COL];
+		bool active_raster2[ROW][COL];
+
+		cout << "After declaration" << endl;
+
+		cout << "Before row iteration" << endl;
+		int i= 0;
+
+		//#pragma parallel for firstprivate(i)
+		/*for(i = 0; i< ROW; ++i){
 			cost_raster2[i] = new float[COL];
+			cout << "After first instruction: iteration: " << i <<endl;
 			output_raster2[i] = new float[COL];
+			cout << "After second instruction: iteration: " << i <<endl;
 			active_raster2[i] = new bool[COL];
-		}
+			cout << "After third instruction: iteration: " << i <<endl;
+		}*/
+
+
+
+		cout<<"Finish row iteration "<< endl;
 
 		for(int x = 0; x < ROW; x++){
 			for(int y = 0; y < COL; y++){

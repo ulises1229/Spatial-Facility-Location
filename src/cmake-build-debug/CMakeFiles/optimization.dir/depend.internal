@@ -30,6 +30,7 @@ CMakeFiles/optimization.dir/dijkstra.cpp.o
 CMakeFiles/optimization.dir/distance.cpp.o
  /root/Documents/Optimization-2018/src/distance.cpp
  /root/Documents/Optimization-2018/src/distance.h
+ /root/Documents/Optimization-2018/src/matrix.h
 CMakeFiles/optimization.dir/exploracion.cpp.o
  /root/Documents/Optimization-2018/src/exploracion.cpp
  /root/Documents/Optimization-2018/src/exploracion.h
