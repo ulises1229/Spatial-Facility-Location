@@ -19,12 +19,12 @@
 		return (a.distance < b.distance);
 	}
 
-	bool costDistance::isInsideGrid(int i, int j){
+	bool costDistance::isInsideGrid(int i, int j, float ** cost_raster){
 		return (i >= 0 && i < ROW && j >= 0 && j < COL && cost_raster[i][j] >= 0);
 	}
 
 
-	set<costDistance::cell>costDistance::vecinos(int origen_x, int origen_y){
+	set<costDistance::cell>costDistance::vecinos(int origen_x, int origen_y, float ** cost_raster, float ** output_raster, bool ** active_raster){
 		set<cell>distancias;
 		float** dis;
 		dis = new float*[this->ROW];
@@ -60,7 +60,7 @@
 			y = k.y + dy[i];
 			//cout << "x = " << x << " y = " << y << endl;
 			// if not inside boundry, ignore them
-			if (!isInsideGrid(x, y)){
+			if (!isInsideGrid(x, y, cost_raster)){
 				//cout << "no inside grid" << endl;
 				continue;
 			}
@@ -126,7 +126,7 @@
 						y = k.y + dy[i];
 						//cout << x << ", " << y << " " << active_raster[x][y]<< " - " << biomass[x][y] << endl;
 						set<float>distancias;
-						if(isInsideGrid(x,y)) {
+						if(isInsideGrid(x,y, cost_raster)) {
 							if(i % 2 != 0){// si es movimiento diagonal
 								//cout << "Diagonal" << " "<< x << ", " << y << " " << cost_raster[x][y] << endl;
 								if((x != origen_x || y != origen_y) && active_raster[x][y] == 0){
@@ -171,7 +171,7 @@
 							else{
 								//cout << "Normal" << " "<< x << ", " << y << " " << cost_raster[x][y] << endl;
 								float dist = 0;
-								if((x != origen_x || y != origen_y) && active_raster[x][y] == 0 && isInsideGrid(x,y)){
+								if((x != origen_x || y != origen_y) && active_raster[x][y] == 0 && isInsideGrid(x,y, cost_raster)){
 									dist = ((cost_raster[k.x][k.y] + cost_raster[x][y])/2) + output_raster[k.x][k.y];
 									if(dist < output_raster[x][y] && dist >= 0){
 										//cout << "Inserté " << x << ", " << y << " - " << dist << endl;
@@ -186,8 +186,6 @@
 					active_raster[k.x][k.y] = true;
 				}
 				}
-
-
 			active_costs.clear();
 		}
 
@@ -200,34 +198,38 @@
 		this->output_raster = new float*[this->ROW];
 		this->active_raster = new bool*[this->ROW];*/
 
-		float ** cost_raster = new float*[this->ROW];
-		float ** output_raster = new float*[this->ROW];
-		bool ** active_raster = new bool*[this->ROW];
+		float ** cost_raster2 = new float*[this->ROW];
+		float ** output_raster2 = new float*[this->ROW];
+		bool ** active_raster2 = new bool*[this->ROW];
 
 		for(int i = 0; i< ROW; ++i){
-			cost_raster[i] = new float[COL];
-			output_raster[i] = new float[COL];
-			active_raster[i] = new bool[COL];
+			cost_raster2[i] = new float[COL];
+			output_raster2[i] = new float[COL];
+			active_raster2[i] = new bool[COL];
 		}
+
 		for(int x = 0; x < ROW; x++){
 			for(int y = 0; y < COL; y++){
 				//FIXME: WHY THIS CONDITION? JUST TO DISCARD UNREACHABLE POINTS?
 				if(grid[x][y] == 999999)
 					grid[x][y] = -9999;
 
-				cost_raster[x][y] = grid[x][y];// * projection;
-				active_raster[x][y] = false;
-				output_raster[x][y] = INT_MAX;
+				cost_raster2[x][y] = grid[x][y];// * projection;
+				active_raster2[x][y] = false;
+				output_raster2[x][y] = INT_MAX;
 			}
 		}
 
+		cout<< "Finish all row and col iteration" << endl;
 
 		// the position of a cell that you want to display its neighbours
 		cout << srcX << " - " << srcY << endl;
-		active_raster[srcX][srcY] = 1;
+		active_raster2[srcX][srcY] = 1;
 
+
+		// FIXME: PASSS AS PARAMETER COST_RASTER, OUTPUT_RASTER, ACTIVE_RASTER.
 		//se obtienen los vecinos proximos al origen y sus distancias calculadas. ordenas de menor a mayor
-		set<cell> distancias = vecinos(srcX,srcY);
+		set<cell> distancias = vecinos(srcX,srcY, cost_raster2, output_raster2, active_raster2);
 
 		/*set <cell> :: iterator itr;
 		for (itr = distancias.begin(); itr != distancias.end(); ++itr){
@@ -237,11 +239,11 @@
 
 		cout<<"before acumulados"<<endl;
 
-		acumulados(distancias, srcX, srcY, biomass, intervals, xMin, xMax, yMin, yMax);//metodo para calcular demas vecinos.
+		//acumulados(distancias, srcX, srcY, biomass, intervals, xMin, xMax, yMin, yMax);//metodo para calcular demas vecinos.
 		for(int r=0; r<ROW; r++){
 			for(int c=0; c<COL; c++){
-				if(output_raster[r][c] == INT_MAX)
-					output_raster[r][c] = -9999;
+				if(output_raster2[r][c] == INT_MAX)
+					output_raster2[r][c] = -9999;
 
 			}
 		}

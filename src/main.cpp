@@ -245,20 +245,20 @@ int main(int argc, const char** argv){
 
 		cout<<"Parallel region"<<endl;
 
-        omp_set_num_threads(1);
+        omp_set_num_threads(2);
 
-        // reproject biomass
+        // Reproject biomass
         di.reproject_coords(map_biomass);
 
         #pragma omp parallel
             #pragma omp for  collapse(2) private(i, j, centroid) schedule(dynamic) nowait
                 for (i = 0; i < rows; i++) {
                     for (j = 0; j < cols; j++) {
-                        cout << "before IF: " << " biomass Value: " << biomass[i][j] << " ThreadID: " << omp_get_thread_num()<< endl;
+                        //cout << "before IF: " << " biomass Value: " << biomass[i][j] << " ThreadID: " << omp_get_thread_num()<< endl;
                         if (biomass[i][j] > 0) {
-                            cout << "AFTER IF: " << " biomass Value: " << biomass[i][j]  << " i: " << i << " j: " << j << " ThreadID: " << omp_get_thread_num()<< endl;
+                            //cout << "AFTER IF: " << " biomass Value: " << biomass[i][j]  << " i: " << i << " j: " << j << " ThreadID: " << omp_get_thread_num()<< endl;
                             centroid.x = i; centroid.y = j;
-                            cout << "Thread: " << omp_get_thread_num() << " Biomass: " << biomass[i][j] <<endl;
+                            //cout << "Thread: " << omp_get_thread_num() << " Biomass: " << biomass[i][j] <<endl;
                             cout << biomass[i][j] << endl;
                             coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
                             cout << centroid.x << ", " << centroid.y << endl;
@@ -266,23 +266,30 @@ int main(int argc, const char** argv){
                             #pragma omp atomic
                                 cont ++;
 
-                            cout << "No. " << cont << " / " << di.valid_points << endl;
-                            coords << centroid.y << " " << centroid.x << "Thread: " << omp_get_thread_num() << endl;
+                            //cout << "No. " << cont << " / " << di.valid_points << endl;
+                            coords << centroid.y << " " << centroid.x  << endl;
+
+                            //cout << "After print coord on a file" << endl;
                             coords.close();
+
+							cout << "After close" << endl;
 
                             //di.reproject_coords(map_biomass);
 
                             //clock_t begin_cd = clock();
 
-                            cout << "before execute cost distance Thread: "<< omp_get_thread_num()<< endl;
+                            //cout << "before execute cost distance Thread: "<< omp_get_thread_num()<< endl;
 
-                            d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
 
-                            cout << "AFTER execute cost distance"<< endl;
+							//#pragma omp critical
+							//cout << "before cost distance" << endl;
+								d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
 
-                            cout << "FINISH" <<endl;
+                            //cout << "AFTER execute cost distance"<< endl;
 
-                            exit(0);
+                            //cout << "FINISH" <<endl;
+
+                            //exit(0);
 
                             /*clock_t end_cd = clock();
                             double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
