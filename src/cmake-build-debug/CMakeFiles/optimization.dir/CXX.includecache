@@ -113,8 +113,6 @@ math.h
 /root/Documents/Optimization-2018/src/distance.cpp
 distance.h
 /root/Documents/Optimization-2018/src/distance.h
-matrix.h
-/root/Documents/Optimization-2018/src/matrix.h
 
 /root/Documents/Optimization-2018/src/distance.h
 iostream
@@ -200,10 +198,6 @@ bellford.cpp
 tclap/CmdLine.h
 -
 omp.h
--
-
-/root/Documents/Optimization-2018/src/matrix.h
-vector
 -
 
 /root/Documents/Optimization-2018/src/tree.cpp

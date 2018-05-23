@@ -245,13 +245,13 @@ int main(int argc, const char** argv){
 
 		cout<<"Parallel region"<<endl;
 
-        omp_set_num_threads(2);
+        omp_set_num_threads(1);
 
         // Reproject biomass
         di.reproject_coords(map_biomass);
 
-        #pragma omp parallel
-            #pragma omp for  collapse(2) private(i, j, centroid) schedule(static) nowait
+        //#pragma omp parallel
+          //  #pragma omp for  collapse(2) private(i, j, centroid) schedule(static) nowait
                 for (i = 0; i < rows; i++) {
                     for (j = 0; j < cols; j++) {
                         //cout << "before IF: " << " biomass Value: " << biomass[i][j] << " ThreadID: " << omp_get_thread_num()<< endl;
@@ -263,7 +263,7 @@ int main(int argc, const char** argv){
                             coords.open("coords"+ std::to_string(omp_get_thread_num()) +".txt");
                             cout << centroid.x << ", " << centroid.y << endl;
 
-                            #pragma omp atomic
+                            //#pragma omp atomic
                                 cont ++;
 
                             //cout << "No. " << cont << " / " << di.valid_points << endl;
@@ -281,13 +281,13 @@ int main(int argc, const char** argv){
                             //cout << "before execute cost distance Thread: "<< omp_get_thread_num()<< endl;
 
 
-							#pragma omp critical
+							//#pragma omp critical
 								cout << "before cost distance" << endl;
 								d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
 
                             cout << "AFTER execute cost distance"<< endl;
 
-                            //cout << "FINISH" <<endl;
+                            cout << "FINISH" <<endl;
 
                             //exit(0);
 
