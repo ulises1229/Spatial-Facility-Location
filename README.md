@@ -148,7 +148,12 @@ Donde:
 
    -b <string>,  --biomass <string>
      (requerido)  Ruta absoluta a mapa de biomasa biomass_map.tif
-
+     
+   -e <string>, --usable <string>
+     (requerido)  Indica si la biomasa del mapa es usable en su totalidad o no (ANPs, Waterbodies).
+     * y = Sí
+     * n = No
+    
    --version
      Displays version information and exits.
 
