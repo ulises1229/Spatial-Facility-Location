@@ -38,8 +38,8 @@ public:
 	//methods
 	bool isInsideGrid(int i, int j);
 	inline set<cell>vecinos(int origen_x, int origen_y);
-	inline void acumulados(set<cell> active_costs, int origen_x, int origen_y, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax);
-	void inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax, double projection);
+	inline void acumulados(set<cell> active_costs, int origen_x, int origen_y, float intervals, float xMin, float xMax, float yMin, float yMax);
+	void inicio_cost_distance(float** grid, int srcX, int srcY, float intervals, float xMin, float xMax, float yMin, float yMax, double projection);
 	void freeMem();
 
 

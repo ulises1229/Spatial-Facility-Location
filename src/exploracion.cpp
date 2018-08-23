@@ -80,23 +80,16 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 	for (vector<info_ruta>::iterator it = p.begin(); it != p.end(); it++) {
 		if(it->x == src.first && it->y == src.second) {
 			//matrix_path[it->x][it->y] = this->biomass[it->x][it->y];
-			matrix_path[it->x][it->y] = it->friction;
+			matrix_path[it->x][it->y] = 255;
 		}
 		else {
 			matrix_path[it->x][it->y] = it->friction;
 			cost += (it->biomass / it->friction);
 		}
+		//cout << it->x << ", " << it->y << endl;
 		biomass += it->biomass;
 		frict += it->friction;
 		size++;
-		if(it->x < xMin)
-			xMin = it->x;
-		if(it->y < yMin)
-			yMin = it->y;
-		if(it->x > xMax)
-			xMax = it->x;
-		if(it->y > yMax)
-			yMax = it->y;
 		}
 		cout << "Size: " << size << endl;
 		cout << fixed <<  "Sum: " << biomass << endl;
@@ -104,8 +97,10 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 		cout << "Cost ($): " << frict << endl;
 		info << size << ",";
 		info << biomass << ",";
-		info  << cost << endl;
+		info  << frict << endl;
+		//info << frict << endl;
 		this->cost = cost;
+		this->cost_frict = frict;
 }
 
 
@@ -115,7 +110,7 @@ void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
 // a given source cell to a destination cell according
 // to A* Search Algorithm
 void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
-
+	cout << "Finding route..." << endl;
     int i, j;
     for (i=0; i<ROW; i++){
         for (j=0; j<COL; j++){

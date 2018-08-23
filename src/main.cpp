@@ -21,7 +21,6 @@
 #include "dijkstra.cpp" //Dijkstra
 #include "bellford.cpp" //Bellman-Ford
 #include <tclap/CmdLine.h>
-#include <omp.h>
 
 struct points_export{
 	int x, y, xMin, xMax, yMin, yMax;
@@ -31,10 +30,10 @@ char is_usable;
 int main(int argc, const char** argv){
 	string map_biomass, map_friction, hName, region, map_npa, map_waterbodies;
 	char algorithm, heuristic;
-	int demanda, optValidation, grids_to_validate, export_points;
+	int demanda, optValidation, grids_to_validate, export_points, pX = 0, pY = 0;
+	float loss, humidity, production;
 
 	try {
-
 		// Define the command line object, and insert a message
 		// that describes the program. The "Command description message"
 		// is printed last in the help text. The second argument is the
@@ -63,6 +62,8 @@ int main(int argc, const char** argv){
 		TCLAP::ValueArg<std::string> npa("n","npa","Map of Natural Protected Areas (NPA)",false,"/path/to/npa_map.tif","int");
 		TCLAP::ValueArg<std::string> waterbody("m","waterbody","Map of Water bodies",false,"/path/to/water_bodies_map.tif","int");
 		TCLAP::ValueArg<std::string> usable("e","usable","Biomass' info represents usable biomass",true,"y/n","char");
+		TCLAP::ValueArg<std::string> px("z","point_x","point_x", false,"155","char");
+		TCLAP::ValueArg<std::string> py("y","point_y","point_y", false,"155","char");
 		// Add the argument nameArg to the CmdLine object. The CmdLine object
 		// uses this Arg to parse the command line.
 		cmd.xorAdd(stop, watts);
@@ -80,6 +81,8 @@ int main(int argc, const char** argv){
 		cmd.add(npa);
 		cmd.add(waterbody);
 		cmd.add(usable);
+		cmd.add(px);
+        cmd.add(py);
 
 		// Parse the argv array.
 		cmd.parse( argc, argv );
@@ -101,8 +104,15 @@ int main(int argc, const char** argv){
 		string demand;
 		string usa = usable.getValue();
 		is_usable = usa[0];
+		pX = atoi(px.getValue().c_str());
+        pY = atoi(py.getValue().c_str());
 
-		if(optValidation > 4 || optValidation < 1) {
+        if(!px.isSet() || py.isSet()) {
+            pX = 0;
+            pY = 0;
+        }
+
+		if(optValidation > 6 || optValidation < 1) {
 			cerr << "Please verify the validation option. (-v):\n 1 -- Best-candidate search.\n 2 -- Candidates where relation >= average validation.\n 3 -- Custom validation.\n 4 -- All-points validation." << endl;
 			exit(0);
 		}
@@ -164,14 +174,16 @@ int main(int argc, const char** argv){
 				string hum = humedad.getValue();
 				string prod = produccion.getValue();
 				float humedad = strtof(hum.c_str(),0);
-				float merm = strtof(mer.c_str(),0);
+				float merma = strtof(mer.c_str(),0);
 				float produ = strtof(prod.c_str(),0);
-				float v1 = 1 - (humedad/100), v2 = 1 - (merm / 100), v3 = (produ/100);
+				float v1 = 1 - (humedad/100), v2 = 1 - (merma / 100), v3 = (produ / 100);
 				float hpa = 8760 * v3;
 				float sp = w * hpa;
 				float eb = sp / v2;
 				float biomasa = eb / (5 * v1);
 				demanda = biomasa;
+
+				humidity = humedad; loss = merma; production = produ;
 			}else{
 				cerr << "Please verify that the following flags are set: -i [--humidity] -l [--loss] -p [--production]" << endl;
 				exit(0);
@@ -197,30 +209,63 @@ int main(int argc, const char** argv){
 	else
 		hName = "No_heuristic";
 
+
+	string alg_name = "";
+	if(algorithm == 'b' || algorithm == 'B')
+		alg_name = "Breadth_First_Search";
+	else if(algorithm == 'a' || algorithm == 'A')
+		alg_name = "A*";
+    else if(algorithm == 'd' || algorithm == 'D')
+        alg_name = "Dijkstra";
+    else if(algorithm == 'f' || algorithm == 'F')
+        alg_name = "Bellman-Ford";
+
 	Display_image di;
 
-	// Import biomass and friction
+    /*float** friction = di.tiff_to_matrix_gdal(map_friction, false);
+    di.calc_centroid_biocuenca("/home/lanase/workspace/distance/Debug/PP_location01_Karnataka.tif");
+    int rows = di.ROWS;
+    int cols = di.COLS;
+    costDistance d;
+    d.COL = cols;
+    d.ROW = rows;
+    cout << di.xMin << " - " << di.xMax << " - " << di.yMin << " - " << di.yMax << endl;
+    d.inicio_cost_distance(friction, di.centroid.x, di.centroid.y, di.intervals, 0, 2000, 0, 2000, di.projection);
+	di.calc_adrian_stats(d.output_raster, map_biomass);
+
+	exit(0);*/
+
+
+    clock_t globalTimeBegin = clock();
+
 	clock_t begin = clock();
 	float** biomass = di.tiff_to_matrix_gdal(map_biomass, true);
 	float** friction = di.tiff_to_matrix_gdal(map_friction, false);
-	cout << di.epsg << endl;
-	//di.reproject_coords(map_biomass);
+	di.reproject_coords(map_biomass);
 	//exit(0);
 	clock_t end = clock();
 	int rows = di.ROWS;
 	int cols = di.COLS;
 
+	string num_export = "";
+	if(export_points > 1)
+		num_export = "1";
+
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 	cout << "TIFF to matrix = " << elapsed_secs << " secs." << endl;
+
+	//di.coords_to_pixel(19.7553264827337, -73.4148579255437);
+
 	Point2D centroid;
 	ofstream info, bestInfo, coords;
 	ostringstream ss, bestSs;
 	ss << "centroids_" << demanda << "_" << hName << ".csv";
-	bestSs << "Exported_points.csv";
+	bestSs << "Exported_points_" << region << "_" << num_export << "_" << alg_name << "_" << demanda << "_" << hName << ".csv";
 	//string fileName = "puntos_" + stop + ".csv"
 	info.open(ss.str().c_str());
-	info << "X, Y, Size, Biomass, Cost" << endl;
+	info << "X, Y, Relation, Grid Biomass, Grid Friction, Size, Biomass, Cost" << endl;
 	bestInfo.open(bestSs.str().c_str());
+	bestInfo << "X, Y, Size, Biomass, Cost" << endl;
 
 	if(map_npa != "") {
 		float** npa_matrix = di.tiff_to_matrix_gdal(map_npa, false);
@@ -233,98 +278,180 @@ int main(int argc, const char** argv){
 	int xIntervals = 0, yIntervals = 0;
 	di.define_intervals(demanda, xIntervals, yIntervals);
 
+	if(optValidation == 6) {
+		di.calculate_map_info(rows, cols, xIntervals, yIntervals, biomass, friction, humidity, loss, production, region);
+		cout << "Please check '" << region << " Overview.csv' for an overview about the area" << endl;
+		exit(0);
+	}
+
+	if(optValidation == 5){
+		ofstream dimensiones;
+		dimensiones.open("dimensiones.csv");
+		map<float,Grid> grids;
+		grids = di.define_grids(rows, cols, xIntervals, yIntervals, biomass, friction, demanda);
+		int cont = 1;
+		grids_to_validate = di.totGSD;
+		while(cont <= grids_to_validate) {
+			cont++;
+			centroid = di.find_centroid(grids, biomass, friction);
+			dimensiones << centroid.x << "," << centroid.y << ", "<< di.xMin<< "," << di.xMax << "," <<  di.yMin << "," << di.yMax << endl;
+			if(!grids.empty())
+				grids.erase(--grids.end());
+		}
+		dimensiones.close();
+		exit(0);
+	}
+
+
 	if(optValidation == 4) {
 		costDistance d;
 		d.COL = cols;
 		d.ROW = rows;
-
+        ofstream todos;
+        todos.open("todos.csv");
+        todos << "X, Y, Size, Biomass, Cost" << endl;
 		float bestCost = 0, bestxMin, bestxMax, bestyMin, bestyMax;
 		int bestX, bestY, cont = 1;
 
-		int i=0, j=0;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				centroid.x = i; centroid.y = j;
+				if (biomass[i][j] > 0) {
+				    todos << i << ", " << j << ",";
+					cout << biomass[i][j] << endl;
+					coords.open("coords.txt");
+					cout << centroid.x << ", " << centroid.y << endl;
+					cout << "No. " << cont << " / " << di.valid_points << endl;
+					coords << centroid.y << " " << centroid.x;
+					coords.close();
+					di.reproject_coords(map_biomass);
 
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    centroid.x = i; centroid.y = j;
-                    if (biomass[i][j] > 0) {
-                        cout << biomass[i][j] << endl;
-                        coords.open("coords.txt");
-                        cout << centroid.x << ", " << centroid.y << endl;
-                        cout << "No. " << cont << " / " << di.valid_points << endl;
-                        coords << centroid.y << " " << centroid.x;
-                        coords.close();
-                        di.reproject_coords(map_biomass);
-                        clock_t begin_cd = clock();
-
-                        d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, i - 80, i + 80, j - 80, j + 80, di.projection);
+					di.define_intervals(demanda, xIntervals, yIntervals);
 
 
-                        clock_t end_cd = clock();
-                        double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
+					clock_t begin_cd = clock();
+					d.inicio_cost_distance(friction, centroid.x, centroid.y, di.intervals, 0, rows, 0, cols, di.projection);
+					clock_t end_cd = clock();
+					double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
 
-                        cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
-                        switch(algorithm) {
-                            case 'B': //Binary search
-                            case 'b': {
-                                string algName = "Breadth_First_Search";
-                                Tree rn;
-                                rn.COL = cols;
-                                rn.ROW = rows;
-                                clock_t begin2 = clock();
-                                rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-                                clock_t end2 = clock();
-                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-                                cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
+					cout << "Cost Distance time = " << elapsed_secs_cd << " secs." << endl;
+					switch(algorithm) {
+						case 'B': //Binary search
+						case 'b': {
+							string algName = "Breadth_First_Search";
+							Tree rn;
+							rn.COL = cols;
+							rn.ROW = rows;
+							clock_t begin2 = clock();
+							rn.inicio_rutas(biomass, d.output_raster, centroid.x, centroid.y, demanda, todos, heuristic);
+							clock_t end2 = clock();
+							double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+							cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
-                                if(rn.cost > bestCost) {
-                                    bestCost = rn.cost;
-                                    bestX = rn.x;
-                                    bestY = rn.y;
-                                    bestxMin = i - 50;
-                                    bestxMax = i + 50;
-                                    bestyMin = j - 50;
-                                    bestyMax = j + 50;
-                                }
+							/*if(rn.cost > bestCost) {
+								bestCost = rn.cost;
+								bestX = rn.x;
+								bestY = rn.y;
+								bestxMin = i - 50;
+								bestxMax = i + 50;
+								bestyMin = j - 50;
+								bestyMax = j + 50;
+							}*/
 
-                                d.freeMem();
-                                rn.freeMem();
-                                break;
-                            }
+							d.freeMem();
+							rn.freeMem();
+							break;
+						}
 
-                            case 'A': //A* search
-                            case 'a': {
-                                Explore e;
-                                string algName = "AStar";
-                                e.COL = cols;
-                                e.ROW = rows;
-                                e.inicio(biomass);
-                                clock_t begin2 = clock();
-                                e.explore(d.output_raster, centroid.x, centroid.y, demanda, info, heuristic);
-                                clock_t end2 = clock();
-                                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
-                                cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
+						case 'A': //A* search
+						case 'a': {
+							Explore e;
+							string algName = "AStar";
+							e.COL = cols;
+							e.ROW = rows;
+							e.inicio(biomass);
+							clock_t begin2 = clock();
+							e.explore(d.output_raster, centroid.x, centroid.y, demanda, todos, heuristic);
+							clock_t end2 = clock();
+							double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+							cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 
-                                if(e.cost > bestCost) {
-                                    bestCost = e.cost;
-                                    bestX = e.X;
-                                    bestY = e.Y;
-                                    bestxMin = i - 50;
-                                    bestxMax = i + 50;
-                                    bestyMin = j - 50;
-                                    bestyMax = j + 50;
-                                }
+							/*if(e.cost > bestCost) {
+								bestCost = e.cost;
+								bestX = e.X;
+								bestY = e.Y;
+								bestxMin = i - 50;
+								bestxMax = i + 50;
+								bestyMin = j - 50;
+								bestyMax = j + 50;
+							}*/
 
-                                e.freeMem();
-                                d.freeMem();
-                                break;
+							e.freeMem();
+							d.freeMem();
+							break;
 
-                            }
+						}
+
+						case 'D': //Dijkstra search
+                        case 'd': {
+                            Graph gr;
+                            gr.COL = cols;
+                            gr.ROW = rows;
+                            string algName = "Dijkstra";
+                            clock_t begin2 = clock();
+                            gr.dijkstra_inicio(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+                                                   0, rows, 0, cols, 0, todos);
+                            clock_t end2 = clock();
+                            double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                            cout << "Dijkstra time = " << elapsed_secs2 << " secs." << endl;
+                            /*if(gr.cost_frict < bestCost) {
+                                bestCost = gr.cost_frict;
+                                bestX = gr.X;
+                                bestY = gr.Y;
+                                bestxMin = di.xMin;
+                                bestxMax = di.xMax;
+                                bestyMin = di.yMin;
+                                bestyMax = di.yMax;
+                            }*/
+                            gr.freeMem();
+                            d.freeMem();
+                            break;
                         }
-                        cont++;
+
+                        case 'F': //Bellman-Ford search
+                        case 'f': {
+                            string algName = "Bellman-Ford";
+                            Bellmanford bf;
+                            bf.COL = cols;
+                            bf.ROW = rows;
+                            clock_t begin2 = clock();
+                            bf.bellford_start(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+                                              0, rows, 0, cols, 0, todos);
+                            clock_t end2 = clock();
+                            double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                            cout << "Bellman-Ford time = " << elapsed_secs2 << " secs." << endl;
+                            /*if(bf.cost_frict < bestCost) {
+                                bestCost = bf.cost_frict;
+                                bestX = bf.X;
+                                bestY = bf.Y;
+                                bestxMin = di.xMin;
+                                bestxMax = di.xMax;
+                                bestyMin = di.yMin;
+                                bestyMax = di.yMax;
+                            }*/
+                            bf.freeMem();
+                            d.freeMem();
+                            break;
+                        }
+                        default:
+                            exit(0);
+                            break;
                     }
-                }
+					cont++;
+				}
+			}
 		}
-		cout << "*** Best point ***" << endl;
+		/*cout << "*** Best point ***" << endl;
 		coords.open("coords.txt");
 		coords << bestY << " " << bestX;
 		coords.close();
@@ -332,7 +459,7 @@ int main(int argc, const char** argv){
 		//cout << "Source = " << bestX << ", " << bestY << endl;
 		bestInfo << bestX << ", " << bestY << ",";
 		if(algorithm == 'a' || algorithm == 'A') {
-			d.inicio_cost_distance(friction, bestX, bestY, biomass, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+			d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
 			Explore e;
 			string algName = "AStar";
 			e.COL = cols;
@@ -344,7 +471,7 @@ int main(int argc, const char** argv){
 			double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 			cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 			clock_t begin3 = clock();
-			di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
+			di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 			di.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
 			clock_t end3 = clock();
 			double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
@@ -352,7 +479,7 @@ int main(int argc, const char** argv){
 			e.freeMem();
 		}
 		else if(algorithm == 'b' || algorithm == 'B') {
-			d.inicio_cost_distance(friction, bestX, bestY, biomass, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+			d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
 			string algName = "Breadth_First_Search";
 			Tree rn;
 			rn.COL = cols;
@@ -365,20 +492,21 @@ int main(int argc, const char** argv){
 
 			clock_t begin3 = clock();
 			cout << "Image creation..." << endl;
-			di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+			di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 			di.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 			clock_t end3 = clock();
 			double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 			cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
 			rn.freeMem();
-		}
+		}*/
+		todos.close();
 	}
 	else {
 		map<float,Grid> grids;
-		grids = di.define_grids(rows, cols, xIntervals, yIntervals, biomass, friction);
+		grids = di.define_grids(rows, cols, xIntervals, yIntervals, biomass, friction, demanda);
 
 		if(optValidation == 2)
-			grids_to_validate = di.totGridsAvg;
+			grids_to_validate = di.totGSD;
 		else if(optValidation == 1)
 			grids_to_validate = 1;
 
@@ -390,21 +518,21 @@ int main(int argc, const char** argv){
 			validac = "Candidates where relation >= average validation";
 		else if(optValidation == 3)
 			validac = "Custom validation";
-		if(algorithm == 'a')
+		/*if(algorithm == 'a')
 			bestInfo << "A*,";
 		else if(algorithm == 't')
 			bestInfo << "Depth Search";
-		bestInfo << demanda << "," << hName << "," << region << "," << validac << "," << grids_to_validate << "," << export_points << endl;
+		bestInfo << demanda << "," << hName << "," << region << "," << validac << "," << grids_to_validate << "," << export_points << endl;*/
 		costDistance d;
 		d.COL = cols;
 		d.ROW = rows;
 
 		int cont = 1;
-		float bestCost = 0, bestxMin, bestxMax, bestyMin, bestyMax;
+		float bestCost = FLT_MAX, bestxMin, bestxMax, bestyMin, bestyMax;
 		int bestX, bestY;
 
 		map <float, points_export> mapa_puntos;
-
+        cout << "Grids 2 validate: " << grids_to_validate << endl;
 		while(cont <= grids_to_validate) {
 			coords.open("coords.txt");
 			cout << "\n\n" << endl;
@@ -413,17 +541,28 @@ int main(int argc, const char** argv){
 				grids.erase(--grids.end());
 
 			cout << "No. " << cont << " / " << grids_to_validate << endl;
-			//centroid.x = 49; centroid.y = 93;
+
+			//centroid.x = 1897; centroid.y = 2677;
+			//cout << friction[1897][2677] << endl;
 			//cout << "Source = " << centroid.x << ", " << centroid.y << endl;
-			info << centroid.x << ", " << centroid.y << ",";
+            if(pX > 0 && pY > 0) {
+                cout << "siiiiiiiuuuuu" << pX << "," << pY << endl;
+                centroid.x = pX;
+                centroid.y = pY;
+                di.xMax = rows;
+                di.yMax = cols;
+                di.xMin = 0;
+                di.yMin = 0;
+            }
+			info << centroid.x << ", " << centroid.y << "," << di.relation << "," << di.grid_biomass << "," << di.grid_frict << ",";
 			coords << centroid.y << " " << centroid.x;
 			coords.close();
 			di.reproject_coords(map_biomass);
 
 			clock_t begin_cd = clock();
-			d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, di.xMin, di.xMax, di.yMin, di.yMax, di.projection);
+			d.inicio_cost_distance(friction, centroid.x, centroid.y, di.intervals, di.xMin, di.xMax, di.yMin, di.yMax, di.projection);
 			//cout << centroid.x << ", " << centroid.y << " - " << di.xMin << " - " << di.xMax << " - " << di.yMin << " - " << di.yMax << endl;
-			//d.inicio_cost_distance(friction, centroid.x, centroid.y, biomass, di.intervals, 0, 498, 0, 256, di.projection);
+			//d.inicio_cost_distance(friction, centroid.x, centroid.y, di.intervals, 0, 498, 0, 256, di.projection);
 			clock_t end_cd = clock();
 			double elapsed_secs_cd = double(end_cd - begin_cd) / CLOCKS_PER_SEC;
 
@@ -454,17 +593,18 @@ int main(int argc, const char** argv){
 					if (optValidation == 1) {
 						clock_t begin3 = clock();
 						cout << "Image creation..." << endl;
-						di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+						di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 						di.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
-						exit(0);
+						break;
+						//exit(0);
 					}
 
 					if(export_points == 1){
-						if(rn.cost > bestCost) {
-							bestCost = rn.cost;
+						if(rn.cost_frict < bestCost) {
+							bestCost = rn.cost_frict;
 							bestX = rn.x;
 							bestY = rn.y;
 							bestxMin = di.xMin;
@@ -474,7 +614,7 @@ int main(int argc, const char** argv){
 						}
 					}else{
 						points_export pp; pp.x = centroid.x; pp.y = centroid.y; pp.xMin = di.xMin; pp.xMax = di.xMax; pp.yMin = di.yMin; pp.yMax = di.yMax;
-						mapa_puntos.insert(make_pair(rn.cost, pp));
+						mapa_puntos.insert(make_pair(rn.cost_frict, pp));
 					}
 
 					d.freeMem();
@@ -502,17 +642,18 @@ int main(int argc, const char** argv){
 
 					if (optValidation == 1) {
 						clock_t begin3 = clock();
-						di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
+						di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 						di.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
-						exit(0);
+						break;
+						//exit(0);
 					}
 
 					if(export_points == 1){
-						if(e.cost > bestCost) {
-							bestCost = e.cost;
+						if(e.cost_frict < bestCost) {
+							bestCost = e.cost_frict;
 							bestX = e.X;
 							bestY = e.Y;
 							bestxMin = di.xMin;
@@ -522,7 +663,7 @@ int main(int argc, const char** argv){
 						}
 					}else{
 						points_export pp; pp.x = centroid.x; pp.y = centroid.y; pp.xMin = di.xMin; pp.xMax = di.xMax; pp.yMin = di.yMin; pp.yMax = di.yMax;
-						mapa_puntos.insert(make_pair(e.cost, pp));
+						mapa_puntos.insert(make_pair(e.cost_frict, pp));
 					}
 
 					e.freeMem();
@@ -535,36 +676,89 @@ int main(int argc, const char** argv){
 					Graph gr;
 					gr.COL = cols;
 					gr.ROW = rows;
+					string algName = "Dijkstra";
 					clock_t begin2 = clock();
-					gr.dijkstra_inicio(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic);
+					if(optValidation == 1) {
+						bestInfo << centroid.x << ", " << centroid.y << ",";
+						gr.dijkstra_inicio(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+										   di.xMin, di.xMax, di.yMin, di.yMax, di.intervals, bestInfo);
+					} else
+						gr.dijkstra_inicio(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+										   di.xMin, di.xMax, di.yMin, di.yMax, di.intervals, info);
 					clock_t end2 = clock();
 					double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 					cout << "Dijkstra time = " << elapsed_secs2 << " secs." << endl;
-
-					/*clock_t begin3 = clock();
-					di.matrix_to_tiff(gr.matrix_path, rows, cols);
-					clock_t end3 = clock();
-					double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
-					cout << "Matrix to TIFF = " << elapsed_secs3 << endl;*/
+                    if (optValidation == 1) {
+                        di.write_image(gr.matrix_path, rows, cols, hName, demanda, region, algName, 1);
+                        di.matrix_to_tiff(gr.matrix_path, rows, cols, hName, demanda, region, algName);
+                        //cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                        clock_t end3 = clock();
+                        double elapsed_secs3 = double(end3 - globalTimeBegin) / CLOCKS_PER_SEC;
+                        cout << "TOTAL TIME OF DIJKSTRA'S VALIDATION 1: " << elapsed_secs3 << " secs." << endl;
+                        exit(0);
+                    }
+					if(export_points == 1){
+						if(gr.cost_frict < bestCost) {
+							bestCost = gr.cost_frict;
+							bestX = gr.X;
+							bestY = gr.Y;
+							bestxMin = di.xMin;
+							bestxMax = di.xMax;
+							bestyMin = di.yMin;
+							bestyMax = di.yMax;
+						}
+					} else {
+						points_export pp; pp.x = centroid.x; pp.y = centroid.y; pp.xMin = di.xMin; pp.xMax = di.xMax; pp.yMin = di.yMin; pp.yMax = di.yMax;
+						mapa_puntos.insert(make_pair(gr.cost_frict, pp));
+					}
+					gr.freeMem();
+					d.freeMem();
 					break;
 				}
 
 				case 'F': //Bellman-Ford search
 				case 'f': {
+				    string algName = "Bellman-Ford";
 					Bellmanford bf;
 					bf.COL = cols;
 					bf.ROW = rows;
 					clock_t begin2 = clock();
-					bf.bellford_start(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic);
+                    if(optValidation == 1) {
+                        bestInfo << centroid.x << ", " << centroid.y << ",";
+                        bf.bellford_start(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+                                           di.xMin, di.xMax, di.yMin, di.yMax, di.intervals, bestInfo);
+                    } else
+                        bf.bellford_start(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+                                          di.xMin, di.xMax, di.yMin, di.yMax, di.intervals, info);
 					clock_t end2 = clock();
 					double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 					cout << "Bellman-Ford time = " << elapsed_secs2 << " secs." << endl;
-
-					/*clock_t begin3 = clock();
-					di.matrix_to_tiff(bf.matrix_path, rows, cols);
-					clock_t end3 = clock();
-					double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
-					cout << "Matrix to TIFF = " << elapsed_secs3 << endl;*/
+                    if (optValidation == 1) {
+                        //clock_t begin3 = clock();
+                        di.write_image(bf.matrix_path, rows, cols, hName, demanda, region, algName, 1);
+                        di.matrix_to_tiff(bf.matrix_path, rows, cols, hName, demanda, region, algName);
+                        clock_t end3 = clock();
+                        double elapsed_secs3 = double(end3 - globalTimeBegin) / CLOCKS_PER_SEC;
+                        cout << "TOTAL TIME OF BELLMAN-FORD'S VALIDATION 1: " << elapsed_secs3 << " secs." << endl;
+                        //cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                        exit(0);
+                    }
+                    if(export_points == 1){
+                        if(bf.cost_frict < bestCost) {
+                            bestCost = bf.cost_frict;
+                            bestX = bf.X;
+                            bestY = bf.Y;
+                            bestxMin = di.xMin;
+                            bestxMax = di.xMax;
+                            bestyMin = di.yMin;
+                            bestyMax = di.yMax;
+                        }
+                    } else {
+                        points_export pp; pp.x = centroid.x; pp.y = centroid.y; pp.xMin = di.xMin; pp.xMax = di.xMax; pp.yMin = di.yMin; pp.yMax = di.yMax;
+                        mapa_puntos.insert(make_pair(bf.cost_frict, pp));
+                    }
+					bf.freeMem();
+					d.freeMem();
 					break;
 				}
 				default:
@@ -576,10 +770,10 @@ int main(int argc, const char** argv){
 
 		cout << endl;
 
-		map <float, points_export> :: reverse_iterator itr;
+		map <float, points_export> :: iterator itr; //reverse_iterator
 
 		int cont_puntos = 1;
-		if(export_points == 1){
+		if(export_points == 1 && optValidation != 1){
 			cout << "*** Best point ***" << endl;
 			coords.open("coords.txt");
 			coords << bestY << " " << bestX;
@@ -588,7 +782,7 @@ int main(int argc, const char** argv){
 			//cout << "Source = " << bestX << ", " << bestY << endl;
 			bestInfo << bestX << ", " << bestY << ",";
 			if(algorithm == 'a' || algorithm == 'A') {
-				d.inicio_cost_distance(friction, bestX, bestY, biomass, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+				d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
 				Explore e;
 				string algName = "AStar";
 				e.COL = cols;
@@ -600,7 +794,7 @@ int main(int argc, const char** argv){
 				double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 				cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 				clock_t begin3 = clock();
-				di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
+				di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 				di.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
 				clock_t end3 = clock();
 				double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
@@ -608,7 +802,7 @@ int main(int argc, const char** argv){
 				e.freeMem();
 			}
 			else if(algorithm == 'b' || algorithm == 'B') {
-				d.inicio_cost_distance(friction, bestX, bestY, biomass, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+				d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
 				string algName = "Breadth_First_Search";
 				Tree rn;
 				rn.COL = cols;
@@ -621,16 +815,59 @@ int main(int argc, const char** argv){
 
 				clock_t begin3 = clock();
 				cout << "Image creation..." << endl;
-				di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+				di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName, 1);
 				di.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 				clock_t end3 = clock();
 				double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 				cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
 				rn.freeMem();
 			}
+			else if(algorithm == 'd' || algorithm == 'D') {
+                d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+                string algName = "Dijkstra";
+                Graph gr;
+                gr.COL = cols;
+                gr.ROW = rows;
+                clock_t begin2 = clock();
+                gr.dijkstra_inicio(biomass, d.output_raster, bestX, bestY, demanda, heuristic,
+                                   bestxMin, bestxMax, bestyMin, bestyMax, di.intervals, bestInfo);
+                clock_t end2 = clock();
+                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
+                clock_t begin3 = clock();
+                cout << "Image creation..." << endl;
+                di.write_image(gr.matrix_path, rows, cols, hName, demanda, region, algName, 1);
+                di.matrix_to_tiff(gr.matrix_path, rows, cols, hName, demanda, region, algName);
+                clock_t end3 = clock();
+                double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
+                cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                gr.freeMem();
+			}
+			else if(algorithm == 'f' || algorithm == 'F') {
+                d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+                string algName = "Bellman-Ford";
+                Bellmanford bf;
+                bf.COL = cols;
+                bf.ROW = rows;
+                clock_t begin2 = clock();
+                bf.bellford_start(biomass, d.output_raster, bestX, bestY, demanda, heuristic,
+								  bestxMin, bestxMax, bestyMin, bestyMax, di.intervals, bestInfo);
+                clock_t end2 = clock();
+                double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                cout << "Bellman-Ford time = " << elapsed_secs2 << " secs." << "\n\n";
+
+                clock_t begin3 = clock();
+                cout << "Image creation..." << endl;
+                di.write_image(bf.matrix_path, rows, cols, hName, demanda, region, algName, 1);
+                di.matrix_to_tiff(bf.matrix_path, rows, cols, hName, demanda, region, algName);
+                clock_t end3 = clock();
+                double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
+                cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                bf.freeMem();
+			}
 		}else{
-			for(itr = mapa_puntos.rbegin(); itr != mapa_puntos.rend(); itr++){
+			for(itr = mapa_puntos.begin(); itr != mapa_puntos.end(); itr++){ //rbegin; rend
 				if(cont_puntos <= export_points){
 					cout << "Best points *** " << cont_puntos << "***" << endl;
 					coords.open("coords.txt");
@@ -640,7 +877,7 @@ int main(int argc, const char** argv){
 					//cout << "Source = " << itr->second.x << ", " << itr->second.y << endl;
 					bestInfo << itr->second.x << ", " << itr->second.y << ",";
 					if(algorithm == 'a' || algorithm == 'A') {
-						d.inicio_cost_distance(friction, itr->second.x, itr->second.y, biomass, di.intervals, itr->second.xMin, itr->second.xMax, itr->second.yMin, itr->second.yMax, di.projection);
+						d.inicio_cost_distance(friction, itr->second.x, itr->second.y, di.intervals, itr->second.xMin, itr->second.xMax, itr->second.yMin, itr->second.yMax, di.projection);
 						Explore e;
 						stringstream s;
 						s << cont_puntos << "_A_Star";
@@ -654,15 +891,16 @@ int main(int argc, const char** argv){
 						double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 						cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 						clock_t begin3 = clock();
-						di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
+						di.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName, cont_puntos);
 						di.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
 						e.freeMem();
+						d.freeMem();
 					}
 					else if(algorithm == 'b' || algorithm == 'B') {
-						d.inicio_cost_distance(friction, itr->second.x, itr->second.y, biomass, di.intervals, itr->second.xMin, itr->second.xMax, itr->second.yMin, itr->second.yMax, di.projection);
+						d.inicio_cost_distance(friction, itr->second.x, itr->second.y, di.intervals, itr->second.xMin, itr->second.xMax, itr->second.yMin, itr->second.yMax, di.projection);
 						stringstream s;
 						s << cont_puntos << "_Breadth_First_Search";					string algName = s.str();
 						Tree rn;
@@ -671,19 +909,63 @@ int main(int argc, const char** argv){
 						clock_t begin2 = clock();
 						rn.inicio_rutas(biomass, d.output_raster, itr->second.x, itr->second.y, demanda, bestInfo, heuristic);
 						clock_t end2 = clock();
-                    double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+						double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
 						cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
 						clock_t begin3 = clock();
 						cout << "Image creation..." << endl;
-						di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+						di.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName, cont_puntos);
 						di.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
 						rn.freeMem();
-					}
+						d.freeMem();
+					} else if(algorithm == 'd' || algorithm == 'D') {
+                        d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+                        string algName = "Dijkstra";
+                        Graph gr;
+                        gr.COL = cols;
+                        gr.ROW = rows;
+                        clock_t begin2 = clock();
+                        gr.dijkstra_inicio(biomass, d.output_raster, bestX, bestY, demanda, heuristic,
+                                           bestxMin, bestxMax, bestyMin, bestyMax, di.intervals, bestInfo);
+                        clock_t end2 = clock();
+                        double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                        cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
 
+                        clock_t begin3 = clock();
+                        cout << "Image creation..." << endl;
+                        di.write_image(gr.matrix_path, rows, cols, hName, demanda, region, algName, cont_puntos);
+                        di.matrix_to_tiff(gr.matrix_path, rows, cols, hName, demanda, region, algName);
+                        clock_t end3 = clock();
+                        double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
+                        cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                        gr.freeMem();
+                        d.freeMem();
+                    } else if(algorithm == 'f' || algorithm == 'F') {
+                        d.inicio_cost_distance(friction, bestX, bestY, di.intervals, bestxMin, bestxMax, bestyMin, bestyMax, di.projection);
+                        string algName = "Bellman-Ford";
+                        Bellmanford bf;
+                        bf.COL = cols;
+                        bf.ROW = rows;
+                        clock_t begin2 = clock();
+                        bf.bellford_start(biomass, d.output_raster, centroid.x, centroid.y, demanda, heuristic,
+                                          di.xMin, di.xMax, di.yMin, di.yMax, di.intervals, bestInfo);
+                        clock_t end2 = clock();
+                        double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+                        cout << "Nodes time = " << elapsed_secs2 << " secs." << "\n\n";
+
+                        clock_t begin3 = clock();
+                        cout << "Image creation..." << endl;
+                        di.write_image(bf.matrix_path, rows, cols, hName, demanda, region, algName, cont_puntos);
+                        di.matrix_to_tiff(bf.matrix_path, rows, cols, hName, demanda, region, algName);
+                        clock_t end3 = clock();
+                        double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
+                        cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
+                        bf.freeMem();
+                        d.freeMem();
+                    }
 					cont_puntos++;
 				}else{
 					break;
@@ -691,6 +973,12 @@ int main(int argc, const char** argv){
 			}
 		}
 	}
+    clock_t globalTimeEnd = clock();
+    double globalTime = double(globalTimeEnd - globalTimeBegin) / CLOCKS_PER_SEC;
+    cout << "GLOBAL TIME: " << globalTime << " secs." << endl;
+	info << "\n\n\nTime," << globalTime << ",secs" << endl;
+	bestInfo << "\n\n\nTime," << globalTime << ",secs" << endl;
 	info.close();
 	bestInfo.close();
+
 }

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="distance"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lanase/workspace/distance/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/lanase/workspace/distance/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/lanase/workspace/distance/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="distance">
+				<Option output="/home/lanase/workspace/distance/cmake-build-debug/distance" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lanase/workspace/distance/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lanase/workspace/distance/src"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 distance"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="distance/fast">
+				<Option output="/home/lanase/workspace/distance/cmake-build-debug/distance" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lanase/workspace/distance/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lanase/workspace/distance/src"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 distance/fast"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lanase/workspace/distance/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lanase/workspace/distance/Debug/src/dijkstra_bck.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/DisplayImage.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/bellford.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/communities.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/communities.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/dijkstra.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/distance.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/distance.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/exploracion.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/exploracion.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/main.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/morton.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/structure.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/tree.cpp">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/tree.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/src/treenode.h">
+			<Option target="distance"/>
+		</Unit>
+		<Unit filename="/home/lanase/workspace/distance/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

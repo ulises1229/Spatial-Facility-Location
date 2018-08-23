@@ -67,8 +67,8 @@ public:
 	float** biomass;
 	float** friction;
 	bool** visitedNodes;
-	float cost;
-	int ROW, COL, tCount = 0, x, y;
+	float cost, cost_frict;
+	int ROW, COL, x, y;
 	float** matrix_path;
 
 

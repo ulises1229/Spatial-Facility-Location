@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/clion-2018.1.2/bin/cmake/bin/cmake
+CMAKE_COMMAND = /opt/clion-2018.1.5/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /opt/clion-2018.1.2/bin/cmake/bin/cmake -E remove -f
+RM = /opt/clion-2018.1.5/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/uolivares/Documents/Optimization-2018/src
+CMAKE_SOURCE_DIR = /home/lanase/workspace/distance
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug
+CMAKE_BINARY_DIR = /home/lanase/workspace/distance/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/uolivares/Documents/Optimization-2018/src/cmake-build-d
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/opt/clion-2018.1.2/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/clion-2018.1.5/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/opt/clion-2018.1.2/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/opt/clion-2018.1.5/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lanase/workspace/distance/cmake-build-debug/CMakeFiles /home/lanase/workspace/distance/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/uolivares/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lanase/workspace/distance/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,206 +111,260 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named optimization
+# Target rules for targets named distance
 
 # Build rule for target.
-optimization: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 optimization
-.PHONY : optimization
+distance: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 distance
+.PHONY : distance
 
 # fast build rule for target.
-optimization/fast:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/build
-.PHONY : optimization/fast
+distance/fast:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/build
+.PHONY : distance/fast
 
-DisplayImage.o: DisplayImage.cpp.o
+Debug/src/dijkstra_bck.o: Debug/src/dijkstra_bck.cpp.o
 
-.PHONY : DisplayImage.o
-
-# target to build an object file
-DisplayImage.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.o
-.PHONY : DisplayImage.cpp.o
-
-DisplayImage.i: DisplayImage.cpp.i
-
-.PHONY : DisplayImage.i
-
-# target to preprocess a source file
-DisplayImage.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.i
-.PHONY : DisplayImage.cpp.i
-
-DisplayImage.s: DisplayImage.cpp.s
-
-.PHONY : DisplayImage.s
-
-# target to generate assembly for a file
-DisplayImage.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.s
-.PHONY : DisplayImage.cpp.s
-
-bellford.o: bellford.cpp.o
-
-.PHONY : bellford.o
+.PHONY : Debug/src/dijkstra_bck.o
 
 # target to build an object file
-bellford.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.o
-.PHONY : bellford.cpp.o
+Debug/src/dijkstra_bck.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/Debug/src/dijkstra_bck.cpp.o
+.PHONY : Debug/src/dijkstra_bck.cpp.o
 
-bellford.i: bellford.cpp.i
+Debug/src/dijkstra_bck.i: Debug/src/dijkstra_bck.cpp.i
 
-.PHONY : bellford.i
+.PHONY : Debug/src/dijkstra_bck.i
 
 # target to preprocess a source file
-bellford.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.i
-.PHONY : bellford.cpp.i
+Debug/src/dijkstra_bck.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/Debug/src/dijkstra_bck.cpp.i
+.PHONY : Debug/src/dijkstra_bck.cpp.i
 
-bellford.s: bellford.cpp.s
+Debug/src/dijkstra_bck.s: Debug/src/dijkstra_bck.cpp.s
 
-.PHONY : bellford.s
+.PHONY : Debug/src/dijkstra_bck.s
 
 # target to generate assembly for a file
-bellford.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.s
-.PHONY : bellford.cpp.s
+Debug/src/dijkstra_bck.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/Debug/src/dijkstra_bck.cpp.s
+.PHONY : Debug/src/dijkstra_bck.cpp.s
 
-dijkstra.o: dijkstra.cpp.o
+src/DisplayImage.o: src/DisplayImage.cpp.o
 
-.PHONY : dijkstra.o
+.PHONY : src/DisplayImage.o
 
 # target to build an object file
-dijkstra.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/dijkstra.cpp.o
-.PHONY : dijkstra.cpp.o
+src/DisplayImage.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/DisplayImage.cpp.o
+.PHONY : src/DisplayImage.cpp.o
 
-dijkstra.i: dijkstra.cpp.i
+src/DisplayImage.i: src/DisplayImage.cpp.i
 
-.PHONY : dijkstra.i
+.PHONY : src/DisplayImage.i
 
 # target to preprocess a source file
-dijkstra.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/dijkstra.cpp.i
-.PHONY : dijkstra.cpp.i
+src/DisplayImage.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/DisplayImage.cpp.i
+.PHONY : src/DisplayImage.cpp.i
 
-dijkstra.s: dijkstra.cpp.s
+src/DisplayImage.s: src/DisplayImage.cpp.s
 
-.PHONY : dijkstra.s
+.PHONY : src/DisplayImage.s
 
 # target to generate assembly for a file
-dijkstra.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/dijkstra.cpp.s
-.PHONY : dijkstra.cpp.s
+src/DisplayImage.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/DisplayImage.cpp.s
+.PHONY : src/DisplayImage.cpp.s
 
-distance.o: distance.cpp.o
+src/bellford.o: src/bellford.cpp.o
 
-.PHONY : distance.o
+.PHONY : src/bellford.o
 
 # target to build an object file
-distance.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/distance.cpp.o
-.PHONY : distance.cpp.o
+src/bellford.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/bellford.cpp.o
+.PHONY : src/bellford.cpp.o
 
-distance.i: distance.cpp.i
+src/bellford.i: src/bellford.cpp.i
 
-.PHONY : distance.i
+.PHONY : src/bellford.i
 
 # target to preprocess a source file
-distance.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/distance.cpp.i
-.PHONY : distance.cpp.i
+src/bellford.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/bellford.cpp.i
+.PHONY : src/bellford.cpp.i
 
-distance.s: distance.cpp.s
+src/bellford.s: src/bellford.cpp.s
 
-.PHONY : distance.s
+.PHONY : src/bellford.s
 
 # target to generate assembly for a file
-distance.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/distance.cpp.s
-.PHONY : distance.cpp.s
+src/bellford.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/bellford.cpp.s
+.PHONY : src/bellford.cpp.s
 
-exploracion.o: exploracion.cpp.o
+src/communities.o: src/communities.cpp.o
 
-.PHONY : exploracion.o
+.PHONY : src/communities.o
 
 # target to build an object file
-exploracion.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/exploracion.cpp.o
-.PHONY : exploracion.cpp.o
+src/communities.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/communities.cpp.o
+.PHONY : src/communities.cpp.o
 
-exploracion.i: exploracion.cpp.i
+src/communities.i: src/communities.cpp.i
 
-.PHONY : exploracion.i
+.PHONY : src/communities.i
 
 # target to preprocess a source file
-exploracion.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/exploracion.cpp.i
-.PHONY : exploracion.cpp.i
+src/communities.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/communities.cpp.i
+.PHONY : src/communities.cpp.i
 
-exploracion.s: exploracion.cpp.s
+src/communities.s: src/communities.cpp.s
 
-.PHONY : exploracion.s
+.PHONY : src/communities.s
 
 # target to generate assembly for a file
-exploracion.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/exploracion.cpp.s
-.PHONY : exploracion.cpp.s
+src/communities.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/communities.cpp.s
+.PHONY : src/communities.cpp.s
 
-main.o: main.cpp.o
+src/dijkstra.o: src/dijkstra.cpp.o
 
-.PHONY : main.o
+.PHONY : src/dijkstra.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/dijkstra.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/dijkstra.cpp.o
+.PHONY : src/dijkstra.cpp.o
 
-main.i: main.cpp.i
+src/dijkstra.i: src/dijkstra.cpp.i
 
-.PHONY : main.i
+.PHONY : src/dijkstra.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/dijkstra.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/dijkstra.cpp.i
+.PHONY : src/dijkstra.cpp.i
 
-main.s: main.cpp.s
+src/dijkstra.s: src/dijkstra.cpp.s
 
-.PHONY : main.s
+.PHONY : src/dijkstra.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/dijkstra.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/dijkstra.cpp.s
+.PHONY : src/dijkstra.cpp.s
 
-tree.o: tree.cpp.o
+src/distance.o: src/distance.cpp.o
 
-.PHONY : tree.o
+.PHONY : src/distance.o
 
 # target to build an object file
-tree.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/tree.cpp.o
-.PHONY : tree.cpp.o
+src/distance.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/distance.cpp.o
+.PHONY : src/distance.cpp.o
 
-tree.i: tree.cpp.i
+src/distance.i: src/distance.cpp.i
 
-.PHONY : tree.i
+.PHONY : src/distance.i
 
 # target to preprocess a source file
-tree.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/tree.cpp.i
-.PHONY : tree.cpp.i
+src/distance.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/distance.cpp.i
+.PHONY : src/distance.cpp.i
 
-tree.s: tree.cpp.s
+src/distance.s: src/distance.cpp.s
 
-.PHONY : tree.s
+.PHONY : src/distance.s
 
 # target to generate assembly for a file
-tree.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/tree.cpp.s
-.PHONY : tree.cpp.s
+src/distance.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/distance.cpp.s
+.PHONY : src/distance.cpp.s
+
+src/exploracion.o: src/exploracion.cpp.o
+
+.PHONY : src/exploracion.o
+
+# target to build an object file
+src/exploracion.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/exploracion.cpp.o
+.PHONY : src/exploracion.cpp.o
+
+src/exploracion.i: src/exploracion.cpp.i
+
+.PHONY : src/exploracion.i
+
+# target to preprocess a source file
+src/exploracion.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/exploracion.cpp.i
+.PHONY : src/exploracion.cpp.i
+
+src/exploracion.s: src/exploracion.cpp.s
+
+.PHONY : src/exploracion.s
+
+# target to generate assembly for a file
+src/exploracion.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/exploracion.cpp.s
+.PHONY : src/exploracion.cpp.s
+
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/tree.o: src/tree.cpp.o
+
+.PHONY : src/tree.o
+
+# target to build an object file
+src/tree.cpp.o:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/tree.cpp.o
+.PHONY : src/tree.cpp.o
+
+src/tree.i: src/tree.cpp.i
+
+.PHONY : src/tree.i
+
+# target to preprocess a source file
+src/tree.cpp.i:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/tree.cpp.i
+.PHONY : src/tree.cpp.i
+
+src/tree.s: src/tree.cpp.s
+
+.PHONY : src/tree.s
+
+# target to generate assembly for a file
+src/tree.cpp.s:
+	$(MAKE) -f CMakeFiles/distance.dir/build.make CMakeFiles/distance.dir/src/tree.cpp.s
+.PHONY : src/tree.cpp.s
 
 # Help Target
 help:
@@ -320,28 +374,34 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... optimization"
-	@echo "... DisplayImage.o"
-	@echo "... DisplayImage.i"
-	@echo "... DisplayImage.s"
-	@echo "... bellford.o"
-	@echo "... bellford.i"
-	@echo "... bellford.s"
-	@echo "... dijkstra.o"
-	@echo "... dijkstra.i"
-	@echo "... dijkstra.s"
-	@echo "... distance.o"
-	@echo "... distance.i"
-	@echo "... distance.s"
-	@echo "... exploracion.o"
-	@echo "... exploracion.i"
-	@echo "... exploracion.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... tree.o"
-	@echo "... tree.i"
-	@echo "... tree.s"
+	@echo "... distance"
+	@echo "... Debug/src/dijkstra_bck.o"
+	@echo "... Debug/src/dijkstra_bck.i"
+	@echo "... Debug/src/dijkstra_bck.s"
+	@echo "... src/DisplayImage.o"
+	@echo "... src/DisplayImage.i"
+	@echo "... src/DisplayImage.s"
+	@echo "... src/bellford.o"
+	@echo "... src/bellford.i"
+	@echo "... src/bellford.s"
+	@echo "... src/communities.o"
+	@echo "... src/communities.i"
+	@echo "... src/communities.s"
+	@echo "... src/dijkstra.o"
+	@echo "... src/dijkstra.i"
+	@echo "... src/dijkstra.s"
+	@echo "... src/distance.o"
+	@echo "... src/distance.i"
+	@echo "... src/distance.s"
+	@echo "... src/exploracion.o"
+	@echo "... src/exploracion.i"
+	@echo "... src/exploracion.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/tree.o"
+	@echo "... src/tree.i"
+	@echo "... src/tree.s"
 .PHONY : help
 
 

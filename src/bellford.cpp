@@ -13,6 +13,7 @@
 #include <set>
 #include <algorithm>
 #include <queue>
+#include <fstream>
 #include <math.h>
 
 using namespace std;
@@ -89,11 +90,13 @@ class Bellmanford {
 	list< pairBio > *adj;
 
 public:
-	int ROW, COL;
+	int ROW, COL, X, Y;
+	float cost, cost_frict;
 	float** biomass;
 	float** friction;
-	vector<nGraph> Path;
-	int** matrix_path;
+    bool** visitedNodes;
+	stack<Pair> Path;
+	float** matrix_path;
 	// A utility function used to print the solution
 	void printArr(int dist[], int n)
 	{
@@ -141,27 +144,35 @@ public:
 	    adj = new list<pairBio> [V];
 	}
 
-	void fillMatrixPath(int srcX, int srcY) {
-		this->matrix_path = new int*[this->ROW];
-		for(int i = 0; i< ROW; ++i){
-			this->matrix_path[i] = new int[COL];
-			/*for(int j = 0; j < COL ; j++){
-				matrix_path[i][j] = 0;
-			}*/
-		}
+	void fillMatrixPath(ofstream& info) {
+        this->matrix_path = new float*[this->ROW];
+        for(int i = 0; i< ROW; ++i){
+            this->matrix_path[i] = new float[COL];
+            for(int j = 0; j < COL ; j++){
+                matrix_path[i][j] = 0;
+            }
+        }
 		int s = Path.size();
-		float totCost = 0, totBiom = 0;
+		float totCost = 0, totBiom = 0, frict = 0;
 
-		vector<nGraph>::iterator it;
-		for(it = Path.begin(); it != Path.end(); it++) {
-			totBiom += this->biomass[it->x][it->y];
-			totCost += this->friction[it->x][it->y];
-			if(it->x == srcX && it->y == srcY)
-				matrix_path[it->x][it->y] = 2;
-			else
-				matrix_path[it->x][it->y] = 1;
+		while(!Path.empty()) {
+            pair<int,int> p = Path.top();
+            Path.pop();
+			totBiom += this->biomass[p.first][p.second];
+			if(friction[p.first][p.second] > 0) {
+				totCost += (this->biomass[p.first][p.second] / this->friction[p.first][p.second]);
+				frict += friction[p.first][p.second];
+				matrix_path[p.first][p.second] = friction[p.first][p.second];
+			} else {
+				matrix_path[p.first][p.second] = 255;
+			}
 		}
-		 cout << "Total Biomass: " << totBiom << "\t Total Cost: " << totCost << "\t Size: " << s << endl;
+        info << s << ",";
+        info << totBiom << ",";
+        info << totCost << endl;
+        cout << "Total Biomass: " << totBiom << "\nTotal Cost: " << totCost << "\nTotal Cost ($): " << frict << "\nSize: " << s << endl;
+        this->cost = totCost;
+        this->cost_frict = frict;
 	}
 	// The main function that finds shortest distances from src to
 	// all other vertices using Bellman-Ford algorithm.  The function
@@ -214,25 +225,8 @@ public:
 		return;
 	}
 
-	void printPath(vector<int> parent, int n){
-	    //printf("Vertex   Distance from Source\n");
-		// Base Case : If j is source
-		    if (parent[n]==-1)
-		        return;
-
-		    printPath(parent, parent[n]);
-		    //list< pair<int, int> >::iterator i;
-		    //i = this->adj[n].begin();
-		    printf("-> %d (%d, %d)  %f\n ", n, this->nodes.at(n).x, this->nodes.at(n).y, this->nodes.at(n).biomass);
-		    //Path.push(make_pair (this->nodes.at(n).x, this->nodes.at(n).y));
-		    //printf("%d ", n);
-	}
-
-	void bellford(int src_id, int srcX, int srcY, int stop) {
+	void bellford(int src_id, int srcX, int srcY, int stop, ofstream& info, int xMin, int xMax, int yMin, int yMax, int** enum_grid, char heuristic) {
 		priority_queue<nInfo> nodeSet;
-		vector<findNode> visitedNodes;
-		vector<findNode>::iterator itNodes;
-		vector<findNode>::iterator itNodesAux;
 		nInfo aux;
 		aux.relation = nodes.at(src_id).biomass; aux.id_dest = src_id; aux.acum = nodes.at(src_id).biomass; aux.x = srcX; aux.y = srcY;
 		nodeSet.push(aux);
@@ -241,74 +235,106 @@ public:
 		while(!nodeSet.empty()) {
 			int u = nodeSet.top().id_dest;
 			int acumBio = nodeSet.top().acum;
-			//cout << x << ", " << y << endl;
-			//cout << this->nodes.at(u).x << ", " << this->nodes.at(u).y << endl;
-			itNodes = find_if(visitedNodes.begin(), visitedNodes.end(), findNode(this->nodes.at(u).x, this->nodes.at(u).y));
-			if(itNodes == visitedNodes.end()) {
-				//cout << "estoy id nodo: " << u << " con peso: " << nodeW << " con acumulado: " << acum <<  endl;
-				//int u = nodeSet.top().id_dest;
-				//float acum = nodeSet.top().acum;
-				//float nodeW = nodeSet.top().weight;
+			if(visitedNodes[nodes.at(u).x][nodes.at(u).y] == false) {
 				totAcum += biomass[nodes.at(u).x][nodes.at(u).y];
-				//cout << totAcum << endl;
-				Path.push_back(nGraph(this->nodes.at(u).x, this->nodes.at(u).y));
-				visitedNodes.push_back(findNode(this->nodes.at(u).x, this->nodes.at(u).y));
+				Path.push(make_pair(this->nodes.at(u).x, this->nodes.at(u).y));
+                visitedNodes[nodes.at(u).x][nodes.at(u).y] = true;
 				nodeSet.pop();
-				//nodeSet = priority_queue<nodeInfo>();
-				//nodeSet.erase(--(nodeSet.end()));
 				if (totAcum >= stop) {
-					//totAcum = acum;
-					//destino = u;
-					//cout << "Terminé los " << stop << " con " << acumF << endl;
+					nodeSet =  priority_queue <nInfo>();
+                    for(int m=0; m < ROW; m++){
+                        delete[] enum_grid[m];
+                    }
 					goto finish;
 				}
-				//adj[u].sort(greater<pairBio>());
+
+                int dx[] = { -1, -1, 0, 1, 1,  1,  0,-1 };
+                int dy[] = {  0,  1, 1, 1, 0, -1, -1,-1 };
+                int id_dest;
+
+                for(int k = 0; k < 8; k++){
+                    bool flag = true;
+                    int x = this->nodes.at(u).x  + dx[k];
+                    int y = this->nodes.at(u).y + dy[k];
+                    if(isValid(x, y) && this->biomass[x][y] > 0 && this->friction[x][y] >= 0 && (x != srcX || y != srcY) && x >= xMin && x <= xMax && y >= yMin && y <= yMax){
+                        id_dest = enum_grid[x][y];
+                        list< pair<float, int> >::iterator iter;
+                        if(adj[id_dest].size() == 0) {
+                            float heuristicResult = 0, relation = 0;
+                            if (heuristic == 'e') {
+                                heuristicResult = sqrt(pow((srcX - x), 2) + pow((srcY - y), 2));
+                            }
+                            else if (heuristic == 'm') {
+                                heuristicResult = abs(srcX - x) + abs(srcY - y);
+                            }
+                            else if(heuristic == 'd') {
+                                heuristicResult = max(abs(srcX - x), abs(srcY - y));
+                            }
+                            if (heuristicResult > 0)
+                                relation = (biomass[x][y] / friction[x][y] + heuristicResult);
+                            else
+                                relation = biomass[x][y] / friction[x][y];
+                            addEdge(nodes.at(u).id, id_dest, relation);
+                        } else {
+                            for (iter = adj[id_dest].begin(); iter != adj[id_dest].end(); ++iter){
+                                if((*iter).second == nodes.at(u).id) {
+                                    flag = false;
+                                    break;
+                                }
+                            }
+                            if(flag) {
+                                float heuristicResult = 0, relation = 0;
+                                if (heuristic == 'e') {
+                                    heuristicResult = sqrt(pow((srcX - x), 2) + pow((srcY - y), 2));
+                                }
+                                else if (heuristic == 'm') {
+                                    heuristicResult = abs(srcX - x) + abs(srcY - y);
+                                }
+                                else if(heuristic == 'd') {
+                                    heuristicResult = max(abs(srcX - x), abs(srcY - y));
+                                }
+                                if (heuristicResult > 0)
+                                    relation = biomass[x][y] / (friction[x][y] + heuristicResult);
+                                else
+                                    relation = biomass[x][y] / friction[x][y];
+                                addEdge(nodes.at(u).id, id_dest, relation);
+                            }
+                        }
+                    }
+                }
+
 				list< pair<float, int> >::iterator it;
-				list< pair<float, int> >::iterator it2;
 				for(it = adj[u].begin(); it != adj[u].end(); ++it) {
-					int i = nodes.at((*it).second).x, j = nodes.at((*it).second).y, uAux = (*it).second;
-					for(it2 = adj[uAux].begin(); it2 != adj[uAux].end(); ++it2){
-						int a = nodes.at((*it2).second).x, b = nodes.at((*it2).second).y;
-						itNodesAux = find_if(visitedNodes.begin(), visitedNodes.end(), findNode(a, b));
-						if(itNodesAux == visitedNodes.end()) {
-							int v = (*it2).second;
-							float w = (*it2).first;
-							float biom = nodes.at(v).biomass;
-							aux.relation = w; aux.id_dest = v; aux.acum = acumBio + biom, aux.x = i; aux.y = j;
-							nodeSet.push(aux);
-						}
-					}
-					itNodesAux = find_if(visitedNodes.begin(), visitedNodes.end(), findNode(i, j));
-					if(itNodesAux == visitedNodes.end()) {
-						int v = (*it).second;
-						float w = (*it).first;
-						float biom = nodes.at(v).biomass;
-						aux.relation = w; aux.id_dest = v; aux.acum = acumBio + biom, aux.x = i; aux.y = j;
-						nodeSet.push(aux);
-					}
+					int i = this->nodes.at((*it).second).x, j = this->nodes.at((*it).second).y, uAux = (*it).second;
+                    if(visitedNodes[i][j] == false) {
+                        int v = (*it).second;
+                        float w = (*it).first;
+                        float biom = nodes.at(v).biomass;
+                        aux.relation = w; aux.id_dest = v; aux.acum = acumBio + biom, aux.x = i; aux.y = j;
+                        nodeSet.push(aux);
+                    }
 				}
 			} else {
 				nodeSet.pop();
 			}
 		}
 		cout << "No More Elements" << endl;
-		//cout << "Terminé los " << stop << " con " << acumF << endl;
-		//printPath(parent, destino);
-		if(!nodeSet.empty()) {
 			finish:
-				fillMatrixPath(srcX, srcY);
-		}
+				fillMatrixPath(info);
 	}
 
 
-	void bellford_start(float** biomass, float** friction, int srcX, int srcY, float stop, char heuristic) {
+	void bellford_start(float** biomass, float** friction, int srcX, int srcY, float stop, char heuristic, int xMin, int xMax, int yMin, int yMax, int intervals, ofstream& info) {		   this->X = srcX;
+	        this->Y = srcY;
 			this->biomass = new float*[this->ROW];
 			this->friction = new float*[this->ROW];
+            this->visitedNodes = new bool*[this->ROW];
 			int** enum_grid;
 			enum_grid = new int*[ROW];
 			for(int i = 0; i< ROW; ++i){
 				this->biomass[i] = new float[COL];
 				this->friction[i] = new float[COL];
+                this->visitedNodes[i] = new bool[COL];
 				enum_grid[i] = new int[COL];
 			}
 
@@ -316,6 +342,7 @@ public:
 				for(int y = 0; y < COL; y++){
 					this->biomass[x][y] = biomass[x][y];
 					this->friction[x][y] = friction[x][y];
+                    this->visitedNodes[x][y] = false;
 				}
 			}
 
@@ -324,106 +351,72 @@ public:
 			nGraph ng;
 			int id_src;
 			float heuristicResult = 0, relation = 0;
-			for(int i = 0; i < ROW; i++){
-				for(int j = 0; j< COL; j++){
+			int exp;
+
+			exp = intervals * 4;
+
+			xMin = xMin - exp;
+			yMin = yMin - exp;
+			xMax = xMax + exp;
+			yMax = yMax + exp;
+
+			if(xMin < 0)
+				xMin = 0;
+
+			if(yMin < 0)
+				yMin = 0;
+
+			if(xMax >= ROW)
+				xMax = ROW - 1;
+
+			if(yMax >= COL)
+				yMax = COL - 1;
+
+			for(int i = xMin; i <= xMax; i++){
+				for(int j = yMin; j <= yMax; j++){
 					if(srcX == i && srcY == j){
 						id_src = v;
 					}
-					if(this->biomass[i][j] != -9999 && this->friction[i][j] > 0){
-						if (heuristic == 'e') {
-							heuristicResult = sqrt(pow((srcX - i), 2) + pow((srcY - j), 2));
-						}
-						else if (heuristic == 'm') {
-							heuristicResult = abs(srcX - i) + abs(srcY - j);
-						}
-						else if(heuristic == 'd') {
-							heuristicResult = max(abs(srcX - i), abs(srcY - j));
-						}
-						if (heuristicResult > 0)
-							relation = (biomass[i][j] + heuristicResult) / friction[i][j];
-						else
-							relation = biomass[i][j] / friction[i][j];
-						ng.id = v; ng.x = i; ng.y = j; ng.biomass = this->biomass[i][j]; ng.friction = this->friction[i][j];
-						ng.relation = relation;
+					if(this->biomass[i][j] > 0 && this->friction[i][j] >= 0){
+						ng.id = v; ng.x = i; ng.y = j; ng.biomass = this->biomass[i][j];// ng.friction = this->friction[i][j];
+						//ng.relation = relation;
 						nodes.push_back(ng);
 						enum_grid[i][j] = v;
 						v++;
 					}
 				}
 			}
+
 			i_Graph(v, nodes);
+			nodes.clear();
 
-			int dx[] = { -1, -1, 0, 1, 1,  1,  0,-1 };
-			int dy[] = {  0,  1, 1, 1, 0, -1, -1,-1 };
-			vector <nGraph> :: iterator it;
-			int x, y;
-			int id_dest;
-
-			for (it = nodes.begin(); it != nodes.end(); ++it){
+			/*for (it = this->nodes.begin(); it != this->nodes.end(); ++it){
 				for(int k = 0; k < 8; k++){
 					x = (*it).x + dx[k];
 					y = (*it).y + dy[k];
-					if(isValid(x, y) && this->biomass[x][y] != -9999 && this->friction[x][y] > 0 && (x != srcX || y != srcY)){
+					if(isValid(x, y) && this->biomass[x][y] > 0 && this->friction[x][y] >= 0 && x >= xMin && x <= xMax && y >= yMin && y <= yMax){
 						id_dest = enum_grid[x][y];
-						addEdge((*it).id, id_dest, nodes.at(id_dest).relation);
+						addEdge((*it).id, id_dest, this->nodes.at(id_dest).relation);
 					}
 
 				}
 			}
-		bellford(id_src, srcX, srcY, stop);
+		for(int m=0; m < ROW; m++){
+			delete[] enum_grid[m];
+		}*/
+		bellford(id_src, srcX, srcY, stop, info, xMin, xMax, yMin, yMax, enum_grid, heuristic);
+	}
+
+	void freeMem() {
+		for(int m=0; m < ROW; m++){
+			delete[] this->biomass[m];
+			delete[] this->friction[m];
+			delete[] this->matrix_path[m];
+            delete[] this->visitedNodes[m];
+		}
+			adj->clear();
+			nodes.clear();
 	}
 
 
-	// Driver program to test above functions
-	/*int main()
-	{
-		 //Let us create the graph given in above example
-		int V = 5;  // Number of vertices in graph
-		int E = 8;  // Number of edges in graph
-		struct Graph* graph = createGraph(V, E);
-
-		// add edge 0-1 (or A-B in above figure)
-		graph->edge[0].src = 0;
-		graph->edge[0].dest = 1;
-		graph->edge[0].weight = -1;
-
-		// add edge 0-2 (or A-C in above figure)
-		graph->edge[1].src = 0;
-		graph->edge[1].dest = 2;
-		graph->edge[1].weight = 4;
-
-		// add edge 1-2 (or B-C in above figure)
-		graph->edge[2].src = 1;
-		graph->edge[2].dest = 2;
-		graph->edge[2].weight = 3;
-
-		// add edge 1-3 (or B-D in above figure)
-		graph->edge[3].src = 1;
-		graph->edge[3].dest = 3;
-		graph->edge[3].weight = 2;
-
-		// add edge 1-4 (or A-E in above figure)
-		graph->edge[4].src = 1;
-		graph->edge[4].dest = 4;
-		graph->edge[4].weight = 2;
-
-		// add edge 3-2 (or D-C in above figure)
-		graph->edge[5].src = 3;
-		graph->edge[5].dest = 2;
-		graph->edge[5].weight = 5;
-
-		// add edge 3-1 (or D-B in above figure)
-		graph->edge[6].src = 3;
-		graph->edge[6].dest = 1;
-		graph->edge[6].weight = 1;
-
-		// add edge 4-3 (or E-D in above figure)
-		graph->edge[7].src = 4;
-		graph->edge[7].dest = 3;
-		graph->edge[7].weight = -3;
-
-		BellmanFord(graph, 0);
-
-		return 0;
-	}*/
 };

@@ -8,19 +8,22 @@ bool Tree::isValid(int row, int col){
 }
 
 void Tree::printPath(vector<nodeInfo> nodes, ofstream& info){
-	float sum = 0, cost = 0;
+	float sum = 0, cost = 0, frict = 0;
 	int totNodes = 0;
 	for (it = nodes.begin(); it != nodes.end(); it++) {
 		sum += it->value;
-		if(it->fricc > 0)
-			cost += it->fricc;//it->value / it->fricc;
+		if(it->fricc > 0) {
+            cost += it->value / it->fricc;
+            frict += it->fricc;
+        }
 		totNodes++;
 	}
-	cout << fixed << "Biomass: " << sum << "  Cost: " << cost << "  Nodes: " << totNodes << endl;
+	cout << fixed << "Biomass: " << sum << "\nCost: " << cost << "\nCost ($): " << frict << "\nNodes: " << totNodes << endl;
 	info << totNodes << ",";
 	info << sum << ",";
-	info << cost << endl;
+	info << frict << endl;
 	this->cost = cost;
+	this->cost_frict = frict;
 }
 
 void Tree::printMatrix(vector<nodeInfo> nodes, Node src){
@@ -73,8 +76,8 @@ void Tree::getExplorationType(vector<nodeInfo> children, char heuristic) {
 			}
 		} else if(heuristic == 'a') {
 			for (vector<nodeInfo>::iterator it = --(children.end()); it != children.begin(); it--) {
-			if(it->relation >= median)
-				sortedNodes.insert(nodeInfo(it->value, it->fricc, it->relation, it->x, it->y, it->id, true, 0, it->heuristic));
+				if(it->relation >= median)
+					sortedNodes.insert(nodeInfo(it->value, it->fricc, it->relation, it->x, it->y, it->id, true, 0, it->heuristic));
 			}
 		} else {
 			for (vector<nodeInfo>::iterator it = children.begin(); it != children.end(); it++) {

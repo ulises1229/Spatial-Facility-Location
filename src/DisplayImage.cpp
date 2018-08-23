@@ -21,12 +21,16 @@
 #include <set>
 #include "/usr/include/gdal/gdal.h"
 #include "/usr/include/gdal/gdal_priv.h"
-#include "/usr/include/gdal/gdalwarper.h"
 #include "/usr/include/gdal/ogr_spatialref.h"
 #include "/usr/include/gdal/ogr_geometry.h"
+#include "/usr/include/gdal/ogr_srs_api.h"
+#include "/usr/include/gdal/cpl_string.h"
+#include "morton.h"
+#include "communities.h"
 
 using namespace cv;
 using namespace std;
+typedef pair<int, int> Pair;
 
 struct Point2D {
 	int x, y;
@@ -36,7 +40,18 @@ struct Point2D {
 		return (x == e.x && y == e.y);
 	}
 };
+struct sturges{
+	double a, b;
+	int cont, x, y;
+	int xMin  = INT_MAX, yMin = INT_MAX;
+	int xMax = 0, yMax = 0;
 
+	sturges(){}
+
+	sturges(double aa, double bb, int cont1):a(aa), b(bb), cont(cont1){	}
+
+	sturges(int x, int y, int cont) : x(x), y(y), cont(cont){ }
+};
 struct Grid {
 	vector<Point2D> elements;
 	int noElements = 0;
@@ -44,9 +59,16 @@ struct Grid {
 	int id;
 	float sum = 0.0;
 	float biomass = 0;
+	float frict = 0;
 	float friction = 0;
 	float value;
 	float biomassAvg = 0;
+	float relMin = FLT_MAX;
+	float relMax = 0;
+	float bioMax = 0;
+	float bioMin = FLT_MAX;
+	float frictMax = 0;
+	float frictMin = FLT_MAX;
 
 	Grid() {}
 
@@ -73,10 +95,11 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 	return (a.distance < b.distance);
 }
 
+
 class Display_image{
 public:
-	float avg_biomasa, pixels_necesarios = 0, xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-	int ROWS, COLS, intervals = 0, totValidGrids = 0, totGridsAvg = 0, valid_points = 0;
+	float avg_biomasa, avg_friction, relation, grid_biomass, grid_frict, pixels_necesarios = 0;
+	int ROWS, COLS, intervals = 0, totValidGrids = 0, totGSD = 0, valid_points = 0, xMax = INT_MIN, xMin = INT_MAX, yMax = INT_MIN, yMin = INT_MAX;
 	bool flag = true;
 	double projection, adfGeoTransform[6];
 	string proj, epsg;
@@ -84,20 +107,136 @@ public:
 	float** costos;
 	map<float,Grid> gridsMap;
 	vector<float> tokens;
+    Point2D centroid;
+	GDALDataset *dataset;
 
 	bool isInsideGrid(int i, int j){
 			return (i >= 0 && i < ROWS && j >= 0 && j < COLS);
 	}
 
+    void calc_adrian_stats(float** fricc, string tiff) {
+        GDALAllRegister();
+        string ds = tiff;
+        GDALDataset *dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
+        if(dataset == NULL) {
+            cout << "Null dataset" << endl;
+            exit(0);
+        }
+
+
+        GDALRasterBand  *poBand;
+
+        poBand = dataset->GetRasterBand(1);
+        int nXSize = poBand->GetXSize();
+        int nYSize = poBand->GetYSize();
+
+        ROWS = nYSize; COLS = nXSize;
+
+        costos = new float*[ROWS];
+        for(int i = 0; i< ROWS; ++i) {
+            costos[i] = new float[COLS];
+        }
+
+        float *pBuf = new float[nYSize * nXSize];
+
+        poBand->RasterIO(GF_Read, 0, 0, nXSize, nYSize, pBuf, nXSize, nYSize, GDT_Float32, 0, 0);
+
+        float biomass = 0, frict = 0, value;
+        int cCols = 0, cRows = 0, size = 0;
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                int location = (nXSize * (i)) + j;
+                if (cCols == COLS - 1) {
+                    cCols = 0;
+                    cRows++;
+                }
+                else {
+                    value = *(pBuf+location);
+                    if(value >= 0) {
+                        //cout << fricc[cRows][cCols] << endl;
+                        biomass += value;
+                        frict += fricc[cRows][cCols];
+                        size++;
+                    }
+                    cCols++;
+                }
+            }
+        }
+        cout << fixed << "Biomasa Total Adrian: " << biomass << "\nFricción Total Adrian: " << frict << "\nTamaño: " << size << endl;
+    }
+
+    void calc_centroid_biocuenca(string tiff) {
+        GDALAllRegister();
+        string ds = tiff;
+        GDALDataset *dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
+        if(dataset == NULL) {
+            cout << "Null dataset" << endl;
+            exit(0);
+        }
+
+
+        GDALRasterBand  *poBand;
+
+        poBand = dataset->GetRasterBand(1);
+        int nXSize = poBand->GetXSize();
+        int nYSize = poBand->GetYSize();
+
+        ROWS = nYSize; COLS = nXSize;
+
+        costos = new float*[ROWS];
+        for(int i = 0; i< ROWS; ++i) {
+            costos[i] = new float[COLS];
+        }
+
+        float *pBuf = new float[nYSize * nXSize];
+
+        poBand->RasterIO(GF_Read, 0, 0, nXSize, nYSize, pBuf, nXSize, nYSize, GDT_Float32, 0, 0);
+
+        float biomass = 0, frict = 0, value;
+        int cCols = 0, cRows = 0, size = 1;
+
+        for (int i = 0; i < ROWS; i++) { //x
+            for (int j = 0; j < COLS; j++) { //y
+                int location = (nXSize * (i)) + j;
+                if (cCols == COLS - 1) {
+                    cCols = 0;
+                    cRows++;
+                }
+                else {
+                    value = *(pBuf+location);
+                    if(value == 1) {
+                        //cout << xMin << " - " << xMax << " - " << yMin << " - " << yMax << endl;
+                        if(i > xMax)
+                            xMax = i;
+
+                        if(i < xMin)
+                            xMin = i;
+
+                        if(j > yMax)
+                            yMax = j;
+
+                        if(j < yMin)
+                            yMin = j;
+
+                        size++;
+                    }
+                    cCols++;
+                }
+            }
+        }
+        centroid.x = xMin + round((xMax - xMin) / 2);
+        centroid.y = yMin + round((yMax - yMin) / 2);
+        centroid.x = centroid.x + 1;
+        centroid.y = centroid.y + 1;
+        //exit(0);
+	}
+
 
 	float** tiff_to_matrix_gdal(string file, bool flag) {
-		GDALDataset *dataset;
-		char **MD;
-		char *info;
 		GDALAllRegister();
 		string ds = file;
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
-		double ndv;
 
 
 		if(dataset == NULL) {
@@ -114,7 +253,7 @@ public:
 
 		proj = dataset->GetProjectionRef();
 
-		cout << projection << endl;
+		//cout << proj << " - " << projection << endl;
 
 		string tail = proj.substr(proj.size() - 20);
 
@@ -124,6 +263,12 @@ public:
 		d2 = tail.find("\"", d1 + 2);
 
 		epsg = tail.substr(d1 + 2, d2 - d1 - 2);
+
+		d1 = proj.find("\"");
+		d2 = proj.find("\"", d1 + 1);
+
+		proj = proj.substr(d1 + 1, d2 - 8);
+		//cout << proj << endl; exit(0);
 
 
 		int nXSize = poBand->GetXSize();
@@ -136,14 +281,14 @@ public:
 			costos[i] = new float[COLS];
 		}
 
-		GDALDataType dataType = poBand->GetRasterDataType();
+		//GDALDataType dataType = poBand->GetRasterDataType();
 		float *pBuf = new float[nYSize * nXSize];
 
 		poBand->RasterIO(GF_Read, 0, 0, nXSize, nYSize, pBuf, nXSize, nYSize, GDT_Float32, 0, 0);
 
-		float biomass = 0;
-		float pxVal = 0;
-		int cCols = 0, cRows = 0;
+		float biomass = 0, frict = 0;
+		//float pxVal = 0;
+		int cCols = 0, cRows = 0, vp_frict = 0;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				int location = (nXSize * (i)) + j;
@@ -154,10 +299,14 @@ public:
 				else {
 					costos[cRows][cCols] = *(pBuf+location);
 					//if(costos[cRows][cCols])
-					//	cout << costos[cRows][cCols] << endl;
+					//cout << costos[cRows][cCols] << endl;
 					if(costos[cRows][cCols] > 0 && flag){
 						valid_points++;
 						biomass += costos[cRows][cCols];
+					} else if(costos[cRows][cCols] > 0 && costos[cRows][cCols] < 1000 && !flag) {
+						vp_frict++;
+						frict += costos[cRows][cCols];
+                        //cout << costos[cRows][cCols] << endl;
 					}
 					cCols++;
 				}
@@ -167,15 +316,19 @@ public:
 			//cout << fixed << "Total B: " << biomass << endl;
 			//cout << "valid: " << valid_points << endl;
 			this->avg_biomasa = biomass / (valid_points);
+		} else {
+			//cout << frict << " - " << vp_frict << endl;
+			this->avg_friction = frict / (vp_frict);
 		}
 		//cout << avg_biomasa << endl;
+		//cout << avg_friction << endl;
 		//exit(0);
 		return costos;
 	}
 
-	void write_image(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
+	void write_image(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName, int img_number) {
 		float* arr = new float[rows * cols * 3];
-		int n_pixels = rows * cols, channelDiv = round(stop /255);
+		int n_pixels = rows * cols; //channelDiv = round(stop / 255);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				arr[i * cols + j] = output_raster[i][j];
@@ -197,14 +350,31 @@ public:
 			planes.push_back(matrix);
 		merge(planes, im_color);
 
+		int rgb[10][3] = {
+			{24, 10, 99},
+			{89, 9, 30},
+			{1, 72, 18},
+			{67, 59, 85},
+			{35, 62, 13},
+			{25, 15, 78},
+			{69, 69, 69},
+			{14, 99, 44},
+			{30, 25, 55},
+			{87, 56, 84},
+		};
+
 		for(int i = 0; i < n_pixels; i++) {
 			Vec4f &v = im_color.at<Vec4f>(i/cols, i%cols);
 			if(v[0] > 0) {
-				v.val[0] = v[0] / (projection * projection) * 1050;
-				v.val[1] = v[1] / (projection * projection) * 450;// / channelDiv;
-				v.val[2] = v[2] / (projection * projection) * 150;// / channelDiv;
-				v.val[3] = 255;
+				v.val[0] = v[0] * rgb[img_number - 1][0];//2500 / channelDiv; // Blue
+				v.val[1] = v[1] * rgb[img_number - 1][1];//10000 / channelDiv; // Green
+				v.val[2] = v[2] * rgb[img_number - 1][2];//1500 / channelDiv; // Red
+				v.val[3] = 255; // Alpha
 				//cout << v.val[2] << endl;
+			} else if (v[0] == 0) {
+                v.val[0] = 0;
+                v.val[1] = 0;
+                v.val[2] = 0;
 			}
 		}
 
@@ -237,7 +407,73 @@ public:
 		//exit(0);
 	}
 
-	map<float,Grid> define_grids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
+	map<float,Grid> define_grids_classic(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction, int demanda) {
+		int xPosGrid, yPosGrid, id = 1, c = 0, cont = 0, contValid = 0;
+		Grid** totalGrids = new Grid*[xIntervals];
+		for (int i = 0; i< xIntervals; i++) {
+			totalGrids[i] = new Grid[yIntervals];
+		}
+
+		Point2D tmp;
+		for(int i = 0; i < rows; i++)
+			for(int j = 0; j < cols; j++) {
+				xPosGrid = floor(i / intervals);
+				yPosGrid = floor(j / intervals);
+				//FIXME: Change tmp
+				tmp.x = i;
+				tmp.y = j;
+				totalGrids[xPosGrid][yPosGrid].noElements++;
+				if (biomass[i][j] >= 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
+					totalGrids[xPosGrid][yPosGrid].elements.push_back(tmp);
+					totalGrids[xPosGrid][yPosGrid].sum += biomass[i][j] / friction[i][j];
+					totalGrids[xPosGrid][yPosGrid].value = biomass[i][j];
+					totalGrids[xPosGrid][yPosGrid].biomass += biomass[i][j];
+					totalGrids[xPosGrid][yPosGrid].friction += friction[i][j];
+					totalGrids[xPosGrid][yPosGrid].frict = friction[i][j];
+					if(biomass[i][j] / friction[i][j] < totalGrids[xPosGrid][yPosGrid].relMin)
+						totalGrids[xPosGrid][yPosGrid].relMin = biomass[i][j] / friction[i][j];
+					if(biomass[i][j] / friction[i][j] > totalGrids[xPosGrid][yPosGrid].relMax)
+						totalGrids[xPosGrid][yPosGrid].relMax = biomass[i][j] / friction[i][j];
+
+					if(biomass[i][j] < totalGrids[xPosGrid][yPosGrid].bioMin)
+						totalGrids[xPosGrid][yPosGrid].bioMin = biomass[i][j];
+					if(biomass[i][j] > totalGrids[xPosGrid][yPosGrid].bioMax)
+						totalGrids[xPosGrid][yPosGrid].bioMax = biomass[i][j];
+
+					if(friction[i][j] < totalGrids[xPosGrid][yPosGrid].frictMin)
+						totalGrids[xPosGrid][yPosGrid].frictMin = friction[i][j];
+					if(friction[i][j] > totalGrids[xPosGrid][yPosGrid].frictMax)
+						totalGrids[xPosGrid][yPosGrid].frictMax = friction[i][j];
+					contValid++;
+
+				}
+				else {
+					totalGrids[xPosGrid][yPosGrid].invalidCells = totalGrids[xPosGrid][yPosGrid].invalidCells + 1;
+					totalGrids[xPosGrid][yPosGrid].value = -9999;
+				}
+
+				c++;
+				if (totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == (intervals * intervals)
+					&& totalGrids[xPosGrid][yPosGrid].biomass > 0 && totalGrids[xPosGrid][yPosGrid].friction > 0
+					&& totalGrids[xPosGrid][yPosGrid].biomass > totalGrids[xPosGrid][yPosGrid].friction) {
+						totalGrids[xPosGrid][yPosGrid].id = id;
+						totalGrids[xPosGrid][yPosGrid].biomassAvg = totalGrids[xPosGrid][yPosGrid].biomass / totalGrids[xPosGrid][yPosGrid].elements.size();
+						if(totalGrids[xPosGrid][yPosGrid].biomassAvg >= avg_biomasa) {
+							totGSD++;
+							id++;
+							cont++;
+							float gridSum = totalGrids[xPosGrid][yPosGrid].biomass/ totalGrids[xPosGrid][yPosGrid].friction;
+							gridsMap.insert(pair<float,Grid>(gridSum, totalGrids[xPosGrid][yPosGrid]));
+						}
+				}
+			}
+		totValidGrids = cont;
+		float prctg = totGSD / totValidGrids;
+		cout << prctg << endl;
+		return gridsMap;
+	}
+
+	map<float,Grid> define_grids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction, int demanda) {
 			int xPosGrid, yPosGrid, id = 1, c = 0, cont = 0, contValid = 0;
 			Grid** totalGrids = new Grid*[xIntervals];
 			for (int i = 0; i< xIntervals; i++) {
@@ -253,7 +489,111 @@ public:
 					tmp.x = i;
 					tmp.y = j;
 					totalGrids[xPosGrid][yPosGrid].noElements++;
-					if (biomass[i][j] >= 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
+					if (biomass[i][j] > 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
+						totalGrids[xPosGrid][yPosGrid].elements.push_back(tmp);
+						totalGrids[xPosGrid][yPosGrid].sum += biomass[i][j] / friction[i][j];
+						totalGrids[xPosGrid][yPosGrid].value = biomass[i][j];
+						totalGrids[xPosGrid][yPosGrid].biomass += biomass[i][j];
+						totalGrids[xPosGrid][yPosGrid].friction += friction[i][j];
+						totalGrids[xPosGrid][yPosGrid].frict = friction[i][j];
+						if(biomass[i][j] / friction[i][j] < totalGrids[xPosGrid][yPosGrid].relMin)
+							totalGrids[xPosGrid][yPosGrid].relMin = biomass[i][j] / friction[i][j];
+						if(biomass[i][j] / friction[i][j] > totalGrids[xPosGrid][yPosGrid].relMax)
+							totalGrids[xPosGrid][yPosGrid].relMax = biomass[i][j] / friction[i][j];
+
+						if(biomass[i][j] < totalGrids[xPosGrid][yPosGrid].bioMin)
+							totalGrids[xPosGrid][yPosGrid].bioMin = biomass[i][j];
+						if(biomass[i][j] > totalGrids[xPosGrid][yPosGrid].bioMax)
+							totalGrids[xPosGrid][yPosGrid].bioMax = biomass[i][j];
+
+						if(friction[i][j] < totalGrids[xPosGrid][yPosGrid].frictMin)
+							totalGrids[xPosGrid][yPosGrid].frictMin = friction[i][j];
+						if(friction[i][j] > totalGrids[xPosGrid][yPosGrid].frictMax)
+							totalGrids[xPosGrid][yPosGrid].frictMax = friction[i][j];
+						//cout << totalGrids[xPosGrid][yPosGrid].sum << endl;
+						contValid++;
+
+					}
+					else {
+						totalGrids[xPosGrid][yPosGrid].invalidCells = totalGrids[xPosGrid][yPosGrid].invalidCells + 1;
+						totalGrids[xPosGrid][yPosGrid].value = -9999;
+					}
+
+					c++;
+					//cout << intervals << endl;
+					/*if(totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == 974169) {
+						cout << totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
+						cout << totalGrids[xPosGrid][yPosGrid].elements.size() << " - " << totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
+					}*/
+					if (totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == (intervals * intervals)
+					    /*&& totalGrids[xPosGrid][yPosGrid].biomass > 0 && totalGrids[xPosGrid][yPosGrid].friction > 0
+						&& totalGrids[xPosGrid][yPosGrid].biomass > totalGrids[xPosGrid][yPosGrid].friction*/
+						/*&& totalGrids[xPosGrid][yPosGrid].elements.size() * avg_biomasa >= demanda*/
+						//&& totalGrids[xPosGrid][yPosGrid].biomass >= demanda
+						/*&& totalGrids[xPosGrid][yPosGrid].elements.size() > totalGrids[xPosGrid][yPosGrid].invalidCells*/) {
+							cont++;
+							totalGrids[xPosGrid][yPosGrid].id = id;
+							totalGrids[xPosGrid][yPosGrid].biomassAvg = totalGrids[xPosGrid][yPosGrid].biomass / totalGrids[xPosGrid][yPosGrid].elements.size();
+							if(totalGrids[xPosGrid][yPosGrid].biomass >= demanda/*totalGrids[xPosGrid][yPosGrid].biomassAvg >= avg_biomasa*/) {
+								totGSD++;
+								id++;
+								float gridSum = totalGrids[xPosGrid][yPosGrid].biomass/ totalGrids[xPosGrid][yPosGrid].friction;
+								gridsMap.insert(pair<float,Grid>(gridSum, totalGrids[xPosGrid][yPosGrid]));
+							}
+					}
+				}
+			totValidGrids = cont;
+			float prctg = totGSD / (double) totValidGrids;
+			//cout << totGSD << " / " << totValidGrids << " = " << prctg * 100 << endl;
+			//exit(0);
+			if(totValidGrids < 2) {
+				gridsMap = define_grids_classic(rows, cols, xIntervals, yIntervals, biomass, friction, demanda);
+			}
+			/*cout << avg_biomasa << endl;
+			cout << totGridsAvg << endl;
+			cout << totValidGrids << endl;*/
+			return gridsMap;
+		}
+
+	void calculate_map_info(int rows, int cols, int &xIntervals, int &yIntervals, float** biomass, float** friction, float humidity, float loss, float production, string region) {
+		//int watts[7] = {1, 2, 5, 10, 15, 20, 30}, index;
+		int watts[7] = {1, 5, 15, 20, 30, 75, 150}, index;
+		ofstream info;
+		info.open(region + " Overview.csv");
+		//info << "1mW, 2mW, 5mW, 10mW, 15mW, 20mW, 30mW" << endl;
+		info << "1mW, 5mW, 15mW, 20mW, 30mW, 75mW, 150mW" << endl;
+		for(index = 0; index < 7; index++) {
+			totGSD = 0;
+			totValidGrids = 0;
+			float v1 = 1 - (humidity/100), v2 = 1 - (loss / 100), v3 = (production / 100);
+			float hpa = 8760 * v3;
+			float sp = watts[index] * hpa;
+			float eb = sp / v2;
+			float biomasa = eb / (5 * v1);
+			int demanda = biomasa, xIn = 0, yIn = 0;
+
+			cout << demanda << " - " << watts[index] << endl;
+
+			define_intervals(demanda, xIn, yIn);
+
+			xIntervals = xIn; yIntervals = yIn;
+
+			int xPosGrid, yPosGrid, id = 1, c = 0, cont = 0, contValid = 0;
+			Grid** totalGrids = new Grid*[xIntervals];
+			for (int i = 0; i< xIntervals; i++) {
+				totalGrids[i] = new Grid[yIntervals];
+			}
+
+			Point2D tmp;
+			for(int i = 0; i < rows; i++)
+				for(int j = 0; j < cols; j++) {
+					xPosGrid = floor(i / intervals);
+					yPosGrid = floor(j / intervals);
+					//FIXME: Change tmp
+					tmp.x = i;
+					tmp.y = j;
+					totalGrids[xPosGrid][yPosGrid].noElements++;
+					if (biomass[i][j] > 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
 						totalGrids[xPosGrid][yPosGrid].elements.push_back(tmp);
 						totalGrids[xPosGrid][yPosGrid].sum += biomass[i][j] / friction[i][j];
 						totalGrids[xPosGrid][yPosGrid].value = biomass[i][j];
@@ -275,43 +615,57 @@ public:
 						cout << totalGrids[xPosGrid][yPosGrid].elements.size() << " - " << totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
 					}*/
 					if (totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells == (intervals * intervals)
-					    && totalGrids[xPosGrid][yPosGrid].biomass > 0 && totalGrids[xPosGrid][yPosGrid].friction > 0
+						&& totalGrids[xPosGrid][yPosGrid].biomass > 0 && totalGrids[xPosGrid][yPosGrid].friction > 0
 						&& totalGrids[xPosGrid][yPosGrid].biomass > totalGrids[xPosGrid][yPosGrid].friction
+						/*&& totalGrids[xPosGrid][yPosGrid].elements.size() * avg_biomasa >= demanda*/
+						//&& totalGrids[xPosGrid][yPosGrid].biomass >= demanda
 						/*&& totalGrids[xPosGrid][yPosGrid].elements.size() > totalGrids[xPosGrid][yPosGrid].invalidCells*/) {
-							//cout << totalGrids[xPosGrid][yPosGrid].elements.size() + totalGrids[xPosGrid][yPosGrid].invalidCells << endl;
-							//cout << totalGrids[xPosGrid][yPosGrid].sum << endl;
+							cont++;
 							totalGrids[xPosGrid][yPosGrid].id = id;
 							totalGrids[xPosGrid][yPosGrid].biomassAvg = totalGrids[xPosGrid][yPosGrid].biomass / totalGrids[xPosGrid][yPosGrid].elements.size();
-							if(totalGrids[xPosGrid][yPosGrid].biomassAvg >= avg_biomasa)
-								totGridsAvg++;
-							id++;
-							cont++;
-							float gridSum = totalGrids[xPosGrid][yPosGrid].biomass / totalGrids[xPosGrid][yPosGrid].friction;
-							gridsMap.insert(pair<float,Grid>(gridSum, totalGrids[xPosGrid][yPosGrid]));
+							if(totalGrids[xPosGrid][yPosGrid].biomass >= demanda/*totalGrids[xPosGrid][yPosGrid].biomassAvg >= avg_biomasa*/) {
+								totGSD++;
+								id++;
+								float gridSum = totalGrids[xPosGrid][yPosGrid].biomass/ totalGrids[xPosGrid][yPosGrid].friction;
+								gridsMap.insert(pair<float,Grid>(gridSum, totalGrids[xPosGrid][yPosGrid]));
+							}
 					}
 				}
 			totValidGrids = cont;
-			return gridsMap;
+			//exit(0);
+			if(totGSD == 0) {
+				cout << "Zero" << endl;
+				info << "0,";
+				//gridsMap = define_grids_classic(rows, cols, xIntervals, yIntervals, biomass, friction, demanda);
+			} else {
+				float prctg = totGSD / (double) totValidGrids;
+				cout << totGSD << " / " << totValidGrids << " = " << prctg * 100 << endl;
+				info << prctg * 100 << ",";
+			}
 		}
+	}
 
 	Point2D find_centroid(map<float,Grid> grids, float** biomass, float** friction) {
 		map<float,Grid>::iterator it;
 		float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-		/*map<float,Grid>::iterator it2;
+		/*ofstream file;
+		file.open("grids.txt");
+
+		map<float,Grid>::iterator it2;
 		for ( it = gridsMap.begin(); it != gridsMap.end(); ++it) {
 			float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
-			cout << it->second.elements.size() + it->second.invalidCells << "\t Relation: " << it->first  << "\t Biomass: " << it->second.biomass << "\t Friction: " << it->second.friction << endl;
+			//cout << it->second.elements.size() + it->second.invalidCells << "\t Relation: " << it->first  << "\t Biomass: " << it->second.biomass << "\t Friction: " << it->second.friction << endl;
+			file << it->second.elements.size() << " - " << it->second.invalidCells << "\t Relation: " << it->first  << "\t Biomass: " << it->second.biomass << "\t Friction: " << it->second.friction << endl;
 		}
 		cout << "Finished. " << gridsMap.size() << endl;
-		//exit(0);*/
+		file.close();
+		exit(0);*/
 		if (!grids.empty()) {
 			it = (--grids.end());
 		} else {
 			flag = false;
 		}
-
 		Point2D centroid;
-
 		if(flag){
 			cout << "Relation: " << it->first << endl;
 			for (int i = 0; i < it->second.elements.size(); i++) {
@@ -328,12 +682,17 @@ public:
 					yMin = it->second.elements.at(i).y;
 			}
 
-			centroid.x = xMin + round((xMax - xMin) / 2) ;
+			this->relation = it->first;
+			this->grid_biomass = it->second.biomass;
+			this->grid_frict = it->second.friction;
+
+			centroid.x = xMin + round((xMax - xMin) / 2);
 			centroid.y = yMin + round((yMax - yMin) / 2);
-			//cout << xMin << " - " << xMax << " - " << yMin << " - " << yMax << endl;
 			this->xMax = xMax; this->xMin = xMin;
 			this->yMax = yMax; this->yMin = yMin;
-			if(biomass[centroid.x][centroid.y] < 0 || biomass[centroid.x][centroid.y] < friction[centroid.x][centroid.y]){
+			//centroid.x = 1996; centroid.y = 1468;
+			if(biomass[centroid.x][centroid.y] < 0 || biomass[centroid.x][centroid.y] < friction[centroid.x][centroid.y] || friction[centroid.x][centroid.y] < 0 || friction[centroid.x][centroid.y] == 999999
+					|| friction[centroid.x][centroid.y] == -9999){
 				cout << "Invalid Centroid: " << centroid.x << ", " << centroid.y << endl;
 				bool found = true;
 				set<cellVecinos> vecinos = vecinos2(centroid.x, centroid.y);
@@ -344,7 +703,7 @@ public:
 					while(found) {
 						for (itr = vecinos.begin(); itr != vecinos.end(); ++itr){
 							//cout << (*itr).x << ", " << (*itr).y << endl;
-							if(biomass[(*itr).x][(*itr).y] > 0 &&  biomass[(*itr).x][(*itr).y] > friction[(*itr).x][(*itr).y]){
+							if(biomass[(*itr).x][(*itr).y] > 0 &&  biomass[(*itr).x][(*itr).y] > friction[(*itr).x][(*itr).y] && friction[(*itr).x][(*itr).y] > 0){
 								//cout << biomass[(*itr).x][(*itr).y] << " " << friction[(*itr).x][(*itr).y] << endl;
 								centroid.x = (*itr).x;
 								centroid.y = (*itr).y;
@@ -510,6 +869,41 @@ public:
 			//pipe.reset();
 			//exit(0);
 		}
+
+		void coords_to_pixel(double lat, double lon) {
+			OGRSpatialReference *src = new OGRSpatialReference();
+
+			src->importFromEPSG(4326);
+
+			const char *sProj = dataset->GetProjectionRef();
+			OGRSpatialReference *dest = new OGRSpatialReference(sProj);
+
+			OGRCoordinateTransformation *trans;
+
+			trans = OGRCreateCoordinateTransformation( src, dest );
+
+			double x = lon;
+			double y = lat;
+			trans->Transform( 1, &x, &y );
+
+			int xi = (int)(x - adfGeoTransform[0]) / adfGeoTransform[1];
+			int yi = (int)(y - adfGeoTransform[3]) / adfGeoTransform[5];
+
+			cout << yi << " - " << xi << endl;
+
+			//exit(0);
+
+			/*double xy[2] = ct->Transform(1, &lon, &lat);
+
+			int x = (int)(((xy[0] - adfGeoTransform[0]) / adfGeoTransform[1]));
+			int y = (int)(((xy[1] - adfGeoTransform[3]) / adfGeoTransform[5]));
+
+			cout << x << ", " << y << endl;*/
+
+		}
+
+
+
 
 		/*void divide_biomass(float** &biomass_matrix) {
 			for (int i = 0; i < ROWS; i++) {

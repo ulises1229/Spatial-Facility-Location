@@ -76,7 +76,7 @@ public:
 	cell_exp** cellDetails;
 	//ell_exp** cellParents;
 	float** matrix_path;
-	float cost;
+	float cost, cost_frict;
 	int X, Y;
 
 

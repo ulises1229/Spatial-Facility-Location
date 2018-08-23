@@ -55,12 +55,14 @@
 		st.erase(st.begin());
 		int x, y;
 		// looping through all neighbours
+		//cout << cost_raster[origen_x][origen_y] << endl;
 		for (int i = 0; i < 8; i++){
 			x = k.x + dx[i];
 			y = k.y + dy[i];
 			//cout << "x = " << x << " y = " << y << endl;
 			// if not inside boundry, ignore them
-			if (!isInsideGrid(x, y)){
+			//cout << cost_raster[x][y] << endl;
+			if (!isInsideGrid(x, y) || cost_raster[x][y] == 99999){
 				//cout << "no inside grid" << endl;
 				continue;
 			}
@@ -88,7 +90,7 @@
 	}
 
 
-	void costDistance::acumulados(set<cell> active_costs, int origen_x, int origen_y, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax){
+	void costDistance::acumulados(set<cell> active_costs, int origen_x, int origen_y, float intervals, float xMin, float xMax, float yMin, float yMax){
 			extern char is_usable;
 			int exp;
 
@@ -109,6 +111,13 @@
 
 			if(yMin < 0)
 				yMin = 0;
+
+			if(xMax >= ROW)
+				xMax = ROW - 1;
+
+			if(yMax >= COL)
+				yMax = COL - 1;
+
 
 			int dx[] = { -1, -1, 0, 1, 1, 1, 0,-1 };
 			int dy[] = {  0,  1, 1, 1, 0, -1, -1,-1 };
@@ -194,7 +203,7 @@
 
 
 
-	void costDistance::inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax, double projection) {
+	void costDistance::inicio_cost_distance(float** grid, int srcX, int srcY, float intervals, float xMin, float xMax, float yMin, float yMax, double projection) {
 		//cout << COL << " " << ROW << endl;
 		this->cost_raster = new float*[this->ROW];
 		this->output_raster = new float*[this->ROW];
@@ -226,9 +235,10 @@
 		/*set <cell> :: iterator itr;
 		for (itr = distancias.begin(); itr != distancias.end(); ++itr){
 			cout << (*itr).x << ", " << (*itr).y << " - dist =  " << (*itr).distance << endl;
-		}*/
-		//exit(0);
-		acumulados(distancias, srcX, srcY, biomass, intervals, xMin, xMax, yMin, yMax);//metodo para calcular demas vecinos.
+		}
+
+		exit(0);*/
+		acumulados(distancias, srcX, srcY, intervals, xMin, xMax, yMin, yMax);//metodo para calcular demas vecinos.
 		for(int r=0; r<ROW; r++){
 			for(int c=0; c<COL; c++){
 				if(output_raster[r][c] == INT_MAX)
