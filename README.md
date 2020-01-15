@@ -29,86 +29,74 @@ The optimization tool contains a collection of algorithms coded in C++ that take
   
   1. Acquire sudo privilleges:  
   ``` bash
-  $ su
+   su
   ```
   2. Update packages:
   ``` bash
-  $ yum -y update
+  # yum -y update
   ```
   3. Install Development Tools
-  $ yum groupinstall "Development Tools"
-  ```
-   [comment]: < si esta instrucción falla, probar con las siguientes:
   ``` bash
-  $ yum group mark install "Development Tools"
-  $ yum group update "Development Tools" >
-  ```
-  Después, instalar los siguientes paquetes:
-  ``` bash
-  $ yum install cmake gcc gtk2-devel pkgconfig
-  ```
- **Nota:** algunos paquetes pueden ya estar instalados
- 
- 
- 4. OpenCV se utiliza para la creación de imágenes, por ende, es necesario instalar las siguientes librerías para llevarla a cabo sin problemas:
- ``` bash
-  $ yum install libpng-devel libjpeg-turbo-devel jasper-devel openexr-devel libtiff-devel libwebp-devel
+  # yum groupinstall "Development Tools"
+  
+  # yum install cmake gcc gtk2-devel pkgconfig libpng-devel libjpeg-turbo-devel jasper-devel openexr-devel libtiff-devel libwebp-devel
   ```
   
- 5. Descargar la librería OpenCV en su versión 3.2 mediante el siguiente comando: 
+ 4. Download and install OpenCV library: 
   ``` bash
-  $ wget https://github.com/opencv/opencv/archive/3.1.0.zip -O opencv-3.1.0.zip
+  # wget https://github.com/opencv/opencv/archive/3.1.0.zip -O opencv-3.1.0.zip
   ```
   
-  6. Descomprimir el archivo descargado:
+  5. Unzip the file:
   ``` bash
-  $ unzip opencv-3.1.0.zip
+  # unzip opencv-3.1.0.zip
   ```
   
-  7. Una vez descomprimido, navegar al directorio creado e instalar los archivos:
+  6. Compilation process:
   ``` bash
-  $ cd opencv-3.1.0
-  $ mkdir build
-  $ cd build
-  $ cmake -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=/usr/local
+  # cd opencv-3.1.0
+  # mkdir build
+  # cd build
+  # cmake -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=/usr/local
   ..
-  $ make
-  $ make install
+  # make
+  # make install
   ```
-  **Nota:** en esta parte se puede demorar varios minutos.
   
-  8. Crear un enlace hacia la librería para evitar problemas con la misma:
+  7. Additional configuration:
    ``` bash
-   $ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/
-   $ echo '/usr/local/lib/' >> /etc/ld.so.conf.d/opencv.conf
-   $ ldconfig
+   # export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/
+   # echo '/usr/local/lib/' >> /etc/ld.so.conf.d/opencv.conf
+   # ldconfig
    ```
    
   
 #### 1.2.2 GDAL
    Desde una terminal, hacer lo siguiente: 
   
-  1. Convertirse en _Superusuario_:  
-  ``` bash
-  $ su
-  ``` 
-  
-  2. Instalar el repositorio y los paquetes de EPEL:
+  1. Install EPEL repository:
   ``` bash
   $ yum install epel-release.noarch
   ``` 
   
-  3. Actualizar la lista de repositorios:
+  2. Update repolist:
   ``` bash
   $ yum repolist
   ``` 
   
-  4. Instalar la librería GDAL:
+  3. Install gdal library:
   ``` bash
   $ yum install gdal-devel.x86_64
   ``` 
 
+#### 1.2.2 TCLAP 
+  1. Download templatized C++ version 1.2.2 from 
+  https://sourceforge.net/projects/tclap/files/tclap-1.2.2.tar.gz/download
+  
+  2. TCLAP is implemted entirely in header files which means that it is  necessary only to include the CmdLine.h fie to use the library 
+   #include <tclap/CmdLine.h>
 
+# 2. Usage 
 
 ### The optimization algorithms can be used in two ways.
 
