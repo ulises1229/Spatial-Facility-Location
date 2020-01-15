@@ -1,10 +1,10 @@
 FROM centos:7
 
-RUN echo "root:curso2018" | chpasswd
+RUN echo "root:optimization" | chpasswd
 
-RUN mkdir Curso
+RUN mkdir optimization
 
-WORKDIR Curso
+WORKDIR optimization
 
 RUN yum -y update
 
@@ -53,13 +53,13 @@ RUN curl -L -b /tmp/cookies "https://drive.google.com$(cat /tmp/intermezzo.html 
 RUN ls
 RUN unzip nrb.zip
 RUN rm nrb.zip
-WORKDIR /Curso/
+WORKDIR /optimization/
 RUN ls
-RUN git clone https://github.com/ulises1229/Optimization-2018.git Curso-Optimizacion
+RUN git https://github.com/ulises1229/PowerPlantOptimization.git optimization-tool
 
 RUN ls
 
-WORKDIR Curso-Optimizacion
+WORKDIR optimization-tool
 
 RUN tar -vzxf tclap-1.2.2.tar.gz
 
@@ -67,8 +67,8 @@ WORKDIR tclap-1.2.2/include/
 
 RUN mv tclap /usr/include/
 
-WORKDIR  /Curso/Curso-Optimizacion/src/
+WORKDIR  /optimization/optimization-tool/src/
 
 RUN g++ -std=c++11 main.cpp -o optimization -L/usr/local/lib -L/usr/include -lopencv_core -lgdal -lopencv_imgproc -lopencv_flann -lopencv_highgui -lopencv_imgcodecs bellford.o dijkstra.o DisplayImage.o distance.o exploracion.o tree.o
 
-RUN export PATH=$PATH:/Curso/Curso-Optimizacion/src/optimization
+RUN export PATH=$PATH:/optimization/optimization-tool/src/optimization
