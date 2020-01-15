@@ -1,17 +1,22 @@
+[comment]: < TODO: replace these images for ENES, UNAM and CIGA Logos or simply remove>
 [comment]: < ![PROBIOMASA 01](/images/probiomasa01.png)![PROBIOMASA 01](/images/probiomasa02.png)![PROBIOMASA 01](/images/probiomasa03.png) >
 
 # Optimization Tool Overview
 
-The optimization tool is a collection of optimization algorithms coded in C++ 
+The optimization tool is a collection of algorithms written in C++ that take input data as above-ground biomass and friction maps to calculate an optimal position for a biomass power plant. 
 
-### Los algoritmos se optimización de pueden utilizar de dos formas.
+### The optimization algorithms can be used in two ways.
 
-## 1. Interfaz web 
+## 1. Web-based platform
 http://www.mofuss.unam.mx/optimization
- ![PROBIOMASA 01](/images/webpage.png) 
+
+[comment]: < TODO: replace this image for an updatet one>
+
+
+![PROBIOMASA 01](/images/webpage.png)
 
 ## 2. Docker Container 
-#### Contenedor de Docker - Instalación
+#### Docker Installation
  
  Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
