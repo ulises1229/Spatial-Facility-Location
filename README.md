@@ -3,7 +3,121 @@
 
 # Optimization Tool Overview
 
-The optimization tool is a collection of algorithms written in C++ that take input data as above-ground biomass and friction maps to calculate an optimal position for a biomass power plant. 
+The optimization tool contains a collection of algorithms coded in C++ that take input data as above-ground biomass and friction maps to calculate an optimal position for a biomass power plant. 
+
+# 1. Installation
+
+## 1.1 System Requirements
+
+#### 1.1.1 Hardware Requirements 
+  Minimum:
+  * Dual core processor  1 GHz  
+  * RAM Memory de 4 GB
+  * At least 1 GB of free disk space
+  
+  Recomended:
+  * Quad core processor 3 GHz 
+  * RAM Memory 16 GB
+  * At least 4 GB of freee disk space (depend on input dataset and map resolution)
+
+#### 1.1.2 Software Requirements
+  The optimization tool was sucessfully tested using the CentOS Linux distribution on its version 7. In addition, it is mandatory to install the following libraries:
+
+  * GDAL at least versión 2.0 
+  * OpenCV at least version 3.0
+  * Tclap  at leas berion 1.0 
+  
+## 1.2 Library Installation
+
+The optimization algorithms use the
+
+#### 1.2.1 OpenCV  
+  Open the comand line and execute the following commands: 
+  
+  1. Acquires sudo privilleges:  
+  ``` bash
+  $ su
+  ```
+  2. Actualizar el gestor de paquetes de CENTOS:
+  ``` bash
+  $ yum -y update
+  ```
+  3. Instalar librerías básicas del sistema (incluida la librería GCC) denominada
+“Development Tools” mediante los siguientes comandos en terminal:
+ ``` bash
+  $ yum groupinstall "Development Tools"
+  ```
+   si esta instrucción falla, probar con las siguientes:
+  ``` bash
+  $ yum group mark install "Development Tools"
+  $ yum group update "Development Tools"
+  ```
+  Después, instalar los siguientes paquetes:
+  ``` bash
+  $ yum install cmake gcc gtk2-devel pkgconfig
+  ```
+ **Nota:** algunos paquetes pueden ya estar instalados
+ 
+ 
+ 4. OpenCV se utiliza para la creación de imágenes, por ende, es necesario instalar las siguientes librerías para llevarla a cabo sin problemas:
+ ``` bash
+  $ yum install libpng-devel libjpeg-turbo-devel jasper-devel openexr-devel libtiff-devel libwebp-devel
+  ```
+  
+ 5. Descargar la librería OpenCV en su versión 3.2 mediante el siguiente comando: 
+  ``` bash
+  $ wget https://github.com/opencv/opencv/archive/3.1.0.zip -O opencv-3.1.0.zip
+  ```
+  
+  6. Descomprimir el archivo descargado:
+  ``` bash
+  $ unzip opencv-3.1.0.zip
+  ```
+  
+  7. Una vez descomprimido, navegar al directorio creado e instalar los archivos:
+  ``` bash
+  $ cd opencv-3.1.0
+  $ mkdir build
+  $ cd build
+  $ cmake -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=/usr/local
+  ..
+  $ make
+  $ make install
+  ```
+  **Nota:** en esta parte se puede demorar varios minutos.
+  
+  8. Crear un enlace hacia la librería para evitar problemas con la misma:
+   ``` bash
+   $ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/
+   $ echo '/usr/local/lib/' >> /etc/ld.so.conf.d/opencv.conf
+   $ ldconfig
+   ```
+   
+  
+#### GDAL
+   Desde una terminal, hacer lo siguiente: 
+  
+  1. Convertirse en _Superusuario_:  
+  ``` bash
+  $ su
+  ``` 
+  
+  2. Instalar el repositorio y los paquetes de EPEL:
+  ``` bash
+  $ yum install epel-release.noarch
+  ``` 
+  
+  3. Actualizar la lista de repositorios:
+  ``` bash
+  $ yum repolist
+  ``` 
+  
+  4. Instalar la librería GDAL:
+  ``` bash
+  $ yum install gdal-devel.x86_64
+  ``` 
+
+
 
 ### The optimization algorithms can be used in two ways.
 
@@ -18,6 +132,7 @@ http://www.mofuss.unam.mx/optimization
 ## 2. Docker Container 
 #### Docker Installation
  
+ Install docker toolbox on your computer
  Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
  https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
  
