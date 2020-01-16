@@ -10,7 +10,7 @@ RUN yum -y update
 
 RUN yum group mark install "Development Tools"
 
-RUN yum -y  install make cmake gcc gtk2-devel pkgconfig wget gcc gcc-c++
+RUN yum -y  install make cmake gcc gtk2-devel pkgconfig wget gcc gcc-c++ git
 
 RUN yum -y install libpng-devel libjpeg-turbo-devel jasper-devel openexr-devel libtiff-devel libwebp-devel
 
