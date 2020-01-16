@@ -93,71 +93,61 @@ The optimization tool contains a collection of algorithms coded in C++ that take
   1. Download templatized C++ version 1.2.2 from 
   https://sourceforge.net/projects/tclap/files/tclap-1.2.2.tar.gz/download
   
-  2. TCLAP is implemted entirely in header files which means that it is  necessary only to include the CmdLine.h fie to use the library 
+  2. TCLAP is implemted entirely in header files which means that it is  necessary only to include the CmdLine.h fie to use the library
+  ``` bash
    #include <tclap/CmdLine.h>
+   ```
 
 # 2. Usage 
 
 ### The optimization algorithms can be used in two ways.
 
-## 1. Web-based platform
+## 2.1. Web-based platform
 http://www.mofuss.unam.mx/optimization
 
 [comment]: < TODO: replace this image for an updatet one>
-
-
 ![PROBIOMASA 01](/images/webpage.png)
 
-## 2. Docker Container 
-#### Docker Installation
+## 2.2 Docker Container 
+#### 2.2.1 Docker Installation
  
- Install docker toolbox on your computer
- Instalar docker toolbox en su computadora siguiendo las siguientes instrucciones <br />
- https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
+ Install docker according your platform (windows, linix or mac) following the instructions in the URL.
+ https://docs.docker.com/install/
  
- ## Creación de un contenedor de docker
+ ### 2.2.2. Docker container creation
  
- Descargar el Dockerfile de la página del curso
+ The Dockerfile is available in the following URL:
+ https://raw.githubusercontent.com/ulises1229/PowerPlantOptimization/master/Dockerfile
  
- http://www.wegp.unam.mx/static/courses/argentina2018/Dockerfile
+ 1. Open a docker terminal and go to the directory where the Dockerfile was downloaded (use the cd command) 
  
- Abrir la terminal de docker 
- 
- ![PROBIOMASA 01](/images/quick.png) 
- 
- Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
- 
- Ejemplo:
-
- ![PROBIOMASA 01](/images/terminal.png) 
+ 2. Cambiarse a la capeta donde se descargo el Dockerfile con el comando change directory  cd <Directorio>.
  
  ``` bash
- cd C:\Users\Ulises\Desktop\Docker
+ cd /path/to/dockerfile
  ``` 
- Utilizar el siguiente comando para ejecutar el contenedor de docker
+ 3. Use the following command to build the docker container.
  
  ``` bash
- docker build -t curso_optimizacion .
+ docker build -t optimization .
   ```
  
- Se deberá esperar al rededor de 20 minutos (Depende de la velocidad de internet y de su computadora).
- 
- Unz vez completada la instlación, verificar el ID del contenedor a través del siguiente comando.
+ 4. One the installation finished, it would be possible to identify the coantainer ID using the following command.
  
   ``` bash
  docker images 
   ```
  
 
-### Correr el contenedor utilizando el volumen que se creo
+### 2.2.3 Runing the docker container
 
  ```
-docker run -it  --name optimizacion_1 -v optimizacion:/storage curso_optimizacion:latest 
+docker run -it  --name optimization -v optimization:/storage optimization-tool:latest 
  ```
  
  ![PROBIOMASA 01](/images/run.png) 
  
- ### Copiar datos de fricción y biomasa
+ ## 2.3 Copiar datos de fricción y biomasa
  Ubicar las capas de ficción y biomasa en un directorio y utilizar el comando de docker cp para copiar las capas dentro del contenedor.
  
   ``` bash
