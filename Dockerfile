@@ -44,7 +44,7 @@ RUN yum repolist
 
 RUN yum -y install gdal-devel.x86_64
 
-#RUN yum -y install git texlive texlive-*.noarch httpd
+RUN yum -y install git texlive texlive-*.noarch httpd
 EXPOSE 80
 WORKDIR /var/www/html/
 RUN curl -c /tmp/cookies "https://drive.google.com/uc?export=download&id=19hlh9yLE48Kci_EheM_aeQ_RJ8rqBaJJ" > /tmp/intermezzo.html
@@ -55,7 +55,7 @@ RUN unzip nrb.zip
 RUN rm nrb.zip
 WORKDIR /optimization/
 RUN ls
-RUN git https://github.com/ulises1229/PowerPlantOptimization.git optimization-tool
+RUN git clone https://github.com/ulises1229/PowerPlantOptimization.git optimization-tool
 
 RUN ls
 
