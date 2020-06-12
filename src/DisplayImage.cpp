@@ -19,11 +19,11 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include "/usr/include/gdal/gdal.h"
-#include "/usr/include/gdal/gdal_priv.h"
-#include "/usr/include/gdal/gdalwarper.h"
-#include "/usr/include/gdal/ogr_spatialref.h"
-#include "/usr/include/gdal/ogr_geometry.h"
+#include "gdal.h"
+#include "gdal_priv.h"
+#include "gdalwarper.h"
+#include "ogr_spatialref.h"
+#include "ogr_geometry.h"
 
 using namespace cv;
 using namespace std;
@@ -142,7 +142,7 @@ public:
 		poBand->RasterIO(GF_Read, 0, 0, nXSize, nYSize, pBuf, nXSize, nYSize, GDT_Float32, 0, 0);
 
 		float biomass = 0;
-		float pxVal = 0;
+		//float pxVal = 0;
 		int cCols = 0, cRows = 0;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {

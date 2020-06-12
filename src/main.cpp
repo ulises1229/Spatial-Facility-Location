@@ -2,14 +2,13 @@
  * main.cpp
  *
  *  Created on: 17/08/2017
- *      Author: lanase
+ *      Author: Ulises Olivares
+ *      olivares@unam.mx
  */
 
 #include <iostream>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string>
-//#include <float.h>
 #include <vector>
 #include <iterator>
 #include <map>
@@ -21,7 +20,7 @@
 #include "dijkstra.cpp" //Dijkstra
 #include "bellford.cpp" //Bellman-Ford
 #include <tclap/CmdLine.h>
-#include <omp.h>
+//#include <omp.h>
 
 struct points_export{
 	int x, y, xMin, xMax, yMin, yMax;
@@ -245,7 +244,7 @@ int main(int argc, const char** argv){
 
 		cout<<"Parallel region"<<endl;
 
-        omp_set_num_threads(1);
+        //omp_set_num_threads(1);
 
         // Reproject biomass
         di.reproject_coords(map_biomass);
