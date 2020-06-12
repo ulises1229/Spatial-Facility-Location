@@ -169,16 +169,6 @@ stdlib.h
 -
 string
 -
-vector
--
-iterator
--
-map
--
-DisplayImage.cpp
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/DisplayImage.cpp
-distance.h
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/distance.h
 exploracion.h
 /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/exploracion.h
 tree.h
@@ -189,6 +179,10 @@ bellford.cpp
 /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp
 tclap/CmdLine.h
 -
+DisplayImage.cpp
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/DisplayImage.cpp
+distance.h
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/distance.h
 
 /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/tree.h
 iostream

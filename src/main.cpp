@@ -2,25 +2,23 @@
  * main.cpp
  *
  *  Created on: 17/08/2017
- *      Author: lanase
+ *      Author: Ulises Olivares
+ *      uolivares@unam.mx
+ *      June 12, 2020
  */
 
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-//#include <float.h>
-#include <vector>
-#include <iterator>
-#include <map>
-#include "DisplayImage.cpp"
-#include "distance.h"
-//#include "gdal.cpp"
 #include "exploracion.h" //A*
 #include "tree.h" //Nodos
 #include "dijkstra.cpp" //Dijkstra
 #include "bellford.cpp" //Bellman-Ford
 #include <tclap/CmdLine.h>
+#include "DisplayImage.cpp"
+#include "distance.h"
+
 
 struct points_export{
 	int x, y, xMin, xMax, yMin, yMax;
@@ -37,23 +35,25 @@ void parsParameters(int argc, const char** argv);
 
 int main(int argc, const char** argv){
 
-
-
-
-
-
-	if(heuristic == 'e')
-		hName = "Euclidean";
-	else if(heuristic == 'm')
-		hName = "Manhattan";
-	else if(heuristic == 'd')
-		hName = "Diagonal";
-	else if(heuristic == 'a')
-		hName = "More_than_median";
-	else if(heuristic == 'b')
-		hName = "Best_2_nodes";
-	else
-		hName = "No_heuristic";
+    // Select heuristic
+    hName = "No_heuristic";
+	switch(heuristic){
+	    case 'e':
+            hName = "Euclidean";
+	    break;
+	    case 'm':
+            hName = "Manhattan";
+	    break;
+	    case 'd':
+            hName = "Diagonal";
+	    break;
+	    case  'a':
+            hName = "More_than_median";
+	    break;
+	    case 'b':
+            hName = "Best_2_nodes";
+	    break;
+	}
 
 	Display_image di;
 
