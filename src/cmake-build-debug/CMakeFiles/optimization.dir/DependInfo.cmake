@@ -4,15 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/root/Documents/Optimization-2018/src/DisplayImage.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
-  "/root/Documents/Optimization-2018/src/bellford.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
-  "/root/Documents/Optimization-2018/src/dijkstra.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
-  "/root/Documents/Optimization-2018/src/distance.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
-  "/root/Documents/Optimization-2018/src/exploracion.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
-  "/root/Documents/Optimization-2018/src/main.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
-  "/root/Documents/Optimization-2018/src/tree.cpp" "/root/Documents/Optimization-2018/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/DisplayImage.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/DisplayImage.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/bellford.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/dijkstra.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/dijkstra.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/distance.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/exploracion.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o"
+  "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/tree.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
