@@ -27,158 +27,17 @@ struct points_export{
 };
 char is_usable;
 
+// Variable definition
+string map_biomass, map_friction, hName, region, map_npa, map_waterbodies;
+char algorithm, heuristic;
+int demanda, optValidation, grids_to_validate, export_points;
+
+
+void parsParameters(int argc, const char** argv);
+
 int main(int argc, const char** argv){
-	string map_biomass, map_friction, hName, region, map_npa, map_waterbodies;
-	char algorithm, heuristic;
-	int demanda, optValidation, grids_to_validate, export_points;
-
-	try {
-
-		// Define the command line object, and insert a message
-		// that describes the program. The "Command description message"
-		// is printed last in the help text. The second argument is the
-		// delimiter (usually space) and the last one is the version number.
-		// The CmdLine object parses the argv array based on the Arg objects
-		// that it contains.
-		TCLAP::CmdLine cmd("Command description message", ' ', "1");
-
-		// Define a value argument and add it to the command line.
-		// A value arg defines a flag and a type of value that it expects,
-		// such as "-n Bishop".
-		//TCLAP::ValueArg<std::string> nameArg("n","name","Name to print",true,"homer","string");
-		TCLAP::ValueArg<std::string> biomass("b","biomass","Absolute path to biomass_map.tif",true,"/path/to/image.tif","string");
-		TCLAP::ValueArg<std::string> friction("f","friction","Absolute path to friction_map.tif",true,"/path/to/image.tif","string");
-		TCLAP::ValueArg<std::string> algor("a","algorithm","Searching algorithm",true,"A","char");
-		TCLAP::ValueArg<std::string> stop("s","demand","Biomass demand",true,"5000","float");
-		TCLAP::ValueArg<std::string> watts("w","watts","Watts demand",true,"20","float");
-		TCLAP::ValueArg<std::string> humedad("i","humidity","Humidity content (%)",false,"40","float");
-		TCLAP::ValueArg<std::string> merma("l","loss","Percentage of expected loss in plant (%)",false,"30","float");
-		TCLAP::ValueArg<std::string> produccion("p","production","Annual percentage of production / operation of plant (%)",false,"20","float");
-		TCLAP::ValueArg<std::string> heur("u","heuristic","Searching heuristic",false,"d","char");
-		TCLAP::ValueArg<std::string> reg("r","region","Name of the region/country",false,"Haiti","string");
-		TCLAP::ValueArg<std::string> validation("v","validation","Validation option",true,"1","int");
-		TCLAP::ValueArg<std::string> grids_validate("g","grids_to_validate","Number of grids to validate",false,"50","int");
-		TCLAP::ValueArg<std::string> export_p("o","export_points","Export a number of points",false,"4","int");
-		TCLAP::ValueArg<std::string> npa("n","npa","Map of Natural Protected Areas (NPA)",false,"/path/to/npa_map.tif","int");
-		TCLAP::ValueArg<std::string> waterbody("m","waterbody","Map of Water bodies",false,"/path/to/water_bodies_map.tif","int");
-		TCLAP::ValueArg<std::string> usable("e","usable","Biomass' info represents usable biomass",true,"y/n","char");
-		// Add the argument nameArg to the CmdLine object. The CmdLine object
-		// uses this Arg to parse the command line.
-		cmd.xorAdd(stop, watts);
-		cmd.add(biomass);
-		cmd.add(friction);
-		cmd.add(algor);
-		cmd.add(heur);
-		cmd.add(reg);
-		cmd.add(validation);
-		cmd.add(grids_validate);
-		cmd.add(humedad);
-		cmd.add(merma);
-		cmd.add(produccion);
-		cmd.add(export_p);
-		cmd.add(npa);
-		cmd.add(waterbody);
-		cmd.add(usable);
-
-		// Parse the argv array.
-		cmd.parse( argc, argv );
-
-		// Get the value parsed by each arg.
-		map_biomass = biomass.getValue();
-		map_friction = friction.getValue();
-		string algoritmo = algor.getValue();
-		algorithm = algoritmo[0];
-		string heuristic2 = heur.getValue();
-		heuristic = heuristic2[0];
-		region = reg.getValue();
-		string validacion = validation.getValue();
-		optValidation = atoi(validacion.c_str());
-		string grids_a_validar = grids_validate.getValue();
-		grids_to_validate = atoi(grids_a_validar.c_str());
-		string exp = export_p.getValue();
-		export_points = atoi(exp.c_str());
-		string demand;
-		string usa = usable.getValue();
-		is_usable = usa[0];
-
-		if(optValidation > 4 || optValidation < 1) {
-			cerr << "Please verify the validation option. (-v):\n 1 -- Best-candidate search.\n 2 -- Candidates where relation >= average validation.\n 3 -- Custom validation.\n 4 -- All-points validation." << endl;
-			exit(0);
-		}
-
-		if(optValidation == 3 && !grids_validate.isSet()) {
-			cerr << "Please indicate the number of grids to validate. (-g)." << endl;
-			exit(0);
-		}
-
-		if(optValidation == 3 && grids_to_validate == 0) {
-			cerr << "Please indicate a positive number of grids to validate. (-g)." << endl;
-			exit(0);
-		}
-
-		if(optValidation == 2 || optValidation == 3){
-			if(export_p.isSet() && export_points <= 0){
-				cerr << "Please select a positive number for points to export. (-o)" << endl;
-				exit(0);
-			}else if(!export_p.isSet()){
-				export_points = 1;
-			}else if(export_p.isSet() && export_points > grids_to_validate){
-				cerr << "Please select a number of points to export less than or equal to the number of grids to validate. (-o)" << endl;
-				exit(0);
-			}
-		} else {
-			export_points = 1;
-		}
 
 
-		if(!heur.isSet())
-			heuristic = 'x';
-
-		if(!grids_validate.isSet())
-			grids_to_validate = 1;
-
-		if(npa.isSet())
-			map_npa = npa.getValue();
-
-		if(waterbody.isSet())
-			map_waterbodies = waterbody.getValue();
-
-		if ( stop.isSet() ){
-			demand = stop.getValue();
-			demanda = strtof(demand.c_str(),0);
-			if (demanda <= 0) {
-				cerr << "Biomass demand must be greater than 0 (-s)." << endl;
-				exit(0);
-			}
-		}
-		else if ( watts.isSet() ){
-			if(merma.isSet() && humedad.isSet() && produccion.isSet()){
-				demand = watts.getValue();
-				float w = strtof(demand.c_str(),0);
-				if (w <= 0) {
-					cerr << "Watts demand must be greater than 0 (-w)." << endl;
-					exit(0);
-				}
-				string mer = merma.getValue();
-				string hum = humedad.getValue();
-				string prod = produccion.getValue();
-				float humedad = strtof(hum.c_str(),0);
-				float merm = strtof(mer.c_str(),0);
-				float produ = strtof(prod.c_str(),0);
-				float v1 = 1 - (humedad/100), v2 = 1 - (merm / 100), v3 = (produ/100);
-				float hpa = 8760 * v3;
-				float sp = w * hpa;
-				float eb = sp / v2;
-				float biomasa = eb / (5 * v1);
-				demanda = biomasa;
-			}else{
-				cerr << "Please verify that the following flags are set: -i [--humidity] -l [--loss] -p [--production]" << endl;
-				exit(0);
-			}
-		}
-
-	} catch (TCLAP::ArgException &e)  // catch any exceptions
-		{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
 
 
 
@@ -692,4 +551,154 @@ int main(int argc, const char** argv){
 	}
 	info.close();
 	bestInfo.close();
+}
+
+void parseParameters(int argc, const char** argv){
+    try {
+
+        // Define the command line object, and insert a message
+        // that describes the program. The "Command description message"
+        // is printed last in the help text. The second argument is the
+        // delimiter (usually space) and the last one is the version number.
+        // The CmdLine object parses the argv array based on the Arg objects
+        // that it contains.
+        TCLAP::CmdLine cmd("Command description message", ' ', "1");
+
+        // Define a value argument and add it to the command line.
+        // A value arg defines a flag and a type of value that it expects,
+        // such as "-n Bishop".
+        //TCLAP::ValueArg<std::string> nameArg("n","name","Name to print",true,"homer","string");
+        TCLAP::ValueArg<std::string> biomass("b","biomass","Absolute path to biomass_map.tif",true,"/path/to/image.tif","string");
+        TCLAP::ValueArg<std::string> friction("f","friction","Absolute path to friction_map.tif",true,"/path/to/image.tif","string");
+        TCLAP::ValueArg<std::string> algor("a","algorithm","Searching algorithm",true,"A","char");
+        TCLAP::ValueArg<std::string> stop("s","demand","Biomass demand",true,"5000","float");
+        TCLAP::ValueArg<std::string> watts("w","watts","Watts demand",true,"20","float");
+        TCLAP::ValueArg<std::string> humedad("i","humidity","Humidity content (%)",false,"40","float");
+        TCLAP::ValueArg<std::string> merma("l","loss","Percentage of expected loss in plant (%)",false,"30","float");
+        TCLAP::ValueArg<std::string> produccion("p","production","Annual percentage of production / operation of plant (%)",false,"20","float");
+        TCLAP::ValueArg<std::string> heur("u","heuristic","Searching heuristic",false,"d","char");
+        TCLAP::ValueArg<std::string> reg("r","region","Name of the region/country",false,"Haiti","string");
+        TCLAP::ValueArg<std::string> validation("v","validation","Validation option",true,"1","int");
+        TCLAP::ValueArg<std::string> grids_validate("g","grids_to_validate","Number of grids to validate",false,"50","int");
+        TCLAP::ValueArg<std::string> export_p("o","export_points","Export a number of points",false,"4","int");
+        TCLAP::ValueArg<std::string> npa("n","npa","Map of Natural Protected Areas (NPA)",false,"/path/to/npa_map.tif","int");
+        TCLAP::ValueArg<std::string> waterbody("m","waterbody","Map of Water bodies",false,"/path/to/water_bodies_map.tif","int");
+        TCLAP::ValueArg<std::string> usable("e","usable","Biomass' info represents usable biomass",true,"y/n","char");
+        // Add the argument nameArg to the CmdLine object. The CmdLine object
+        // uses this Arg to parse the command line.
+        cmd.xorAdd(stop, watts);
+        cmd.add(biomass);
+        cmd.add(friction);
+        cmd.add(algor);
+        cmd.add(heur);
+        cmd.add(reg);
+        cmd.add(validation);
+        cmd.add(grids_validate);
+        cmd.add(humedad);
+        cmd.add(merma);
+        cmd.add(produccion);
+        cmd.add(export_p);
+        cmd.add(npa);
+        cmd.add(waterbody);
+        cmd.add(usable);
+
+        // Parse the argv array.
+        cmd.parse( argc, argv );
+
+        // Get the value parsed by each arg.
+        map_biomass = biomass.getValue();
+        map_friction = friction.getValue();
+        string algoritmo = algor.getValue();
+        algorithm = algoritmo[0];
+        string heuristic2 = heur.getValue();
+        heuristic = heuristic2[0];
+        region = reg.getValue();
+        string validacion = validation.getValue();
+        optValidation = atoi(validacion.c_str());
+        string grids_a_validar = grids_validate.getValue();
+        grids_to_validate = atoi(grids_a_validar.c_str());
+        string exp = export_p.getValue();
+        export_points = atoi(exp.c_str());
+        string demand;
+        string usa = usable.getValue();
+        is_usable = usa[0];
+
+        if(optValidation > 4 || optValidation < 1) {
+            cerr << "Please verify the validation option. (-v):\n 1 -- Best-candidate search.\n 2 -- Candidates where relation >= average validation.\n 3 -- Custom validation.\n 4 -- All-points validation." << endl;
+            exit(0);
+        }
+
+        if(optValidation == 3 && !grids_validate.isSet()) {
+            cerr << "Please indicate the number of grids to validate. (-g)." << endl;
+            exit(0);
+        }
+
+        if(optValidation == 3 && grids_to_validate == 0) {
+            cerr << "Please indicate a positive number of grids to validate. (-g)." << endl;
+            exit(0);
+        }
+
+        if(optValidation == 2 || optValidation == 3){
+            if(export_p.isSet() && export_points <= 0){
+                cerr << "Please select a positive number for points to export. (-o)" << endl;
+                exit(0);
+            }else if(!export_p.isSet()){
+                export_points = 1;
+            }else if(export_p.isSet() && export_points > grids_to_validate){
+                cerr << "Please select a number of points to export less than or equal to the number of grids to validate. (-o)" << endl;
+                exit(0);
+            }
+        } else {
+            export_points = 1;
+        }
+
+
+        if(!heur.isSet())
+            heuristic = 'x';
+
+        if(!grids_validate.isSet())
+            grids_to_validate = 1;
+
+        if(npa.isSet())
+            map_npa = npa.getValue();
+
+        if(waterbody.isSet())
+            map_waterbodies = waterbody.getValue();
+
+        if ( stop.isSet() ){
+            demand = stop.getValue();
+            demanda = strtof(demand.c_str(),0);
+            if (demanda <= 0) {
+                cerr << "Biomass demand must be greater than 0 (-s)." << endl;
+                exit(0);
+            }
+        }
+        else if ( watts.isSet() ){
+            if(merma.isSet() && humedad.isSet() && produccion.isSet()){
+                demand = watts.getValue();
+                float w = strtof(demand.c_str(),0);
+                if (w <= 0) {
+                    cerr << "Watts demand must be greater than 0 (-w)." << endl;
+                    exit(0);
+                }
+                string mer = merma.getValue();
+                string hum = humedad.getValue();
+                string prod = produccion.getValue();
+                float humedad = strtof(hum.c_str(),0);
+                float merm = strtof(mer.c_str(),0);
+                float produ = strtof(prod.c_str(),0);
+                float v1 = 1 - (humedad/100), v2 = 1 - (merm / 100), v3 = (produ/100);
+                float hpa = 8760 * v3;
+                float sp = w * hpa;
+                float eb = sp / v2;
+                float biomasa = eb / (5 * v1);
+                demanda = biomasa;
+            }else{
+                cerr << "Please verify that the following flags are set: -i [--humidity] -l [--loss] -p [--production]" << endl;
+                exit(0);
+            }
+        }
+
+    } catch (TCLAP::ArgException &e)  // catch any exceptions
+    { std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
 }
