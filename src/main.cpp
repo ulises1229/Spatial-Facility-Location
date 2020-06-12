@@ -21,7 +21,6 @@
 #include "dijkstra.cpp" //Dijkstra
 #include "bellford.cpp" //Bellman-Ford
 #include <tclap/CmdLine.h>
-#include <omp.h>
 
 struct points_export{
 	int x, y, xMin, xMax, yMin, yMax;
