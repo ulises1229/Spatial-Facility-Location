@@ -57,9 +57,22 @@ include CMakeFiles/optimization.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/optimization.dir/flags.make
 
+CMakeFiles/optimization.dir/main.cpp.o: CMakeFiles/optimization.dir/flags.make
+CMakeFiles/optimization.dir/main.cpp.o: ../main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/optimization.dir/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/main.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp
+
+CMakeFiles/optimization.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp > CMakeFiles/optimization.dir/main.cpp.i
+
+CMakeFiles/optimization.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp -o CMakeFiles/optimization.dir/main.cpp.s
+
 CMakeFiles/optimization.dir/bellford.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/bellford.cpp.o: ../bellford.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/optimization.dir/bellford.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/bellford.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/bellford.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp
 
 CMakeFiles/optimization.dir/bellford.cpp.i: cmake_force
@@ -72,7 +85,7 @@ CMakeFiles/optimization.dir/bellford.cpp.s: cmake_force
 
 CMakeFiles/optimization.dir/dijkstra.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/dijkstra.cpp.o: ../dijkstra.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/dijkstra.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/optimization.dir/dijkstra.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/dijkstra.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/dijkstra.cpp
 
 CMakeFiles/optimization.dir/dijkstra.cpp.i: cmake_force
@@ -85,7 +98,7 @@ CMakeFiles/optimization.dir/dijkstra.cpp.s: cmake_force
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/DisplayImage.cpp.o: ../DisplayImage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/optimization.dir/DisplayImage.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/optimization.dir/DisplayImage.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/DisplayImage.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/DisplayImage.cpp
 
 CMakeFiles/optimization.dir/DisplayImage.cpp.i: cmake_force
@@ -98,7 +111,7 @@ CMakeFiles/optimization.dir/DisplayImage.cpp.s: cmake_force
 
 CMakeFiles/optimization.dir/distance.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/distance.cpp.o: ../distance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/optimization.dir/distance.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/optimization.dir/distance.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/distance.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.cpp
 
 CMakeFiles/optimization.dir/distance.cpp.i: cmake_force
@@ -111,7 +124,7 @@ CMakeFiles/optimization.dir/distance.cpp.s: cmake_force
 
 CMakeFiles/optimization.dir/exploracion.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/exploracion.cpp.o: ../exploracion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/optimization.dir/exploracion.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/optimization.dir/exploracion.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/exploracion.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.cpp
 
 CMakeFiles/optimization.dir/exploracion.cpp.i: cmake_force
@@ -121,19 +134,6 @@ CMakeFiles/optimization.dir/exploracion.cpp.i: cmake_force
 CMakeFiles/optimization.dir/exploracion.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/exploracion.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.cpp -o CMakeFiles/optimization.dir/exploracion.cpp.s
-
-CMakeFiles/optimization.dir/main.cpp.o: CMakeFiles/optimization.dir/flags.make
-CMakeFiles/optimization.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/optimization.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/main.cpp.o -c /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp
-
-CMakeFiles/optimization.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp > CMakeFiles/optimization.dir/main.cpp.i
-
-CMakeFiles/optimization.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/main.cpp -o CMakeFiles/optimization.dir/main.cpp.s
 
 CMakeFiles/optimization.dir/tree.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/tree.cpp.o: ../tree.cpp
@@ -150,23 +150,23 @@ CMakeFiles/optimization.dir/tree.cpp.s: cmake_force
 
 # Object files for target optimization
 optimization_OBJECTS = \
+"CMakeFiles/optimization.dir/main.cpp.o" \
 "CMakeFiles/optimization.dir/bellford.cpp.o" \
 "CMakeFiles/optimization.dir/dijkstra.cpp.o" \
 "CMakeFiles/optimization.dir/DisplayImage.cpp.o" \
 "CMakeFiles/optimization.dir/distance.cpp.o" \
 "CMakeFiles/optimization.dir/exploracion.cpp.o" \
-"CMakeFiles/optimization.dir/main.cpp.o" \
 "CMakeFiles/optimization.dir/tree.cpp.o"
 
 # External object files for target optimization
 optimization_EXTERNAL_OBJECTS =
 
+optimization: CMakeFiles/optimization.dir/main.cpp.o
 optimization: CMakeFiles/optimization.dir/bellford.cpp.o
 optimization: CMakeFiles/optimization.dir/dijkstra.cpp.o
 optimization: CMakeFiles/optimization.dir/DisplayImage.cpp.o
 optimization: CMakeFiles/optimization.dir/distance.cpp.o
 optimization: CMakeFiles/optimization.dir/exploracion.cpp.o
-optimization: CMakeFiles/optimization.dir/main.cpp.o
 optimization: CMakeFiles/optimization.dir/tree.cpp.o
 optimization: CMakeFiles/optimization.dir/build.make
 optimization: CMakeFiles/optimization.dir/link.txt

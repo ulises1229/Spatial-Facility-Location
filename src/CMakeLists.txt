@@ -12,15 +12,16 @@ link_directories(/usr/local/lib)
 
 
 add_executable(optimization
-    bellford.cpp
-    dijkstra.cpp
-    DisplayImage.cpp
-    distance.cpp
-    distance.h
-    exploracion.cpp
-    exploracion.h
-    main.cpp
-    structure.h
-    tree.cpp
-    tree.h
-    treenode.h)
+        main.cpp
+        bellford.cpp
+        dijkstra.cpp
+        DisplayImage.cpp
+        distance.cpp
+        distance.h
+        exploracion.cpp
+        exploracion.h
+        main.cpp
+        structure.h
+        tree.cpp
+        tree.h
+        treenode.h)
