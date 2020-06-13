@@ -34,9 +34,9 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
 		double ndv;
 
-
+        // File not found
 		if(dataset == NULL) {
-			cout << "No such file or directory, please specify a valid path and name file..." << endl;
+			cout << file << ": No such file or directory, please specify a valid path and name file..." << endl;
 			exit(0);
 		}
 
@@ -48,8 +48,6 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 		projection = adfGeoTransform[1];
 
 		proj = dataset->GetProjectionRef();
-
-		cout << projection << endl;
 
 		string tail = proj.substr(proj.size() - 20);
 
@@ -99,12 +97,9 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			}
 		}
 		if(flag){
-			//cout << fixed << "Total B: " << biomass << endl;
-			//cout << "valid: " << valid_points << endl;
 			this->avg_biomasa = biomass / (valid_points);
 		}
-		//cout << avg_biomasa << endl;
-		//exit(0);
+
 		return costos;
 	}
 

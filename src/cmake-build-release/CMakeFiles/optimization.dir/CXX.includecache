@@ -62,10 +62,6 @@ fstream
 math.h
 -
 
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.cpp
-distance.h
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.h
-
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.h
 iostream
 -
@@ -87,10 +83,6 @@ stdlib.h
 -
 math.h
 -
-
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.cpp
-exploracion.h
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.h
 
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/exploracion.h
 climits
@@ -144,10 +136,6 @@ raster.h
 distance.h
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/distance.h
 
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/raster.cpp
-raster.h
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/raster.h
-
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/raster.h
 stdlib.h
 -
@@ -185,10 +173,6 @@ gdal_priv.h
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/gdal_priv.h
 ogr_spatialref.h
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/ogr_spatialref.h
-
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/tree.cpp
-tree.h
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/tree.h
 
 /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/tree.h
 iostream

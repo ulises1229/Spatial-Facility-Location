@@ -42,24 +42,32 @@ int main(int argc, const char** argv){
     parseParameters(argc, argv);
 
 	// Import biomass and friction
+    cout << "-------------------------------------------------------"<< endl;
+    cout << "Importing data ... " << endl;
 
-    // FIXME:  add a directive to detect OS and use a
+    //FIXME:  add a directive to detect OS and use relative path
 	map_biomass = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/" + map_biomass;
 	map_friction = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/" + map_friction;
 
 	clock_t begin = clock();    // start timer
+
+	// Import input maps
 	float** biomass = objRaster.tiff_to_matrix_gdal(map_biomass, true);
 	float** friction = objRaster.tiff_to_matrix_gdal(map_friction, false);
+
+	// In case a non-supported projection
 	//cout << objRaster.epsg << endl;
 	//objRaster.reproject_coords(map_biomass);
 	//exit(0);
+
 	clock_t end = clock();
 	int rows = objRaster.getRows();
 	int cols = objRaster.getCols();
-
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	cout << "TIFF to matrix = " << elapsed_secs << " secs." << endl;
-	Point2D centroid;
+	cout << "Total importation time: " << elapsed_secs << " secs." << endl;
+    cout << "-------------------------------------------------------"<< endl;
+
+    Point2D centroid;
 	ofstream info, bestInfo, coords;
 	ostringstream ss, bestSs;
 	ss << "centroids_" << demanda << "_" << hName << ".csv";
