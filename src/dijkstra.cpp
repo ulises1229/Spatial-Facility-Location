@@ -222,7 +222,7 @@ void dijkstra(int id_src, int src_x, int src_y, int stop){
 		// in pair)
 		int u = pq2.top().id_dest;
 		acum = pq2.top().acum;//solo biomasa
-		float weight_pq = pq2.top().relation; // biomasa/friccion
+		//float weight_pq = pq2.top().relation; // biomasa/friccion
 
 		if(closedList[this->nodes.at(u).x][this->nodes.at(u).y] == false){
 			biomasa_total += this->biomass[this->nodes.at(u).x][this->nodes.at(u).y];

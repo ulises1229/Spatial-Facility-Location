@@ -15,7 +15,7 @@ add_executable(optimization
         main.cpp
         bellford.cpp
         dijkstra.cpp
-        DisplayImage.cpp
+        raster.cpp
         distance.cpp
         distance.h
         exploracion.cpp
@@ -24,4 +24,4 @@ add_executable(optimization
         structure.h
         tree.cpp
         tree.h
-        treenode.h)
+        treenode.h raster.h)

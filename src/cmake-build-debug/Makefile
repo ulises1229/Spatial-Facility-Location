@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src
+CMAKE_SOURCE_DIR = /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,33 +122,6 @@ optimization: cmake_check_build_system
 optimization/fast:
 	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/build
 .PHONY : optimization/fast
-
-DisplayImage.o: DisplayImage.cpp.o
-
-.PHONY : DisplayImage.o
-
-# target to build an object file
-DisplayImage.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.o
-.PHONY : DisplayImage.cpp.o
-
-DisplayImage.i: DisplayImage.cpp.i
-
-.PHONY : DisplayImage.i
-
-# target to preprocess a source file
-DisplayImage.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.i
-.PHONY : DisplayImage.cpp.i
-
-DisplayImage.s: DisplayImage.cpp.s
-
-.PHONY : DisplayImage.s
-
-# target to generate assembly for a file
-DisplayImage.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/DisplayImage.cpp.s
-.PHONY : DisplayImage.cpp.s
 
 bellford.o: bellford.cpp.o
 
@@ -285,6 +258,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+raster.o: raster.cpp.o
+
+.PHONY : raster.o
+
+# target to build an object file
+raster.cpp.o:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/raster.cpp.o
+.PHONY : raster.cpp.o
+
+raster.i: raster.cpp.i
+
+.PHONY : raster.i
+
+# target to preprocess a source file
+raster.cpp.i:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/raster.cpp.i
+.PHONY : raster.cpp.i
+
+raster.s: raster.cpp.s
+
+.PHONY : raster.s
+
+# target to generate assembly for a file
+raster.cpp.s:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/raster.cpp.s
+.PHONY : raster.cpp.s
+
 tree.o: tree.cpp.o
 
 .PHONY : tree.o
@@ -321,9 +321,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... optimization"
-	@echo "... DisplayImage.o"
-	@echo "... DisplayImage.i"
-	@echo "... DisplayImage.s"
 	@echo "... bellford.o"
 	@echo "... bellford.i"
 	@echo "... bellford.s"
@@ -339,6 +336,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... raster.o"
+	@echo "... raster.i"
+	@echo "... raster.s"
 	@echo "... tree.o"
 	@echo "... tree.i"
 	@echo "... tree.s"
