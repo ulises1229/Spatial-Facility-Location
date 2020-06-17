@@ -145,7 +145,7 @@ public:
 		this->matrix_path = new int*[this->ROW];
 		for(int i = 0; i< ROW; ++i){
 			this->matrix_path[i] = new int[COL];
-			/*for(int j = 0; j < COL ; j++){
+			/*for(int j = 0; j < COLS ; j++){
 				matrix_path[i][j] = 0;
 			}*/
 		}

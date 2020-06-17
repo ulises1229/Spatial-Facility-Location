@@ -140,7 +140,7 @@ void Explore::aStarSearch(Pair src, float stop, ofstream& info, char heuristic){
      <f, <i, j>>
      where f = g + h,
      and i, j are the row and column index of that cell
-     Note that 0 <= i <= ROW-1 & 0 <= j <= COL-1
+     Note that 0 <= i <= ROWS-1 & 0 <= j <= COLS-1
      This open list is implenented as a set of pair of pair.*/
     set<cell_info> openList;
 

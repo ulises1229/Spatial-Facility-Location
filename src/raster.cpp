@@ -109,10 +109,10 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				arr[i * cols + j] = output_raster[i][j];
-				/*if(output_raster[i][j] > 0 && output_raster[i][j] < 0.1)
-					arr[i * cols + j] = output_raster[i][j] * 3;
-				else if(output_raster[i][j] >= 0.1)
-					arr[i * cols + j] = output_raster[i][j];
+				/*if(outputRaster[i][j] > 0 && outputRaster[i][j] < 0.1)
+					arr[i * cols + j] = outputRaster[i][j] * 3;
+				else if(outputRaster[i][j] >= 0.1)
+					arr[i * cols + j] = outputRaster[i][j];
 				else
 					arr[i * cols + j] = 0;*/
 			}
@@ -351,7 +351,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 					int x = k.x + dx[i];
 					int y = k.y + dy[i];
 					it = find_if(active_raster.begin(), active_raster.end(), Point2D(x, y));
-					//cout << "\t x = " << x << " y = " << y << " active_raster= " << active_raster[x][y] << endl;
+					//cout << "\t x = " << x << " y = " << y << " activeRaster= " << activeRaster[x][y] << endl;
 					// if not inside boundry, ignore them
 					if (!isInsideGrid(x, y) || it != active_raster.end()){
 						//cout << "\t fuera del grid" << endl;
@@ -388,8 +388,8 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			for(int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					pBuf[i * cols + j] = output_raster[i][j];
-					/*if(output_raster[i][j] <= 2000)
-						pBuf[i * cols + j] = output_raster[i][j];
+					/*if(outputRaster[i][j] <= 2000)
+						pBuf[i * cols + j] = outputRaster[i][j];
 					else
 						pBuf[i * cols + j] = -9999;*/
 					if(output_raster[i][j] > maxVal)
@@ -491,7 +491,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			}
 		}*/
 
-/*	void matrix_to_tiff(float** output_raster, int rows, int cols) {
+/*	void matrix_to_tiff(float** outputRaster, int rows, int cols) {
 
 
 			setenv("PYTHONPATH",".",1);
@@ -508,7 +508,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 
 			for (int i = 0; i < rows; i++)
 				for (int j = 0; j < cols; j++, c++)
-					PyTuple_SetItem(pArgs, c, Py_BuildValue("f", output_raster[i][j]));
+					PyTuple_SetItem(pArgs, c, Py_BuildValue("f", outputRaster[i][j]));
 
 			pName = PyString_FromString((char*)"write_array");
 

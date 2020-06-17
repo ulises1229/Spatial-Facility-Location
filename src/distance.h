@@ -17,8 +17,11 @@
 #include <math.h>
 using namespace std;
 
-class costDistance {
+class CostDistance{
 public:
+
+    CostDistance(int cols, int rows);
+
 	//structs
 	struct cell2 {
 		int x, y;
@@ -41,14 +44,16 @@ public:
 	inline void acumulados(set<cell> active_costs, int origen_x, int origen_y, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax);
 	void inicio_cost_distance(float** grid, int srcX, int srcY, float** biomass, float intervals, float xMin, float xMax, float yMin, float yMax, double projection);
 	void freeMem();
+    float** getOutputRaster();
 
 
+private:
 	//variables
-	int ROW, COL;
+	int ROWS, COLS;
 	int** locations;
-	float** output_raster;
-	float** cost_raster;
-	bool** active_raster;
+	float** outputRaster;
+	float** costRaster;
+	bool** activeRaster;
 	int rutas[8][8]{
 		{0,0,0,0,0,0,0,0},
 		{-1,0,0,1,0,1,-1,0},
