@@ -48,7 +48,6 @@ int main(int argc, const char** argv){
     //FIXME:  add a directive to detect OS and use relative path
     //string path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
     string path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
-    cout<< "Path name: " << path << map_biomass << endl;
 	map_biomass =  path + map_biomass;
 	map_friction = path + map_friction;
 
@@ -58,10 +57,9 @@ int main(int argc, const char** argv){
 	float** biomass = objRaster.tiff_to_matrix_gdal(map_biomass, true);
 	float** friction = objRaster.tiff_to_matrix_gdal(map_friction, false);
 
-	// In case a non-supported projection
+	// In case of a non-supported projection
 	//cout << objRaster.epsg << endl;
 	//objRaster.reproject_coords(map_biomass);
-	//exit(0);
 
 	clock_t end = clock();
 	int rows = objRaster.getRows();
@@ -70,8 +68,10 @@ int main(int argc, const char** argv){
 	cout << "Total importation time: " << elapsed_secs << " secs." << endl;
     cout << "-------------------------------------------------------"<< endl;
 
+    // FIXME: Use a common class for all strucutures
     Point2D centroid;
 
+    // Create a file to export time
 	ofstream info, bestInfo, coords;
 	ostringstream ss, bestSs;
 	ss << "centroids_" << demanda << "_" << hName << ".csv";
@@ -84,15 +84,18 @@ int main(int argc, const char** argv){
 	info << "X, Y, Size, Biomass, Cost" << endl;
 	bestInfo.open(bestSs.str().c_str());
 
-	// Verify a Natural Protected Area Map
+	// Verify if there is a map of Natural Protected Areas
 	if(map_npa != "") {
 		float** npa_matrix = objRaster.tiff_to_matrix_gdal(map_npa, false);
 		objRaster.check_npa(npa_matrix, biomass);
-	} else if(map_waterbodies != "") {
+	}
+    // Verify if there is a map of Water bodies
+	if(map_waterbodies != "") {
 		float** water_matrix = objRaster.tiff_to_matrix_gdal(map_waterbodies, false);
 		objRaster.check_waterbodies(water_matrix, biomass);
 	}
 
+	// Define the number of grids for each axis
 	int xIntervals = 0, yIntervals = 0;
 	objRaster.define_intervals(demanda, xIntervals, yIntervals);
 
@@ -316,6 +319,7 @@ int main(int argc, const char** argv){
 						clock_t begin3 = clock();
 						cout << "Image creation..." << endl;
 						objRaster.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+						cout << "Tiff path: " << rn.matrix_path << endl;
 						objRaster.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
@@ -363,6 +367,7 @@ int main(int argc, const char** argv){
 
 					if (optValidation == 1) {
 						clock_t begin3 = clock();
+                        cout << "Tiff path: " << e.matrix_path << endl;
 						objRaster.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
 						objRaster.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();

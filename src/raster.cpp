@@ -377,7 +377,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			string sStop = ostr.str();
 			string fileName = "final_route_"+map+"_"+algName+"_"+sStop+"_"+heuristic+".tiff";
 			string proyeccion = "EPSG:" + epsg;
-			cout << proyeccion << endl;
+			//cout << proyeccion << endl;
 			poDriver = GetGDALDriverManager()->GetDriverByName("Gtiff");
 			poDstDS = poDriver->Create( fileName.c_str(), cols, rows, 1, GDT_Float32, NULL);
 			poDstDS->SetGeoTransform(adfGeoTransform);
