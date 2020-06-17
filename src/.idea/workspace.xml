@@ -32,11 +32,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07ec2862-92e2-47e4-abec-3cd992ce5c20" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/optimization" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/optimization" afterDir="false" />
-    </list>
+    <list default="true" id="07ec2862-92e2-47e4-abec-3cd992ce5c20" name="Default" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +98,7 @@
       <workItem from="1592002416982" duration="22000" />
       <workItem from="1592002441876" duration="777000" />
       <workItem from="1592065970847" duration="8233000" />
-      <workItem from="1592108364755" duration="5566000" />
+      <workItem from="1592108364755" duration="5761000" />
     </task>
     <servers />
   </component>
