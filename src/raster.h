@@ -81,7 +81,7 @@ public:
     Point2D find_centroid(map<float,Grid> grids, float** biomass, float** friction);
     set<cellVecinos>vecinos2(int origen_x, int origen_y);
     set<cellVecinos> vecinos3(set<cellVecinos> vecinos);
-    void matrix_to_tiff(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName);
+    void matrix_to_tiff(string path, float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName);
     void check_npa(float** npa_matrix, float** &biomass_matrix);
     void check_waterbodies(float** water_matrix, float** &biomass_matrix);
     void reproject_coords(string map_biomass);

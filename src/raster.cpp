@@ -367,7 +367,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			return distancias;
 		}
 
-		void Raster::matrix_to_tiff(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
+		void Raster::matrix_to_tiff(string path, float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
 			GDALDataset *poDstDS;
 			//char **papszOptions = NULL;
 			GDALDriver *poDriver;
@@ -375,7 +375,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			std::ostringstream ostr;
 			ostr << stop;
 			string sStop = ostr.str();
-			string fileName = "final_route_"+map+"_"+algName+"_"+sStop+"_"+heuristic+".tiff";
+			string fileName = path + "final_route_"+map+"_"+algName+"_"+sStop+"_"+heuristic+".tiff";
 			string proyeccion = "EPSG:" + epsg;
 			//cout << proyeccion << endl;
 			poDriver = GetGDALDriverManager()->GetDriverByName("Gtiff");

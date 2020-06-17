@@ -48,6 +48,7 @@ int main(int argc, const char** argv){
     //FIXME:  add a directive to detect OS and use relative path
     //string path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
     string path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
+    string outPath = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/output/";
 	map_biomass =  path + map_biomass;
 	map_friction = path + map_friction;
 
@@ -209,7 +210,7 @@ int main(int argc, const char** argv){
 			cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 			clock_t begin3 = clock();
 			objRaster.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
-			objRaster.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
+			objRaster.matrix_to_tiff(outPath, e.matrix_path, rows, cols, hName, demanda, region, algName);
 			clock_t end3 = clock();
 			double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 			cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -230,7 +231,7 @@ int main(int argc, const char** argv){
 			clock_t begin3 = clock();
 			cout << "Image creation..." << endl;
 			objRaster.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
-			objRaster.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+			objRaster.matrix_to_tiff(outPath, rn.matrix_path, rows, cols, hName, demanda, region, algName);
 			clock_t end3 = clock();
 			double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 			cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -320,7 +321,7 @@ int main(int argc, const char** argv){
 						cout << "Image creation..." << endl;
 						objRaster.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						cout << "Tiff path: " << rn.matrix_path << endl;
-						objRaster.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+						objRaster.matrix_to_tiff(outPath, rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -369,7 +370,7 @@ int main(int argc, const char** argv){
 						clock_t begin3 = clock();
                         cout << "Tiff path: " << e.matrix_path << endl;
 						objRaster.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
-						objRaster.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
+						objRaster.matrix_to_tiff(outPath, e.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -467,7 +468,7 @@ int main(int argc, const char** argv){
 				cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 				clock_t begin3 = clock();
 				objRaster.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
-				objRaster.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
+				objRaster.matrix_to_tiff(outPath, e.matrix_path, rows, cols, hName, demanda, region, algName);
 				clock_t end3 = clock();
 				double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 				cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -488,7 +489,7 @@ int main(int argc, const char** argv){
 				clock_t begin3 = clock();
 				cout << "Image creation..." << endl;
 				objRaster.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
-				objRaster.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+				objRaster.matrix_to_tiff(outPath, rn.matrix_path, rows, cols, hName, demanda, region, algName);
 				clock_t end3 = clock();
 				double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 				cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -521,7 +522,7 @@ int main(int argc, const char** argv){
 						cout << "A* Search time = " << elapsed_secs2 << " secs." << endl;
 						clock_t begin3 = clock();
 						objRaster.write_image(e.matrix_path, rows, cols, hName, demanda, region, algName);
-						objRaster.matrix_to_tiff(e.matrix_path, rows, cols, hName, demanda, region, algName);
+						objRaster.matrix_to_tiff(outPath, e.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
@@ -543,7 +544,7 @@ int main(int argc, const char** argv){
 						clock_t begin3 = clock();
 						cout << "Image creation..." << endl;
 						objRaster.write_image(rn.matrix_path, rows, cols, hName, demanda, region, algName);
-						objRaster.matrix_to_tiff(rn.matrix_path, rows, cols, hName, demanda, region, algName);
+						objRaster.matrix_to_tiff(outPath, rn.matrix_path, rows, cols, hName, demanda, region, algName);
 						clock_t end3 = clock();
 						double elapsed_secs3 = double(end3 - begin3) / CLOCKS_PER_SEC;
 						cout << "Creating the final route image took " << elapsed_secs3 << " secs." << endl;
