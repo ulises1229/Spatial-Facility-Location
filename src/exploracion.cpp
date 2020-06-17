@@ -64,7 +64,7 @@ bool Explore::checkFutureInsert(int x, int y, float acum, float parada){
 }
 
 void Explore::printPath2(vector<info_ruta> p, ofstream& info, Pair src){
-	float biomass = 0, cost = 0, frict = 0, normalCost = 0;
+	float biomass = 0, cost = 0, frict = 0;
 	int size = 0;
 	this->X = src.first; this->Y = src.second;
 	this->matrix_path = new float*[this->ROW];

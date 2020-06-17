@@ -46,8 +46,11 @@ int main(int argc, const char** argv){
     cout << "Importing data ... " << endl;
 
     //FIXME:  add a directive to detect OS and use relative path
-	map_biomass = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/" + map_biomass;
-	map_friction = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/" + map_friction;
+    //string path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
+    string path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
+    cout<< "Path name: " << path << map_biomass << endl;
+	map_biomass =  path + map_biomass;
+	map_friction = path + map_friction;
 
 	clock_t begin = clock();    // start timer
 
@@ -68,15 +71,20 @@ int main(int argc, const char** argv){
     cout << "-------------------------------------------------------"<< endl;
 
     Point2D centroid;
+
 	ofstream info, bestInfo, coords;
 	ostringstream ss, bestSs;
 	ss << "centroids_" << demanda << "_" << hName << ".csv";
 	bestSs << "Exported_points.csv";
+
+
 	//string fileName = "puntos_" + stop + ".csv"
+
 	info.open(ss.str().c_str());
 	info << "X, Y, Size, Biomass, Cost" << endl;
 	bestInfo.open(bestSs.str().c_str());
 
+	// Verify a Natural Protected Area Map
 	if(map_npa != "") {
 		float** npa_matrix = objRaster.tiff_to_matrix_gdal(map_npa, false);
 		objRaster.check_npa(npa_matrix, biomass);

@@ -27,12 +27,12 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 
 	float** Raster::tiff_to_matrix_gdal(string file, bool flag) {
 		GDALDataset *dataset;
-		char **MD;
-		char *info;
+		//char **MD;
+		//char *info;
 		GDALAllRegister();
 		string ds = file;
 		dataset = (GDALDataset *) GDALOpen(ds.c_str(), GA_ReadOnly);
-		double ndv;
+		//double ndv;
 
         // File not found
 		if(dataset == NULL) {
@@ -69,13 +69,13 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			costos[i] = new float[COLS];
 		}
 
-		GDALDataType dataType = poBand->GetRasterDataType();
+		//GDALDataType dataType = poBand->GetRasterDataType();
 		float *pBuf = new float[nYSize * nXSize];
 
 		poBand->RasterIO(GF_Read, 0, 0, nXSize, nYSize, pBuf, nXSize, nYSize, GDT_Float32, 0, 0);
 
 		float biomass = 0;
-		float pxVal = 0;
+		//float pxVal = 0;
 		int cCols = 0, cRows = 0;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
@@ -105,7 +105,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 
 	void Raster::write_image(float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
 		float* arr = new float[rows * cols * 3];
-		int n_pixels = rows * cols, channelDiv = round(stop /255);
+		int n_pixels = rows * cols; //channelDiv = round(stop /255);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				arr[i * cols + j] = output_raster[i][j];

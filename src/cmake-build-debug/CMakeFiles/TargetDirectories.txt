@@ -1,3 +1,0 @@
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir
