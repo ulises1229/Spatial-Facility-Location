@@ -223,7 +223,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 			totValidGrids = cont;
 			return gridsMap;
 		}
-
+    // FIXME: REPLACE THIS METHOD FOR THE EM one
 	Point2D Raster::find_centroid(map<float,Grid> grids, float** biomass, float** friction) {
 		map<float,Grid>::iterator it;
 		float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
@@ -258,7 +258,7 @@ static bool operator<(const cellVecinos& a, const cellVecinos& b){
 					yMin = it->second.elements.at(i).y;
 			}
 
-			centroid.x = xMin + round((xMax - xMin) / 2) ;
+			centroid.x = xMin + round((xMax - xMin) / 2);
 			centroid.y = yMin + round((yMax - yMin) / 2);
 			//cout << xMin << " - " << xMax << " - " << yMin << " - " << yMax << endl;
 			this->xMax = xMax; this->xMin = xMin;

@@ -1,115 +1,33 @@
+/*
+ * bell-ford.cpp
+ * Author: Ulises Olivares
+ * uolivares@unam.mx
+ * June 12, 2020
+ */
+
 // A C / C++ program for Bellman-Ford's single source
 // shortest path algorithm.
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-#include <iostream>
-#include <vector>
-#include <list>
-#include <iterator>
-#include <stack>
-#include <set>
-#include <algorithm>
-#include <queue>
-#include <math.h>
+#include "bell-ford.h"
 
 using namespace std;
-// a structure to represent a weighted edge in graph
-typedef pair<float, int> pairBio;
-typedef pair<int, int> Pair;
-struct Edge
-{
-    int src, dest, weight;
-};
 
-struct nGraph {
-	int id, x, y;
-	float biomass, friction, relation;
 
-	nGraph() {}
-
-	nGraph(int x, int y) : x(x), y(y) {}
-};
-
-// a structure to represent a connected, directed and
-// weighted graph
-struct Graf
-{
-    // V-> Number of vertices, E-> Number of edges
-    int V, E;
-
-    // graph is represented as an array of edges.
-    struct Edge* edge;
-};
-
-// Creates a graph with V vertices and E edges
-/*struct Graf* createGraf(int V, int E)
-{
-    struct Graf* graph =
-         (struct Graf*) malloc( sizeof(struct Graf) );
-    graph->V = V;
-    graph->E = E;
-
-    graph->edge =
-       (struct Edge*) malloc( graph->E * sizeof( struct Edge ) );
-
-    return graph;
-}*/
-
-struct nInfo {
-	float relation;
-	int id_dest, x, y;
-	float acum;
-	bool operator<(const nInfo& rhs) const{
-		return relation < rhs.relation;
-	}
-};
-
-struct nodeParent {
-	int id, parent, x, y;
-	float weight, acum;
-};
-
-struct findNode {
-	int x, y;
-	findNode(){};
-	findNode(int x, int y) : x(x), y(y) {}
-	bool operator () (findNode const &e) const {
-		return (x == e.x && y == e.y);
-	}
-};
-
-class Bellmanford {
-	int V;    // No. of vertices
-	vector<nGraph> nodes;
-	// In a weighted graph, we need to store vertex
-	// and weight pair for every edge
-	list< pairBio > *adj;
-
-public:
-	int ROW, COL;
-	float** biomass;
-	float** friction;
-	vector<nGraph> Path;
-	int** matrix_path;
 	// A utility function used to print the solution
-	void printArr(int dist[], int n)
+	void BellmanFord::printArr(int dist[], int n)
 	{
 		printf("Vertex   Distance from Source\n");
 		for (int i = 0; i < n; ++i)
 			printf("%d \t\t %d\n", i, dist[i]);
 	}
 
-	bool isValid(int row, int col){
+	bool BellmanFord::isValid(int row, int col){
 	    // Returns true if row number and column number
 	    // is in range
 	    return (row >= 0) && (row < ROW) &&
 	           (col >= 0) && (col < COL);
 	}
 
-	bool rutaValida(vector<int> parent, int n){
+	bool BellmanFord::rutaValida(vector<int> parent, int n){
 		//cout << "valdiar" << n << " "  << parent[n] << endl;
 		bool ciclo = true;
 		int destino = n;
@@ -131,17 +49,17 @@ public:
 	}
 
 
-	void addEdge(int u, int v, float w){
+	void BellmanFord::addEdge(int u, int v, float w){
 	    adj[u].push_back(make_pair(w, v));
 	}
 
-	void i_Graph(int V, vector<nGraph> nodes){
+	void BellmanFord::i_Graph(int V, vector<nGraph> nodes){
 	    this->V = V;
 	    this->nodes = nodes;
 	    adj = new list<pairBio> [V];
 	}
 
-	void fillMatrixPath(int srcX, int srcY) {
+	void BellmanFord::fillMatrixPath(int srcX, int srcY) {
 		this->matrix_path = new int*[this->ROW];
 		for(int i = 0; i< ROW; ++i){
 			this->matrix_path[i] = new int[COL];
@@ -166,7 +84,8 @@ public:
 	// The main function that finds shortest distances from src to
 	// all other vertices using Bellman-Ford algorithm.  The function
 	// also detects negative weight cycle
-	void BellmanFord(struct Graf* graph, int src)
+
+	void BellmanFord::runBellmanFord(struct Graf* graph, int src)
 	{
 		int V = graph->V;
 		int E = graph->E;
@@ -206,7 +125,7 @@ public:
 			int v = graph->edge[i].dest;
 			int weight = graph->edge[i].weight;
 			if (dist[u] != INT_MIN && dist[u] + weight > dist[v])
-				printf("Graph contains negative weight cycle\n");
+				printf("Dijkstra contains negative weight cycle\n");
 		}
 
 		printArr(dist, V);
@@ -214,7 +133,7 @@ public:
 		return;
 	}
 
-	void printPath(vector<int> parent, int n){
+	void BellmanFord::printPath(vector<int> parent, int n){
 	    //printf("Vertex   Distance from Source\n");
 		// Base Case : If j is source
 		    if (parent[n]==-1)
@@ -228,7 +147,7 @@ public:
 		    //printf("%d ", n);
 	}
 
-	void bellford(int src_id, int srcX, int srcY, int stop) {
+	void BellmanFord::bellford(int src_id, int srcX, int srcY, int stop) {
 		priority_queue<nInfo> nodeSet;
 		vector<findNode> visitedNodes;
 		vector<findNode>::iterator itNodes;
@@ -301,7 +220,7 @@ public:
 	}
 
 
-	void bellford_start(float** biomass, float** friction, int srcX, int srcY, float stop, char heuristic) {
+	void BellmanFord::bellford_start(float** biomass, float** friction, int srcX, int srcY, float stop, char heuristic) {
 			this->biomass = new float*[this->ROW];
 			this->friction = new float*[this->ROW];
 			int** enum_grid;
@@ -380,7 +299,7 @@ public:
 		 //Let us create the graph given in above example
 		int V = 5;  // Number of vertices in graph
 		int E = 8;  // Number of edges in graph
-		struct Graph* graph = createGraph(V, E);
+		struct Dijkstra* graph = createGraph(V, E);
 
 		// add edge 0-1 (or A-B in above figure)
 		graph->edge[0].src = 0;
@@ -426,4 +345,3 @@ public:
 
 		return 0;
 	}*/
-};

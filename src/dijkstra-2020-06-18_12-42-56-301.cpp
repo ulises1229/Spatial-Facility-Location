@@ -59,7 +59,7 @@ void Dijkstra::fillMatrixPath(){
 }
 
 
-bool Dijkstra::validRoute(vector<int> parent, int n){
+bool Dijkstra::rutaValida(vector<int> parent, int n){
 	//cout << "valdiar" << n << " "  << parent[n] << endl;
 	bool ciclo = false;
 	int destino = n;
@@ -80,29 +80,7 @@ bool Dijkstra::validRoute(vector<int> parent, int n){
 	return ciclo;
 }
 
-// Overload validRoute
-bool Dijkstra::validRoute(int c, vector<int> parent, int n){
-    //cout << "valdiar" << n << " "  << parent[n] << endl;
-    //visited[n] = true;
-    bool ciclo = false;
-    int destino = n;
-    vector<int> vis(c);
-    vis.push_back(destino);
-    std::vector<int>::iterator it;
-    while(1){
-        if(parent[n] == 0)
-            break;
-        it = find (vis.begin(), vis.end(), parent[n]);
-        if(it != vis.end()){//found = ciclo
-            //cout << "Cicloooo " << parent[n] << endl;
-            ciclo = true; break;
-        }else{
-            vis.push_back(parent[n]);
-            n = parent[n];
-        }
-    }
-    return ciclo;
-}
+
 
 
 
@@ -116,7 +94,33 @@ bool Dijkstra::isValid(int row, int col){
 }
 
 
-void Dijkstra::dijkstra(int id_src, int src_x, int src_y, int stop){
+bool Dijkstra::rutaValida(int c, vector<int> parent, int n){
+	//cout << "valdiar" << n << " "  << parent[n] << endl;
+	//visited[n] = true;
+	bool ciclo = false;
+	int destino = n;
+	vector<int> vis(c);
+	vis.push_back(destino);
+	std::vector<int>::iterator it;
+	while(1){
+		if(parent[n] == 0)
+			break;
+		it = find (vis.begin(), vis.end(), parent[n]);
+		if(it != vis.end()){//found = ciclo
+			//cout << "Cicloooo " << parent[n] << endl;
+			ciclo = true; break;
+		}else{
+			vis.push_back(parent[n]);
+			n = parent[n];
+		}
+	}
+	return ciclo;
+}
+
+
+
+
+void dijkstra(int id_src, int src_x, int src_y, int stop){
 	// Create a priority queue to store vertices that
 	// are being preprocessed. This is weird syntax in C++.
 	// Refer below link for details of this syntax
@@ -226,7 +230,7 @@ void Dijkstra::dijkstra(int id_src, int src_x, int src_y, int stop){
 }
 
 // Driver program to test methods of graph class
-void Dijkstra::initDijkstra(float** biomass, float** friction, int src_X, int src_Y, float stop, char heuristic){
+void dijkstra_inicio(float** biomass, float** friction, int src_X, int src_Y, float stop, char heuristic){
 	this->biomass = new float*[this->ROW];
 	this->friction = new float*[this->ROW];
 	this->closedList = new bool*[this->ROW];
@@ -329,3 +333,4 @@ void Dijkstra::initDijkstra(float** biomass, float** friction, int src_X, int sr
 
 }
 
+};

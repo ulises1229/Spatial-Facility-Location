@@ -14,7 +14,7 @@
 
 // FIXME: CORRECT THESE TWO FILES, INCLUDE THE H FILE
 #include "dijkstra.cpp" //Dijkstra
-#include "bellford.cpp" //Bellman-Ford
+#include "bell-ford.cpp" //Bellman-Ford
 
 #include <tclap/CmdLine.h>
 #include "raster.h"

@@ -70,18 +70,18 @@ CMakeFiles/optimization.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/main.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/main.cpp -o CMakeFiles/optimization.dir/main.cpp.s
 
-CMakeFiles/optimization.dir/bellford.cpp.o: CMakeFiles/optimization.dir/flags.make
-CMakeFiles/optimization.dir/bellford.cpp.o: ../bellford.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/bellford.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/bellford.cpp.o -c /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp
+CMakeFiles/optimization.dir/bell-ford.cpp.o: CMakeFiles/optimization.dir/flags.make
+CMakeFiles/optimization.dir/bell-ford.cpp.o: ../bell-ford.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/optimization.dir/bell-ford.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/optimization.dir/bell-ford.cpp.o -c /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.cpp
 
-CMakeFiles/optimization.dir/bellford.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/bellford.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp > CMakeFiles/optimization.dir/bellford.cpp.i
+CMakeFiles/optimization.dir/bell-ford.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/optimization.dir/bell-ford.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.cpp > CMakeFiles/optimization.dir/bell-ford.cpp.i
 
-CMakeFiles/optimization.dir/bellford.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/bellford.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp -o CMakeFiles/optimization.dir/bellford.cpp.s
+CMakeFiles/optimization.dir/bell-ford.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/optimization.dir/bell-ford.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.cpp -o CMakeFiles/optimization.dir/bell-ford.cpp.s
 
 CMakeFiles/optimization.dir/dijkstra.cpp.o: CMakeFiles/optimization.dir/flags.make
 CMakeFiles/optimization.dir/dijkstra.cpp.o: ../dijkstra.cpp
@@ -151,7 +151,7 @@ CMakeFiles/optimization.dir/tree.cpp.s: cmake_force
 # Object files for target optimization
 optimization_OBJECTS = \
 "CMakeFiles/optimization.dir/main.cpp.o" \
-"CMakeFiles/optimization.dir/bellford.cpp.o" \
+"CMakeFiles/optimization.dir/bell-ford.cpp.o" \
 "CMakeFiles/optimization.dir/dijkstra.cpp.o" \
 "CMakeFiles/optimization.dir/raster.cpp.o" \
 "CMakeFiles/optimization.dir/distance.cpp.o" \
@@ -162,7 +162,7 @@ optimization_OBJECTS = \
 optimization_EXTERNAL_OBJECTS =
 
 optimization: CMakeFiles/optimization.dir/main.cpp.o
-optimization: CMakeFiles/optimization.dir/bellford.cpp.o
+optimization: CMakeFiles/optimization.dir/bell-ford.cpp.o
 optimization: CMakeFiles/optimization.dir/dijkstra.cpp.o
 optimization: CMakeFiles/optimization.dir/raster.cpp.o
 optimization: CMakeFiles/optimization.dir/distance.cpp.o

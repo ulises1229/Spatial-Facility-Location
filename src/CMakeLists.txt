@@ -13,7 +13,7 @@ link_directories(/usr/local/lib)
 
 add_executable(optimization
         main.cpp
-        bellford.cpp
+        bell-ford.cpp
         dijkstra.cpp
         raster.cpp
         distance.cpp
@@ -24,4 +24,4 @@ add_executable(optimization
         structure.h
         tree.cpp
         tree.h
-        treenode.h raster.h)
+        treenode.h raster.h bell-ford.h dijkstra.h)

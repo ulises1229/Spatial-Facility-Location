@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.h
 stdio.h
 -
 stdlib.h
@@ -34,12 +34,10 @@ queue
 math.h
 -
 
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.cpp
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.h
 stdio.h
 -
 stdlib.h
--
-limits.h
 -
 iostream
 -
@@ -125,10 +123,10 @@ exploracion.h
 /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/exploracion.h
 tree.h
 /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/tree.h
-dijkstra.cpp
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.cpp
-bellford.cpp
-/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp
+dijkstra.h
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.h
+bell-ford.h
+/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.h
 tclap/CmdLine.h
 -
 raster.h

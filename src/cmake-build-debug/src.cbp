@@ -82,10 +82,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bellford.cpp">
+		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.cpp">
+			<Option target="optimization"/>
+		</Unit>
+		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/bell-ford.h">
 			<Option target="optimization"/>
 		</Unit>
 		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.cpp">
+			<Option target="optimization"/>
+		</Unit>
+		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/dijkstra.h">
 			<Option target="optimization"/>
 		</Unit>
 		<Unit filename="/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/distance.cpp">

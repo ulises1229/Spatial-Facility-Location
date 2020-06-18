@@ -123,32 +123,32 @@ optimization/fast:
 	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/build
 .PHONY : optimization/fast
 
-bellford.o: bellford.cpp.o
+bell-ford.o: bell-ford.cpp.o
 
-.PHONY : bellford.o
+.PHONY : bell-ford.o
 
 # target to build an object file
-bellford.cpp.o:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.o
-.PHONY : bellford.cpp.o
+bell-ford.cpp.o:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bell-ford.cpp.o
+.PHONY : bell-ford.cpp.o
 
-bellford.i: bellford.cpp.i
+bell-ford.i: bell-ford.cpp.i
 
-.PHONY : bellford.i
+.PHONY : bell-ford.i
 
 # target to preprocess a source file
-bellford.cpp.i:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.i
-.PHONY : bellford.cpp.i
+bell-ford.cpp.i:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bell-ford.cpp.i
+.PHONY : bell-ford.cpp.i
 
-bellford.s: bellford.cpp.s
+bell-ford.s: bell-ford.cpp.s
 
-.PHONY : bellford.s
+.PHONY : bell-ford.s
 
 # target to generate assembly for a file
-bellford.cpp.s:
-	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bellford.cpp.s
-.PHONY : bellford.cpp.s
+bell-ford.cpp.s:
+	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/bell-ford.cpp.s
+.PHONY : bell-ford.cpp.s
 
 dijkstra.o: dijkstra.cpp.o
 
@@ -321,9 +321,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... optimization"
-	@echo "... bellford.o"
-	@echo "... bellford.i"
-	@echo "... bellford.s"
+	@echo "... bell-ford.o"
+	@echo "... bell-ford.i"
+	@echo "... bell-ford.s"
 	@echo "... dijkstra.o"
 	@echo "... dijkstra.i"
 	@echo "... dijkstra.s"
