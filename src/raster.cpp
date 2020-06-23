@@ -437,8 +437,25 @@ void Raster::reproject_coords(string map_biomass) {
     //exit(0);
 }
 
-Point2D clusterizationEM(map<float,Grid> grids, float** biomass, float** friction){
-    
+Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
+    Point2D origin;
+
+    // Start from last element greater quotients
+    map<float,Grid>::iterator it;
+    it = --grids.end();
+
+    it.
+
+    // Create EM instance from openCV
+    cv::ml::EM;
+
+
+
+
+
+    cout<< "Test" << endl;
+
+    return origin;
 }
 
     int Raster::getCols() {

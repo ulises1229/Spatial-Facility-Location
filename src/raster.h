@@ -13,6 +13,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/mat.hpp>
+#include <opencv2/ml.hpp>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -83,7 +84,7 @@ public:
     void check_npa(float** npa_matrix, float** &biomass_matrix);
     void check_waterbodies(float** water_matrix, float** &biomass_matrix);
     void reproject_coords(string map_biomass);
-    Point2D clusterizationEM(map<float,Grid> grids, float** biomass, float** friction);
+    Point2D runEM(map<float,Grid> grids, float** biomass, float** friction);
 
     // Get methods
     int getCols();

@@ -35,6 +35,7 @@ int demanda, optValidation, gridsToValidate, exportPoints, rows = 0, cols = 0;
 
 // TODO: Use a common class for all structures
 Point2D centroid;
+
 float** biomass;
 float** friction;
 
@@ -63,9 +64,9 @@ int main(int argc, const char** argv){
     cout << "Importing data ... " << endl;
 
     //FIXME:  add a directive to detect OS and use a relative path
-    //string path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
-    path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
-    outPath = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/output/";
+    string path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
+    //path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
+    outPath = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/output/";
 
 	map_biomass =  path + map_biomass;
 	map_friction = path + map_friction;
@@ -260,7 +261,7 @@ void runValidation4(){
     //cout << "Source = " << bestX << ", " << bestY << endl;
     bestInfo << bestX << ", " << bestY << ",";
 
-    // FIXME: use a swtch
+    // FIXME: use a switch
     if(algorithm == 'a' || algorithm == 'A') {
         objDist.inicio_cost_distance(friction, bestX, bestY, biomass, objRaster.getIntervals(), bestxMin, bestxMax, bestyMin, bestyMax, objRaster.getProjection());
         Explore e;
@@ -318,6 +319,9 @@ void runCommonValidation(CostDistance objDist, map<float,Grid> grids){
 
         //cout << "\n\n" << endl;
         // TODO:Insert EM algorithm here
+        objRaster.runEM(grids, biomass, friction);
+
+
         centroid = objRaster.findCentroid(grids, biomass, friction);
         if(!grids.empty())
             grids.erase(--grids.end());
