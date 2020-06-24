@@ -164,7 +164,7 @@ void Raster::defineGridSize(int demand, int &xIntervals, int &yIntervals) {
  *
  */
 map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
-        cout << "-------------------" <<endl;
+        cout << "-----------------------------------------" <<endl;
         cout << "Defining grids ... " <<endl;
 
         int xPosGrid, yPosGrid, id = 1, count2 = 0, cont = 0, contValid = 0;
@@ -183,9 +183,10 @@ map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, c
                 //FIXME: Change tmp
                 tmp.x = i;
                 tmp.y = j;
-                totalGrids[xPosGrid][yPosGrid].noElements++;
+
 
                 if (biomass[i][j] >= 0 && friction[i][j] > 0 && biomass[i][j] > friction[i][j]) {
+                    totalGrids[xPosGrid][yPosGrid].noElements++;
                     totalGrids[xPosGrid][yPosGrid].elements.push_back(tmp);
                     totalGrids[xPosGrid][yPosGrid].sum += biomass[i][j] / friction[i][j];
                     totalGrids[xPosGrid][yPosGrid].value = biomass[i][j]; // it overrides previous value
@@ -218,7 +219,7 @@ map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, c
                 }
             }
         totValidGrids = cont;
-        cout << "-------------------" <<endl;
+        cout << "-----------------------------------------" <<endl;
         return gridsMap;
     }
 // FIXME: REPLACE THIS METHOD FOR THE EM one
@@ -439,7 +440,7 @@ void Raster::reproject_coords(string map_biomass) {
 }
 
 Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
-    cout << "-------------------------" << endl;
+    cout << "----------------------------------------" << endl;
     cout << "Runing EM Algortihtm ... " << endl;
 
     Point2D origin;
@@ -454,29 +455,36 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     const int elements = it->second.noElements;
 
-    float* inputPtr = new float[elements];
-    float* outputPtr = new float [elements];
+    /*float* inputPtr = new float[elements];
+    float* outputPtr = new float [elements];*/
+
+    Mat1f in;
 
     float input[elements], output[elements], labels[elements], probs[elements];
 
     // Create input array for clusterization
     for (int i= 0; i < it->second.noElements; i++){
-        cout << "x: " << it->second.elements.at(i).x << " y:" << it->second.elements.at(i).x <<endl;
+        //cout << "No. Elements: " << it->second.noElements << endl;
+        //cout  << "i: " << i << " x: " << it->second.elements.at(i).x << " y:" << it->second.elements.at(i).y <<endl;
         input[i] = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
     }
 
+    in.;
     /*inputPtr = input;
     outputPtr = output;*/
 
     // Create EM instance from openCV
-    //EM::create();
+    Ptr<ml::EM> objEM = ml::EM::create();
 
-    //EM::train(input, output);
+    objEM->trainEM(input);
+
+
+    //EM::trainEM(input);
 
     //EM::train( input, output, labels, probs);
 
 
-    cout << "-------------------------" << endl;
+    cout << "----------------------------------------" << endl;
 
     return origin;
 }
