@@ -31,6 +31,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace cv::ml;
 
 // Struct definition
 struct Point2D {
@@ -57,7 +58,6 @@ struct Grid {
 
     Grid(vector<Point2D> elements, int noElements, int invalidCells, float sum) :
             elements(elements),noElements(noElements), invalidCells(invalidCells), sum(sum) {}
-
 };
 
 struct cellVecinos {

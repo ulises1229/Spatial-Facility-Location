@@ -164,7 +164,7 @@ void Raster::defineGridSize(int demand, int &xIntervals, int &yIntervals) {
  *
  */
 map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, const int &yIntervals, float** biomass, float** friction) {
-
+        cout << "-------------------" <<endl;
         cout << "Defining grids ... " <<endl;
 
         int xPosGrid, yPosGrid, id = 1, count2 = 0, cont = 0, contValid = 0;
@@ -218,6 +218,7 @@ map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, c
                 }
             }
         totValidGrids = cont;
+        cout << "-------------------" <<endl;
         return gridsMap;
     }
 // FIXME: REPLACE THIS METHOD FOR THE EM one
@@ -438,22 +439,44 @@ void Raster::reproject_coords(string map_biomass) {
 }
 
 Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
+    cout << "-------------------------" << endl;
+    cout << "Runing EM Algortihtm ... " << endl;
+
     Point2D origin;
 
     // Start from last element greater quotients
     map<float,Grid>::iterator it;
     it = --grids.end();
 
-    it.
+    // TODO:evaluate a defined number of best quotients.
+
+    cout<< "Num elements: " << it->second.noElements << " elements: " << it->second.elements.at(1).x << endl;
+
+    const int elements = it->second.noElements;
+
+    float* inputPtr = new float[elements];
+    float* outputPtr = new float [elements];
+
+    float input[elements], output[elements], labels[elements], probs[elements];
+
+    // Create input array for clusterization
+    for (int i= 0; i < it->second.noElements; i++){
+        cout << "x: " << it->second.elements.at(i).x << " y:" << it->second.elements.at(i).x <<endl;
+        input[i] = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+    }
+
+    /*inputPtr = input;
+    outputPtr = output;*/
 
     // Create EM instance from openCV
-    cv::ml::EM;
+    //EM::create();
+
+    //EM::train(input, output);
+
+    //EM::train( input, output, labels, probs);
 
 
-
-
-
-    cout<< "Test" << endl;
+    cout << "-------------------------" << endl;
 
     return origin;
 }
