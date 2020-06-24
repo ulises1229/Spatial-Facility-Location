@@ -462,21 +462,27 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     float input[elements], output[elements], labels[elements], probs[elements];
 
+    vector<float> input;
+
     // Create input array for clusterization
     for (int i= 0; i < it->second.noElements; i++){
         //cout << "No. Elements: " << it->second.noElements << endl;
         //cout  << "i: " << i << " x: " << it->second.elements.at(i).x << " y:" << it->second.elements.at(i).y <<endl;
-        input[i] = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+        input.push_back(biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y]);
     }
 
-    in.;
+    /*cv::InputArray input2(input, it->second.noElements);
+
+    for (int i = 0; i < it->second.noElements; i++){
+        cout<< "Input 2: " << input2. << endl;
+    }*/
     /*inputPtr = input;
     outputPtr = output;*/
 
     // Create EM instance from openCV
-    Ptr<ml::EM> objEM = ml::EM::create();
+    //Ptr<ml::EM> objEM = ml::EM::create();
 
-    objEM->trainEM(input);
+    //objEM->trainEM(input2);
 
 
     //EM::trainEM(input);
