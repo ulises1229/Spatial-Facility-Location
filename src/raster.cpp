@@ -458,18 +458,30 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     /*float* inputPtr = new float[elements];
     float* outputPtr = new float [elements];*/
 
-    Mat1f in;
+    // Create an opencv float mat
+    Mat input;
+    input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
 
-    float input[elements], output[elements], labels[elements], probs[elements];
 
-    vector<float> input;
+    //float input[elements], output[elements], labels[elements], probs[elements];
+    vector<Point2f> tmp;
+
+    Point2f point;
+    point.x = 2;
+    point.y = 3;
+
+    tmp.push_back(point);
+
+
+    //vector<float> input2;
 
     // Create input array for clusterization
-    for (int i= 0; i < it->second.noElements; i++){
-        //cout << "No. Elements: " << it->second.noElements << endl;
-        //cout  << "i: " << i << " x: " << it->second.elements.at(i).x << " y:" << it->second.elements.at(i).y <<endl;
-        input.push_back(biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y]);
-    }
+    /*for (int i= 0; i < it->second.noElements; i++){
+        test.
+        test.push_back(biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y]);
+    }*/
+
+
 
     /*cv::InputArray input2(input, it->second.noElements);
 
@@ -480,9 +492,10 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     outputPtr = output;*/
 
     // Create EM instance from openCV
-    //Ptr<ml::EM> objEM = ml::EM::create();
+    //
+    Ptr<ml::EM> objEM = ml::EM::create();
 
-    //objEM->trainEM(input2);
+    objEM->trainEM(tmp);
 
 
     //EM::trainEM(input);
