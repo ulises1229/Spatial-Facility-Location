@@ -493,9 +493,9 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     // Create EM instance from openCV
     //
-    Ptr<ml::EM> objEM = ml::EM::create();
+   // Ptr<ml::EM> objEM = ml::EM::create();
 
-    objEM->trainEM(tmp);
+   //objEM->trainEM(tmp);
 
 
     //EM::trainEM(input);
