@@ -7,6 +7,7 @@
 
 
 
+
 // Utility method for comparing two cells
 static bool operator<(const cellVecinos& a, const cellVecinos& b){
 	if (a.distance == b.distance){
@@ -453,54 +454,31 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     cout<< "Num elements: " << it->second.noElements << " elements: " << it->second.elements.at(1).x << endl;
 
-    const int elements = it->second.noElements;
+    const int numElements = it->second.noElements;
 
-    /*float* inputPtr = new float[elements];
-    float* outputPtr = new float [elements];*/
 
     // Create an opencv float mat
-    Mat input;
-    input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
+    Mat inputSamples(numElements, 1, CV_32F);
+    Mat labels;
+
+    for(int i = 0; i < numElements; i++){
+        it->second.elements.at(i).x;
+        it->second.elements.at(i).y;
 
 
-    //float input[elements], output[elements], labels[elements], probs[elements];
-    vector<Point2f> tmp;
+    }
 
-    Point2f point;
-    point.x = 2;
-    point.y = 3;
+    //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
 
-    tmp.push_back(point);
+    int noClusters = (1 + log2(it->second.noElements));
 
+    // Clustering data
+    cout <<"Clustering data ..." << endl;
+    Ptr<EM> em_model = EM::create();
+    em_model->setClustersNumber(N);
+    em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
+    // Complete
 
-    //vector<float> input2;
-
-    // Create input array for clusterization
-    /*for (int i= 0; i < it->second.noElements; i++){
-        test.
-        test.push_back(biomass[it->second.elements.at(i).x][it->second.elements.at(i).y]/friction[it->second.elements.at(i).x][it->second.elements.at(i).y]);
-    }*/
-
-
-
-    /*cv::InputArray input2(input, it->second.noElements);
-
-    for (int i = 0; i < it->second.noElements; i++){
-        cout<< "Input 2: " << input2. << endl;
-    }*/
-    /*inputPtr = input;
-    outputPtr = output;*/
-
-    // Create EM instance from openCV
-    //
-   // Ptr<ml::EM> objEM = ml::EM::create();
-
-   //objEM->trainEM(tmp);
-
-
-    //EM::trainEM(input);
-
-    //EM::train( input, output, labels, probs);
 
 
     cout << "----------------------------------------" << endl;

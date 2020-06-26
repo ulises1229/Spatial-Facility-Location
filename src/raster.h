@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#include <math.h>
 #include "gdal.h"
 #include "gdal_priv.h"
 #include "ogr_spatialref.h"

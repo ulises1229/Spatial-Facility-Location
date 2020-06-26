@@ -25,3 +25,5 @@ add_executable(optimization
         tree.cpp
         tree.h
         treenode.h raster.h bell-ford.h dijkstra.h)
+
+# TODO: Check this
