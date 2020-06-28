@@ -456,28 +456,68 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     const int numElements = it->second.noElements;
 
+    const int N1 = (int)sqrt((double)numElements);
+
+    int numClusters = floor(1 + log2(it->second.noElements));
+
+    Mat img = Mat::zeros( Size(N1, N1), CV_8UC3 );
+
+    Mat sample( 1, 2, CV_32FC1 );
+
+    const Scalar colors[] =
+            {
+                    Scalar(0,0,255), Scalar(0,255,0),
+                    Scalar(0,255,255),Scalar(255,255,0)
+            };
 
     // Create an opencv float mat
     Mat inputSamples(numElements, 1, CV_32F);
     Mat labels;
 
-    for(int i = 0; i < numElements; i++){
-        it->second.elements.at(i).x;
-        it->second.elements.at(i).y;
+    for(int i = 0; i < numClusters; i++){
+        // form the training samples
+        Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
 
+        Scalar mean(((i%N1)+1)*img.rows/(N1+1),
+                    ((i/N1)+1)*img.rows/(N1+1));
+        Scalar sigma(30,30);
+        randn( samples_part, mean, sigma );
 
     }
 
     //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
 
-    int noClusters = (1 + log2(it->second.noElements));
+
 
     // Clustering data
     cout <<"Clustering data ..." << endl;
     Ptr<EM> em_model = EM::create();
-    em_model->setClustersNumber(N);
+    em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
-    // Complete
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 300, 0.1));
+    em_model ->trainEM(inputSamples, noArray(), labels, noArray());
+
+    // classify every image pixel
+
+    for (int i = 0; i<numElements; i++){
+        sample.at<float>(0) = it->second.elements.at(0).x;
+        sample.at<float>(1) = it->second.elements.at(0).y;
+
+        int response = cvRound(em_model->predict2(sample, noArray())[1]);
+        Scalar c = colors[response];
+        circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
+
+    }
+    for( int i = 0; i < img.rows; i++ ){
+        for( int j = 0; j < img.cols; j++ ){
+            sample.at<float>(0) = (float)j;
+            sample.at<float>(1) = (float)i;
+            int response = cvRound(em_model->predict2( sample, noArray() )[1]);
+            Scalar c = colors[response];
+
+            circle(img, Point(j, i), 1, c*0.75, FILLED );
+        }
+    }
 
 
 
