@@ -506,9 +506,9 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         int response = cvRound(em_model->predict2(sample, noArray())[1]);
         Scalar c = colors[response];
         circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
-
     }
-    for( int i = 0; i < img.rows; i++ ){
+
+    /*for( int i = 0; i < img.rows; i++ ){
         for( int j = 0; j < img.cols; j++ ){
             sample.at<float>(0) = (float)j;
             sample.at<float>(1) = (float)i;
@@ -517,7 +517,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
             circle(img, Point(j, i), 1, c*0.75, FILLED );
         }
-    }
+    }*/
 
 
 

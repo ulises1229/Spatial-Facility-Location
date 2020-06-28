@@ -43,9 +43,7 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdCXX/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdCXX/a.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/8" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/CXX.includecache" afterDir="false" />
@@ -60,12 +58,13 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/flags.make" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/link.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/main.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/raster.cpp.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/optimization" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/optimization" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/src.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/src.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/raster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/raster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raster.h" beforeDir="false" afterPath="$PROJECT_DIR$/raster.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +142,7 @@
       <workItem from="1593138297070" duration="5479000" />
       <workItem from="1593209121257" duration="231000" />
       <workItem from="1593218208658" duration="6774000" />
+      <workItem from="1593307137925" duration="1791000" />
     </task>
     <servers />
   </component>
@@ -292,13 +292,13 @@
     <state x="781" y="324" key="SettingsEditor/-2560.23.2560.1417/0.23.2560.1417@0.23.2560.1417" timestamp="1592076737517" />
     <state x="513" y="239" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1592371258750" />
     <state x="513" y="239" key="SettingsEditor/1680.-827.1080.1920/0.0.1680.1050@0.0.1680.1050" timestamp="1592497359034" />
-    <state x="0" y="24" width="840" height="952" key="com.intellij.ide.util.TipDialog" timestamp="1593218209223">
-      <screen x="0" y="23" width="1680" height="953" />
+    <state x="127" y="98" width="840" height="952" key="com.intellij.ide.util.TipDialog" timestamp="1593307137184">
+      <screen x="0" y="23" width="2560" height="1325" />
     </state>
     <state x="0" y="1" key="com.intellij.ide.util.TipDialog/-1440.-704.1440.2537/0.0.2560.1348@0.0.2560.1348" timestamp="1593020138746" />
     <state x="0" y="53" key="com.intellij.ide.util.TipDialog/-1440.-704.1440.2537/0.23.2560.1325@0.23.2560.1325" timestamp="1592870529674" />
     <state x="957" y="552" key="com.intellij.ide.util.TipDialog/-2560.0.2560.1440/0.0.2560.1440@0.0.2560.1440" timestamp="1591932166126" />
-    <state x="127" y="98" key="com.intellij.ide.util.TipDialog/-2560.23.2560.1417/0.23.2560.1325@0.23.2560.1325" timestamp="1593138015502" />
+    <state x="127" y="98" key="com.intellij.ide.util.TipDialog/-2560.23.2560.1417/0.23.2560.1325@0.23.2560.1325" timestamp="1593307137184" />
     <state x="0" y="24" key="com.intellij.ide.util.TipDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1592934496648" />
     <state x="0" y="24" width="840" height="952" key="com.intellij.ide.util.TipDialog/0.23.1680.953@0.23.1680.953" timestamp="1593218209223" />
     <state x="317" y="374" width="1680" height="953" maximized="true" key="dock-window-1" timestamp="1593218240677">
@@ -335,17 +335,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/raster.cpp</url>
-          <line>547</line>
+          <line>587</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/raster.cpp</url>
-          <line>538</line>
+          <line>578</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/raster.cpp</url>
-          <line>537</line>
+          <line>577</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
