@@ -445,24 +445,17 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "Runing EM Algortihtm ... " << endl;
 
     Point2D origin;
-
     // Start from last element greater quotients
     map<float,Grid>::iterator it;
     it = --grids.end();
 
     // TODO:evaluate a defined number of best quotients.
-
-    cout<< "Num elements: " << it->second.noElements << " elements: " << it->second.elements.at(1).x << endl;
-
     const int numElements = it->second.noElements;
-
     const int N1 = (int)sqrt((double)numElements);
-
     int numClusters = floor(1 + log2(it->second.noElements));
-
     Mat img = Mat::zeros( Size(N1, N1), CV_8UC3 );
-
     Mat sample( 1, 2, CV_32FC1 );
+
 
     const Scalar colors[] =
             {
@@ -473,6 +466,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     // Create an opencv float mat
     Mat inputSamples(numElements, 1, CV_32F);
     Mat labels;
+    //cv::CvEM em_model;
+    //cv::CvEMParams params;
 
     for(int i = 0; i < numClusters; i++){
         // form the training samples
@@ -487,14 +482,12 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
 
-
-
     // Clustering data
     cout <<"Clustering data ..." << endl;
     Ptr<EM> em_model = EM::create();
     em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
-    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 300, 0.1));
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 500, 0.01));
     em_model ->trainEM(inputSamples, noArray(), labels, noArray());
 
     // classify every image pixel
@@ -504,8 +497,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         sample.at<float>(1) = it->second.elements.at(0).y;
 
         int response = cvRound(em_model->predict2(sample, noArray())[1]);
-        Scalar c = colors[response];
-        circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
+        //Scalar c = colors[response];
+        //circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
     }
 
     /*for( int i = 0; i < img.rows; i++ ){
