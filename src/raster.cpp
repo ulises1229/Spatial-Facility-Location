@@ -519,8 +519,6 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         }
     }*/
 
-
-
     cout << "----------------------------------------" << endl;
 
     return origin;
