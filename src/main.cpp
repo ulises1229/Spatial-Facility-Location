@@ -64,9 +64,9 @@ int main(int argc, const char** argv){
     cout << "Importing data ... " << endl;
 
     //FIXME:  add a directive to detect OS and use a relative path
-    //path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
-    path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
-    outPath = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/output/";
+    path = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/input/"; // IMAC
+    //path = "/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/input/"; // MACBOOK
+    outPath = "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/output/";
 
 	map_biomass =  path + map_biomass;
 	map_friction = path + map_friction;

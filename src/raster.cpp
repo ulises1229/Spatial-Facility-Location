@@ -444,73 +444,91 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "----------------------------------------" << endl;
     cout << "Runing EM Algortihtm ... " << endl;
 
+    // Seed to generate random numbers
+    srand (time(NULL));
+
     Point2D origin;
     // Start from last element greater quotients
     map<float,Grid>::iterator it;
     it = --grids.end();
 
+    it --;
+
+
     // TODO:evaluate a defined number of best quotients.
     const int numElements = it->second.noElements;
-    const int N1 = (int)sqrt((double)numElements);
-    int numClusters = floor(1 + log2(it->second.noElements));
+    const int N1 = floor(sqrt((double)numElements));
     Mat img = Mat::zeros( Size(N1, N1), CV_8UC3 );
-    Mat sample( 1, 2, CV_32FC1 );
-
-
-    const Scalar colors[] =
-            {
-                    Scalar(0,0,255), Scalar(0,255,0),
-                    Scalar(0,255,255),Scalar(255,255,0)
-            };
+    Mat sample( 1, 3, CV_32FC1 );
 
     // Create an opencv float mat
-    Mat inputSamples(numElements, 1, CV_32F);
+    Mat inputSamples(numElements, 3, CV_32F);
     Mat labels;
-    //cv::CvEM em_model;
-    //cv::CvEMParams params;
 
+    // Use the Sturges formula to define the number of clusters
+    const int numClusters = floor(1 + log2(it->second.noElements));
+
+    cout <<"Clustering data ..." << endl;
+
+
+    // Set colors
+    Scalar colors[numClusters];
+    int increment = floor(255/numClusters);
+
+    for (int i = 0; i < numClusters; i++){
+        Scalar col;
+        int rnd = rand() % 3 ;
+        for (int j = 0; j<3; j++){
+            if (j == rnd)
+                col[j] = i*increment;
+            else
+                col[j] = 255;
+        }
+        colors[i] = col;
+    }
+
+    // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
         // form the training samples
         Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
-
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
-        Scalar sigma(30,30);
+        Scalar sigma(3,3);
         randn( samples_part, mean, sigma );
-
     }
 
     //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
 
-    // Clustering data
-    cout <<"Clustering data ..." << endl;
+
+
+    cout<<"Training model EM..." << endl;
+
     Ptr<EM> em_model = EM::create();
     em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
-    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 500, 0.01));
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 500, 0.1));
     em_model ->trainEM(inputSamples, noArray(), labels, noArray());
 
+
     // classify every image pixel
-
+    cout << "clasifying pixels into clusters" << endl;
     for (int i = 0; i<numElements; i++){
-        sample.at<float>(0) = it->second.elements.at(0).x;
-        sample.at<float>(1) = it->second.elements.at(0).y;
-
+        sample.at<float>(0) = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
         int response = cvRound(em_model->predict2(sample, noArray())[1]);
+        cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<< biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y] <<" , " << response << endl;
         //Scalar c = colors[response];
         //circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
     }
 
-    /*for( int i = 0; i < img.rows; i++ ){
-        for( int j = 0; j < img.cols; j++ ){
-            sample.at<float>(0) = (float)j;
-            sample.at<float>(1) = (float)i;
-            int response = cvRound(em_model->predict2( sample, noArray() )[1]);
-            Scalar c = colors[response];
+    //draw the clustered samples
+    for( int i = 0; i < numElements; i++ ){
+        Point pt(cvRound(inputSamples.at<float>(i, 0)), cvRound(inputSamples.at<float>(i, 1)));
+        circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
+    }
 
-            circle(img, Point(j, i), 1, c*0.75, FILLED );
-        }
-    }*/
+    //imshow( "EM-clustering result", img );
+    //waitKey(0);
+
 
     cout << "----------------------------------------" << endl;
 
