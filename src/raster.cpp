@@ -448,7 +448,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     srand (time(NULL));
 
     Point2D origin;
-    // Start from last element greater quotients
+
+    // Start from the last element (greater quotient)
     map<float,Grid>::iterator it;
     it = --grids.end();
 
@@ -493,8 +494,12 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
+
+        int test []= {4, 2};
+        Scalar mean2(test[0], test[1]);
+
         Scalar sigma(3,3);
-        randn( samples_part, mean, sigma );
+        randn(samples_part, mean, sigma );
     }
 
     //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
@@ -520,14 +525,14 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         //circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
     }
 
-    //draw the clustered samples
+    /*//draw the clustered samples
     for( int i = 0; i < numElements; i++ ){
         Point pt(cvRound(inputSamples.at<float>(i, 0)), cvRound(inputSamples.at<float>(i, 1)));
-        circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
+        //circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
     }
 
-    //imshow( "EM-clustering result", img );
-    //waitKey(0);
+    imshow( "EM-clustering result", img );
+    waitKey(0);*/
 
 
     cout << "----------------------------------------" << endl;
