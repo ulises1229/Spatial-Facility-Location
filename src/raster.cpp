@@ -452,17 +452,14 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     map<float,Grid>::iterator it;
     it = --grids.end();
 
-    it --;
-
-
     // TODO:evaluate a defined number of best quotients.
     const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));
     Mat img = Mat::zeros( Size(N1, N1), CV_8UC3 );
-    Mat sample( 1, 3, CV_32FC1 );
+    Mat sample( 1, 2, CV_32FC1 );
 
     // Create an opencv float mat
-    Mat inputSamples(numElements, 3, CV_32F);
+    Mat inputSamples(numElements, 2, CV_32F);
     Mat labels;
 
     // Use the Sturges formula to define the number of clusters
@@ -472,7 +469,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
 
     // Set colors
-    Scalar colors[numClusters];
+    /*Scalar colors[numClusters];
     int increment = floor(255/numClusters);
 
     for (int i = 0; i < numClusters; i++){
@@ -485,7 +482,10 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
                 col[j] = 255;
         }
         colors[i] = col;
-    }
+    }*/
+
+
+
 
     // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
