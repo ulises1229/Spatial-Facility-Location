@@ -485,9 +485,18 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         colors[i] = col;
     }*/
 
+    float smplMean = 0.0, smplSd = 0.0;
+    for (int i =0; i< numElements; i++)
+        smplMean += biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+    smplMean = smplMean / numElements;
 
+    for (int i =0; i< numElements; i++)
+        smplSd += pow(((biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y]) - smplMean) , 2);
+    smplSd = sqrt(smplSd / (numElements - 1));
 
+    cout << "Mean: " << smplMean << " Sd: " << smplSd << endl;
 
+    inputSamples = inputSamples.reshape(2, 0);
     // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
         // form the training samples
@@ -495,11 +504,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
 
-        int test []= {4, 2};
-        Scalar mean2(test[0], test[1]);
-
-        Scalar sigma(3,3);
-        randn(samples_part, mean, sigma );
+        Scalar sigma(smplSd,smplSd);
+        randn(samples_part, smplMean, sigma );
     }
 
     //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
