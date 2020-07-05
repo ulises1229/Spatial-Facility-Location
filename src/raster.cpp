@@ -464,7 +464,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     Mat labels;
 
     // Use the Sturges formula to define the number of clusters
-    const int numClusters = floor(1 + log2(it->second.noElements));
+    const int numClusters = ceil(1 + log2(it->second.noElements));
 
     cout <<"Clustering data ..." << endl;
 
@@ -486,17 +486,31 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     }*/
 
 
+    /* Test code
+     * Calculate stdev and smpMean */
+    float smpMean = 0.0, smpSd = 0.0;
+    for (int i = 0; i<numElements; i++)
+        smpMean = smpMean + biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+    smpMean = smpMean / numElements;
+
+    for (int i=0; i<numElements; i++)
+        smpSd = smpSd + pow(biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y], 2);
+    smpSd = sqrt(((float) (1 / ((float)numElements - 1)) * smpSd));
+    /* End of test code*/
 
 
+    inputSamples = inputSamples.reshape(2,0);
     // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
-        // form the training samples
+        // Create a mat and initialize rows
         Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
 
-        int test []= {4, 2};
-        Scalar mean2(test[0], test[1]);
+        //Scalar mean(smpMean, smpMean);
+
+        /*int test []= {4, 2};
+        Scalar mean2(test[0], test[1]);*/
 
         Scalar sigma(3,3);
         randn(samples_part, mean, sigma );
