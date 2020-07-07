@@ -485,18 +485,18 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         colors[i] = col;
     }*/
 
-    float smplMean = 0.0, smplSd = 0.0;
+    int smplMean = 0, smplSd = 0;
     for (int i =0; i< numElements; i++)
         smplMean += biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
-    smplMean = smplMean / numElements;
+    smplMean = (int) (smplMean / numElements);
 
     for (int i =0; i< numElements; i++)
         smplSd += pow(((biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y]) - smplMean) , 2);
-    smplSd = sqrt(smplSd / (numElements - 1));
+    smplSd = (int) sqrt(smplSd / (numElements - 1));
 
     cout << "Mean: " << smplMean << " Sd: " << smplSd << endl;
 
-    //inputSamples = inputSamples.reshape(2, 0);
+    inputSamples = inputSamples.reshape(1, 0);
     // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
         // form the training samples
