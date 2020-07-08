@@ -464,7 +464,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     Mat labels;
 
     // Use the Sturges formula to define the number of clusters
-    const int numClusters = floor(1 + log2(it->second.noElements));
+    const int numClusters = ceil(1 + log2(it->second.noElements));
 
     cout <<"Clustering data ..." << endl;
 
@@ -485,39 +485,54 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         colors[i] = col;
     }*/
 
+    // Calculate mean and standard deviation
+    float maxNum=  FLT_MIN, minNum = FLT_MAX, range = 0.0;
+    //float
+
     int smplMean = 0, smplSd = 0;
-    for (int i =0; i< numElements; i++)
-        smplMean += biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+
+    for (int i =0; i< numElements; i++){
+        float current = (float) biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+        if (current < minNum)
+            minNum = current;
+        if (current > maxNum)
+            maxNum = current;
+        smplMean += current;
+    }
     smplMean = (int) (smplMean / numElements);
+    range =  maxNum - minNum;
 
     for (int i =0; i< numElements; i++)
         smplSd += pow(((biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y]) - smplMean) , 2);
     smplSd = (int) sqrt(smplSd / (numElements - 1));
-
     cout << "Mean: " << smplMean << " Sd: " << smplSd << endl;
 
-    inputSamples = inputSamples.reshape(1, 0);
+    // Reshape inputSamples
+    inputSamples = inputSamples.reshape(2, 0);
     // Create Mixed Gaussian models
     for(int i = 0; i < numClusters; i++){
         // form the training samples
-        Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
+        Mat samples_part = inputSamples.rowRange(i * range / numClusters, (i + 1) * range / numClusters );
+        int first = i * range / numClusters;
+        int second = (i + 1) * range / numClusters;
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
-
+        float mean1 = ((i%N1)+1)*img.rows/(N1+1);
+        float mean2 = ((i/N1)+1)*img.rows/(N1+1);
         Scalar sigma(smplSd,smplSd);
-        randn(samples_part, smplMean, sigma);
+        randn(samples_part, mean, sigma);
     }
 
-    //input.create(it->second.elements.size(), it->second.elements.size(), CV_32F);
-
-
+    inputSamples = inputSamples.reshape(1, 0);
 
     cout<<"Training model EM..." << endl;
+
+    int iterations = 500, epsilon = 0.1;
 
     Ptr<EM> em_model = EM::create();
     em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
-    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 500, 0.1));
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, iterations, epsilon));
     em_model ->trainEM(inputSamples, noArray(), labels, noArray());
 
 
