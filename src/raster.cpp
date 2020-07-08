@@ -508,26 +508,29 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "Mean: " << smplMean << " Sd: " << smplSd << endl;
 
     // Reshape inputSamples
-    inputSamples = inputSamples.reshape(2, 0);
+    //inputSamples = inputSamples.reshape(2, 0);
     // Create Mixed Gaussian models
+
+
+
+
+
     for(int i = 0; i < numClusters; i++){
         // form the training samples
-        Mat samples_part = inputSamples.rowRange(i * range / numClusters, (i + 1) * range / numClusters );
-        int first = i * range / numClusters;
-        int second = (i + 1) * range / numClusters;
+        Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
-        float mean1 = ((i%N1)+1)*img.rows/(N1+1);
-        float mean2 = ((i/N1)+1)*img.rows/(N1+1);
         Scalar sigma(smplSd,smplSd);
         randn(samples_part, mean, sigma);
+        for (int j = 0; j < samples_part.elemSize(); j++)
+            cout << " ELement: " << j << " => " << samples_part.at<float>(i)<< endl;
     }
 
-    inputSamples = inputSamples.reshape(1, 0);
+    //inputSamples = inputSamples.reshape(1, 0);
 
     cout<<"Training model EM..." << endl;
 
-    int iterations = 500, epsilon = 0.1;
+    int iterations = 300, epsilon = 0.1;
 
     Ptr<EM> em_model = EM::create();
     em_model->setClustersNumber(numClusters);
@@ -535,16 +538,35 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, iterations, epsilon));
     em_model ->trainEM(inputSamples, noArray(), labels, noArray());
 
+    cout << "Model training finished successfully!" <<endl;
+
 
     // classify every image pixel
     cout << "clasifying pixels into clusters" << endl;
-    for (int i = 0; i<numElements; i++){
-        sample.at<float>(0) = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+
+    for( int i = 0; i < img.rows; i++ )
+    {
+        for( int j = 0; j < img.cols; j++ )
+        {
+            float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+            sample.at<float>(0) = (float)j;
+            sample.at<float>(1) = (float)i;
+            int response = cvRound(em_model->predict( sample ));
+            //Scalar c = colors[response];
+            cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<<current <<" , " << response << endl;
+            //circle( img, Point(j, i), 1, c*0.75, CV_FILLED );
+        }
+    }
+
+    /*for (int i = 0; i<numElements; i++){
+        float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+        //sample.at<float>(0) = i;
+        sample.at<float>(0) = current;
         int response = cvRound(em_model->predict2(sample, noArray())[1]);
-        cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<< biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y] <<" , " << response << endl;
+        cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<<current <<" , " << response << endl;
         //Scalar c = colors[response];
         //circle(img, Point(it->second.elements.at(i).x, it->second.elements.at(i).y), 1, c*0.75, FILLED);
-    }
+    }*/
 
     /*//draw the clustered samples
     for( int i = 0; i < numElements; i++ ){
