@@ -468,29 +468,14 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     cout <<"Clustering data ..." << endl;
 
-
-    // Set colors
-    /*Scalar colors[numClusters];
-    int increment = floor(255/numClusters);
-
-    for (int i = 0; i < numClusters; i++){
-        Scalar col;
-        int rnd = rand() % 3 ;
-        for (int j = 0; j<3; j++){
-            if (j == rnd)
-                col[j] = i*increment;
-            else
-                col[j] = 255;
-        }
-        colors[i] = col;
-    }*/
-
     // Calculate mean and standard deviation
     float maxNum=  FLT_MIN, minNum = FLT_MAX, range = 0.0;
     //float
 
     int smplMean = 0, smplSd = 0;
 
+
+    // Calculate mean and stdev
     for (int i =0; i< numElements; i++){
         float current = (float) biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
         if (current < minNum)
@@ -508,13 +493,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "Mean: " << smplMean << " Sd: " << smplSd << endl;
 
     // Reshape inputSamples
-    //inputSamples = inputSamples.reshape(2, 0);
-    // Create Mixed Gaussian models
-
-
-
-
-
+    inputSamples = inputSamples.reshape(2, 0);
+    // Create Mixed Gaussian model
     for(int i = 0; i < numClusters; i++){
         // form the training samples
         Mat samples_part = inputSamples.rowRange(i * numElements / numClusters, (i + 1) * numElements / numClusters );
@@ -522,11 +502,10 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
                     ((i/N1)+1)*img.rows/(N1+1));
         Scalar sigma(smplSd,smplSd);
         randn(samples_part, mean, sigma);
-        for (int j = 0; j < samples_part.elemSize(); j++)
-            cout << " ELement: " << j << " => " << samples_part.at<float>(i)<< endl;
+        cout << " ELement: " << " => " << samples_part.at<float>(0)<< endl;
     }
 
-    //inputSamples = inputSamples.reshape(1, 0);
+    inputSamples = inputSamples.reshape(1, 0);
 
     cout<<"Training model EM..." << endl;
 
