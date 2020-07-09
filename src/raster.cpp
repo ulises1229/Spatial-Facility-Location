@@ -444,17 +444,106 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "----------------------------------------" << endl;
     cout << "Runing EM Algortihtm ... " << endl;
 
-    // Seed to generate random numbers
-    srand (time(NULL));
-
     Point2D origin;
 
     // Start from the last element (greater quotient)
     map<float,Grid>::iterator it;
     it = --grids.end();
 
+
+
+
+
+
+
+    const int N = 4;
+    const int N1 = (int)sqrt((double)N);
+    const Scalar colors[] =
+            {
+                    Scalar(0,0,255), Scalar(0,255,0),
+                    Scalar(0,255,255),Scalar(255,255,0)
+            };
+
+    int i, j;
+    int nsamples = 100;
+    Mat samples( nsamples, 2, CV_32FC1 );
+    Mat labels;
+    Mat img = Mat::zeros( Size( 500, 500 ), CV_8UC3 );
+    Mat sample( 1, 2, CV_32FC1 );
+
+    Ptr<EM> em_model = EM::create();
+
+
+    samples = samples.reshape(2, 0);
+    for( i = 0; i < N; i++ )
+    {
+        // form the training samples
+        Mat samples_part = samples.rowRange(i*nsamples/N, (i+1)*nsamples/N );
+
+        Scalar mean(((i%N1)+1)*img.rows/(N1+1),
+                    ((i/N1)+1)*img.rows/(N1+1));
+        Scalar sigma(30,30);
+        randn( samples_part, mean, sigma );
+    }
+    samples = samples.reshape(1, 0);
+
+
+    // initialize model parameters
+
+    em_model->setClustersNumber(N);
+    em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 300, 0.1));
+
+    // cluster the data
+    em_model ->trainEM(samples, noArray(), labels, noArray());
+
+#if 0
+    // the piece of code shows how to repeatedly optimize the model
+    // with less-constrained parameters
+    //(COV_MAT_DIAGONAL instead of COV_MAT_SPHERICAL)
+    // when the output of the first stage is used as input for the second one.
+    CvEM em_model2;
+    params.cov_mat_type = CvEM::COV_MAT_DIAGONAL;
+    params.start_step = CvEM::START_E_STEP;
+    params.means = em_model.get_means();
+    params.covs = (const CvMat**)em_model.get_covs();
+    params.weights = em_model.get_weights();
+
+    em_model2.train( samples, Mat(), params, &labels );
+    // to use em_model2, replace em_model.predict()
+    // with em_model2.predict() below
+#endif
+    // classify every image pixel
+    for( i = 0; i < img.rows; i++ )
+    {
+        for( j = 0; j < img.cols; j++ )
+        {
+            sample.at<float>(0) = (float)j;
+            sample.at<float>(1) = (float)i;
+            int response = cvRound(em_model->predict( sample ));
+            Scalar c = colors[response];
+
+            circle( img, Point(j, i), 1, c*0.75, CV_FILLED );
+        }
+    }
+
+    //draw the clustered samples
+    for( i = 0; i < nsamples; i++ )
+    {
+        Point pt(cvRound(samples.at<float>(i, 0)), cvRound(samples.at<float>(i, 1)));
+        circle( img, pt, 1, colors[labels.at<int>(i)], CV_FILLED );
+    }
+
+    imshow( "EM-clustering result", img );
+    waitKey(0);
+
+
+
+
+
+
     // TODO:evaluate a defined number of best quotients.
-    const int numElements = it->second.noElements;
+    /*const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));
     Mat img = Mat::zeros( Size(N1, N1), CV_8UC3 );
     Mat sample( 1, 2, CV_32FC1 );
@@ -470,10 +559,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     // Calculate mean and standard deviation
     float maxNum=  FLT_MIN, minNum = FLT_MAX, range = 0.0;
-    //float
-
     int smplMean = 0, smplSd = 0;
-
 
     // Calculate mean and stdev
     for (int i =0; i< numElements; i++){
@@ -486,7 +572,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     }
     smplMean = (int) (smplMean / numElements);
     range =  maxNum - minNum;
-
+    // Calculate Std dev
     for (int i =0; i< numElements; i++)
         smplSd += pow(((biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y]) - smplMean) , 2);
     smplSd = (int) sqrt(smplSd / (numElements - 1));
@@ -494,6 +580,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     // Reshape inputSamples
     inputSamples = inputSamples.reshape(2, 0);
+
     // Create Mixed Gaussian model
     for(int i = 0; i < numClusters; i++){
         // form the training samples
@@ -518,15 +605,11 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     em_model ->trainEM(inputSamples, noArray(), labels, noArray());
 
     cout << "Model training finished successfully!" <<endl;
-
-
     // classify every image pixel
     cout << "clasifying pixels into clusters" << endl;
 
-    for( int i = 0; i < img.rows; i++ )
-    {
-        for( int j = 0; j < img.cols; j++ )
-        {
+    for( int i = 0; i < img.rows; i++ ){
+        for( int j = 0; j < img.cols; j++ ){
             float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
             sample.at<float>(0) = (float)j;
             sample.at<float>(1) = (float)i;
@@ -535,7 +618,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
             cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<<current <<" , " << response << endl;
             //circle( img, Point(j, i), 1, c*0.75, CV_FILLED );
         }
-    }
+    }*/
 
     /*for (int i = 0; i<numElements; i++){
         float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
