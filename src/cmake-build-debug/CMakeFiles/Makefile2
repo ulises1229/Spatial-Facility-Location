@@ -35,19 +35,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = "/Users/ulisesolivares/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/CLion.app/Contents/bin/cmake/mac/bin/cmake"
+CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake
 
 # The command to remove a file.
-RM = "/Users/ulisesolivares/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
+RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src
+CMAKE_SOURCE_DIR = /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +74,14 @@ clean: CMakeFiles/optimization.dir/clean
 CMakeFiles/optimization.dir/all:
 	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/depend
 	$(MAKE) -f CMakeFiles/optimization.dir/build.make CMakeFiles/optimization.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target optimization"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target optimization"
 .PHONY : CMakeFiles/optimization.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/optimization.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/optimization.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/optimization.dir/rule
 
 # Convenience name for target.

@@ -523,7 +523,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
             int response = cvRound(em_model->predict( sample ));
             Scalar c = colors[response];
 
-            circle( img, Point(j, i), 1, c*0.75, CV_FILLED );
+            circle( img, Point(j, i), 1, c*0.75, FILLED );
         }
     }
 
@@ -531,7 +531,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     for( i = 0; i < nsamples; i++ )
     {
         Point pt(cvRound(samples.at<float>(i, 0)), cvRound(samples.at<float>(i, 1)));
-        circle( img, pt, 1, colors[labels.at<int>(i)], CV_FILLED );
+        circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
     }
 
     imshow( "EM-clustering result", img );
