@@ -453,32 +453,62 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
 
 
+    const int numElements = it->second.noElements;
+    const int N1 = floor(sqrt((double)numElements));
+    const int numClusters = ceil(1 + log2(it->second.noElements));
+    Scalar colors[numClusters];
+    int increment = floor(255/numClusters);
 
-
-
-    const int N = 4;
-    const int N1 = (int)sqrt((double)N);
-    const Scalar colors[] =
-            {
-                    Scalar(0,0,255), Scalar(0,255,0),
-                    Scalar(0,255,255),Scalar(255,255,0)
-            };
+    // Define colors
+    for (int i = 0; i < numClusters; i++){
+        Scalar col;
+        int rnd = rand() % 3 ;
+        for (int j = 0; j<3; j++){
+            if (j == rnd)
+                col[j] = i*increment;
+            else
+                col[j] = 128;
+        }
+        colors[i] = col;
+    }
 
     int i, j;
-    int nsamples = 100;
-    Mat samples( nsamples, 2, CV_32FC1 );
+
+
+    // Calculate mean and standard deviation
+    float maxNum=  FLT_MIN, minNum = FLT_MAX, range = 0.0;
+    int smplMean = 0, smplSd = 0;
+
+    // Calculate mean and stdev
+    for (int i =0; i< numElements; i++){
+        float current = (float) biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+        if (current < minNum)
+            minNum = current;
+        if (current > maxNum)
+            maxNum = current;
+        smplMean += current;
+    }
+
+    for (int i =0; i< numElements; i++)
+        smplSd += pow(((biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y]) - smplMean) , 2);
+    smplSd = (int) sqrt(smplSd / (numElements - 1));
+
+    smplMean = (int) (smplMean / numElements);
+    range =  maxNum - minNum;
+
+    Mat samples( numElements, 2, CV_32FC1 );
     Mat labels;
-    Mat img = Mat::zeros( Size( 500, 500 ), CV_8UC3 );
+    Mat img = Mat::zeros( Size( N1, N1 ), CV_8UC3 );
     Mat sample( 1, 2, CV_32FC1 );
 
     Ptr<EM> em_model = EM::create();
 
 
     samples = samples.reshape(2, 0);
-    for( i = 0; i < N; i++ )
+    for( i = 0; i < numClusters; i++ )
     {
         // form the training samples
-        Mat samples_part = samples.rowRange(i*nsamples/N, (i+1)*nsamples/N );
+        Mat samples_part = samples.rowRange(i*numElements/range, (i+1)*numElements/range );
 
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
@@ -489,8 +519,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
 
     // initialize model parameters
-
-    em_model->setClustersNumber(N);
+    em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
     em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 300, 0.1));
 
@@ -513,6 +542,11 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     // to use em_model2, replace em_model.predict()
     // with em_model2.predict() below
 #endif
+
+
+
+    //classify every point of the  
+
     // classify every image pixel
     for( i = 0; i < img.rows; i++ )
     {
@@ -528,7 +562,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     }
 
     //draw the clustered samples
-    for( i = 0; i < nsamples; i++ )
+    for( i = 0; i < numElements; i++ )
     {
         Point pt(cvRound(samples.at<float>(i, 0)), cvRound(samples.at<float>(i, 1)));
         circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
