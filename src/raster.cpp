@@ -505,11 +505,12 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
 
     samples = samples.reshape(2, 0);
-    for( i = 0; i < numClusters; i++ )
+    for( i = 1; i < numClusters; i++ )
     {
         // form the training samples
-        Mat samples_part = samples.rowRange(i*numElements/range, (i+1)*numElements/range );
-
+        Mat samples_part = samples.rowRange(i*numElements/numClusters, (i+1)*numElements/numClusters );
+        int test1 = i*numElements/range;
+        int test2 = (i+1)*numElements/range;
         Scalar mean(((i%N1)+1)*img.rows/(N1+1),
                     ((i/N1)+1)*img.rows/(N1+1));
         Scalar sigma(30,30);
@@ -545,27 +546,27 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
 
 
-    //classify every point of the  
-
-    // classify every image pixel
-    for( i = 0; i < img.rows; i++ )
-    {
-        for( j = 0; j < img.cols; j++ )
-        {
-            sample.at<float>(0) = (float)j;
-            sample.at<float>(1) = (float)i;
-            int response = cvRound(em_model->predict( sample ));
-            Scalar c = colors[response];
-
-            circle( img, Point(j, i), 1, c*0.75, FILLED );
-        }
+    //classify every pixel of the original data
+    for (int i = 0; i<numElements; i++){
+        //cout<< "Number of elements " << sqrt(it->second.elements.size())<< endl;
+        float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
+        int x = it->second.elements.at(i).x;
+        int y =  it->second.elements.at(i).x;
+        sample.at<float>(0) = x;
+        sample.at<float>(1) = y;
+        int response = cvRound(em_model->predict( sample ));
+        Scalar c = colors[response];
+        circle( img, Point(x, y), 1, c*0.75, FILLED );
     }
 
     //draw the clustered samples
-    for( i = 0; i < numElements; i++ )
-    {
+    cout << "X," <<"Y," <<"tmpX," << "tmpY," << "quotient," << "cluster" << endl;
+    for( i = 0; i < numElements; i++ ){
+        float current = biomass[it->second.elements.at(i).x][it->second.elements.at(i).y] / friction[it->second.elements.at(i).x][it->second.elements.at(i).y];
         Point pt(cvRound(samples.at<float>(i, 0)), cvRound(samples.at<float>(i, 1)));
         circle( img, pt, 1, colors[labels.at<int>(i)], FILLED );
+        //cout  << it->second.elements.at(i).x << " , " << it->second.elements.at(i).y << " , "<<current <<" , " << labels.at<int>(i)   << endl;
+        cout  << it->second.elements.at(i).x << "," << it->second.elements.at(i).y <<"," << samples.at<float>(i, 0) << "," << samples.at<float>(i, 1) << ","<<current <<"," << labels.at<int>(i)   << endl;
     }
 
     imshow( "EM-clustering result", img );
