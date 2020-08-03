@@ -522,7 +522,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     // initialize model parameters
     em_model->setClustersNumber(numClusters);
     em_model->setCovarianceMatrixType(EM::COV_MAT_SPHERICAL);
-    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 300, 0.1));
+    em_model->setTermCriteria(TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 500, 0.1));
 
     // cluster the data
     em_model ->trainEM(samples, noArray(), labels, noArray());
