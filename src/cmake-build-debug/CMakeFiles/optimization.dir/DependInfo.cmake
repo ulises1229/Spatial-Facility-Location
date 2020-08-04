@@ -12,7 +12,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/raster.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/raster.cpp.o"
   "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/tree.cpp" "/Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug/CMakeFiles/optimization.dir/tree.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

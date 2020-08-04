@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/local/bin/gcc-10 -DCMAKE_CXX_COMPILER=/usr/local/bin/g++-10 -G "CodeBlocks - Unix Makefiles" /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /Users/ulisesolivares2/Documents/GitHub/PowerPlantOptimization/src/cmake-build-debug
