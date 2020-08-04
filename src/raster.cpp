@@ -569,8 +569,8 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
         cout  << it->second.elements.at(i).x << "," << it->second.elements.at(i).y <<"," << samples.at<float>(i, 0) << "," << samples.at<float>(i, 1) << ","<<current <<"," << labels.at<int>(i)   << endl;
     }
 
-    imshow( "EM-clustering result", img );
-    waitKey(0);
+    //imshow( "EM-clustering result", img );
+    //waitKey(0);
 
 
 
