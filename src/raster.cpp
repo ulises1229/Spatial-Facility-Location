@@ -443,7 +443,7 @@ void Raster::reproject_coords(string map_biomass) {
 /*
  * Method to generate a raster for the selected grid
  */
-float ** Raster::generateGridRaster(Grid grid) {
+float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction) {
 
     // Initialize matrix
     float ** gridRaster;
@@ -451,19 +451,26 @@ float ** Raster::generateGridRaster(Grid grid) {
     for(int i = 0; i< ROWS; ++i)
         costos[i] = new float[COLS];
 
-    for(int i = 0; i< ROWS; i++) {
+    int x = grid.elements.at(0).x, y= grid.elements.at(0).y;
+    int count =0;
+
+    for(int i = 0; i< ROWS; i++)
         for (int j = 0; i < COLS; j++) {
             cout <<"Test" << endl;
-            /*if()
-            gridRaster[i][j] = ;*/
+            if(i == x & j == y){
+                gridRaster[i][j] = biomass[x][y] / friction[x][y];
+                count ++;
+                x = grid.elements.at(count).x;
+                y = grid.elements.at(count).y;
+            }
+            else
+                gridRaster[i][j] = noDataValue;
         }
-    }
-
     return gridRaster;
 }
 
 
-Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
+Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction, string outPath){
     cout << "----------------------------------------" << endl;
     cout << "Runing EM Algortihtm ... " << endl;
 
@@ -476,11 +483,11 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
 
     // Export image
 
-    generateGridRaster(it);
+    float **gridRaster = generateGridRaster(it->second, biomass, friction);
 
-    //exportTiff(Grid )
+    exportTiff(outPath, gridRaster, ROWS, COLS, "none", "NA", "Haiti", "grid");
 
-    //exit(0);
+    exit(0);
 
     const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));

@@ -86,7 +86,7 @@ public:
     void check_npa(float** npa_matrix, float** &biomass_matrix);
     void check_waterbodies(float** water_matrix, float** &biomass_matrix);
     void reproject_coords(string map_biomass);
-    Point2D runEM(map<float,Grid> grids, float** biomass, float** friction);
+    Point2D runEM(map<float,Grid> grids, float** biomass, float** friction, string outPath);
 
     // Get methods
     int getCols();
@@ -95,7 +95,7 @@ public:
     int getIntervals();
     double getProjection();
     int getTotalGrids();
-    float ** generateGridRaster(Grid grid);
+    float ** generateGridRaster(Grid grid, float** biomass, float** friction);
     int getXMin();
     int getYMin();
     int getXMax();
