@@ -6,8 +6,6 @@
 #include "raster.h"
 
 
-
-
 // Utility method for comparing two cells
 static bool operator<(const cellVecinos& a, const cellVecinos& b){
 	if (a.distance == b.distance){
@@ -223,7 +221,9 @@ map<float,Grid> Raster::defineGrids(int rows, int cols, const int &xIntervals, c
         cout << "-----------------------------------------" <<endl;
         return gridsMap;
     }
-// FIXME: REPLACE THIS METHOD FOR THE EM one
+
+
+    // TODO: REPLACE THIS METHOD FOR THE EM one
 Point2D Raster::findCentroid(map<float,Grid> grids, float** biomass, float** friction) {
     map<float,Grid>::iterator it;
     float xMax = FLT_MIN, xMin = FLT_MAX, yMax = FLT_MIN, yMin = FLT_MAX;
@@ -440,6 +440,29 @@ void Raster::reproject_coords(string map_biomass) {
     //exit(0);
 }
 
+/*
+ * Method to generate a raster for the selected grid
+ */
+float ** Raster::generateGridRaster(Grid grid) {
+
+    // Initialize matrix
+    float ** gridRaster;
+    gridRaster = new float*[ROWS];
+    for(int i = 0; i< ROWS; ++i)
+        costos[i] = new float[COLS];
+
+    for(int i = 0; i< ROWS; i++) {
+        for (int j = 0; i < COLS; j++) {
+            cout <<"Test" << endl;
+            /*if()
+            gridRaster[i][j] = ;*/
+        }
+    }
+
+    return gridRaster;
+}
+
+
 Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     cout << "----------------------------------------" << endl;
     cout << "Runing EM Algortihtm ... " << endl;
@@ -451,15 +474,22 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     it = --grids.end();
 
 
+    // Export image
 
+    generateGridRaster(it);
+
+    //exportTiff(Grid )
+
+    //exit(0);
 
     const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));
     const int numClusters = ceil(1 + log2(it->second.noElements));
     Scalar colors[numClusters];
+
     int increment = floor(255/numClusters);
 
-    // Define colors
+    // Define colors temp code just to export
     for (int i = 0; i < numClusters; i++){
         Scalar col;
         int rnd = rand() % 3 ;
@@ -473,7 +503,6 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     }
 
     int i, j;
-
 
     // Calculate mean and standard deviation
     float maxNum=  FLT_MIN, minNum = FLT_MAX, range = 0.0;
@@ -543,9 +572,6 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction){
     // to use em_model2, replace em_model.predict()
     // with em_model2.predict() below
 #endif
-
-
-
     //classify every pixel of the original data
     for (int i = 0; i<numElements; i++){
         //cout<< "Number of elements " << sqrt(it->second.elements.size())<< endl;

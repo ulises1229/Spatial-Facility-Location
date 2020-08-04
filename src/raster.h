@@ -95,6 +95,7 @@ public:
     int getIntervals();
     double getProjection();
     int getTotalGrids();
+    float ** generateGridRaster(Grid grid);
     int getXMin();
     int getYMin();
     int getXMax();
