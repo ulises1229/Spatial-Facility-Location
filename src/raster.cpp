@@ -449,22 +449,26 @@ float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction
     float ** gridRaster;
     gridRaster = new float*[ROWS];
     for(int i = 0; i< ROWS; ++i)
-        costos[i] = new float[COLS];
+        gridRaster[i] = new float[COLS];
 
     int x = grid.elements.at(0).x, y= grid.elements.at(0).y;
     int count =0;
 
     for(int i = 0; i< ROWS; i++)
         for (int j = 0; i < COLS; j++) {
-            cout <<"Test" << endl;
-            if(i == x & j == y){
+            if(i == x){
                 gridRaster[i][j] = biomass[x][y] / friction[x][y];
                 count ++;
                 x = grid.elements.at(count).x;
                 y = grid.elements.at(count).y;
+                cout << "Update value: " << count << endl;
             }
-            else
-                gridRaster[i][j] = noDataValue;
+            else{
+                //cout<< "Nodata"  << noDataValue <<endl;
+                gridRaster[i][j] = (float) noDataValue;
+
+            }
+
         }
     return gridRaster;
 }
@@ -485,7 +489,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction, 
 
     float **gridRaster = generateGridRaster(it->second, biomass, friction);
 
-    exportTiff(outPath, gridRaster, ROWS, COLS, "none", "NA", "Haiti", "grid");
+    exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Haiti", "grid");
 
     exit(0);
 
