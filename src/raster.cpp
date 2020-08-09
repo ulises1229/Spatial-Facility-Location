@@ -456,18 +456,19 @@ float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction
 
     for(int i = 0; i< ROWS; i++){
         for (int j = 0; j < COLS; j++){
-            if (i == x && j == y) {
+            if (i == x && j == y && count < grid.noElements-1) {
+                //cout << "Enter if count: " << count <<   endl ;
                 gridRaster[i][j] = biomass[x][y] / friction[x][y];
                 count++;
                 x = grid.elements.at(count).x;
                 y = grid.elements.at(count).y;
-                cout << " If i: " << i << " j: " << j << " Rows: " << ROWS << " Cols: " << COLS <<endl;
+                //cout << " If i: " << i << " j: " << j << " Elements: " << grid.noElements << " count: " << count<< endl;
 
             }
             else {
                 //cout<< "Nodata"  << noDataValue <<endl;
                 gridRaster[i][j] = (float) noDataValue;
-                cout << " Else i: " << i << " j: " << j <<endl;
+                //cout << " Else i: " << i << " j: " << j <<endl;
             }
 
         }
