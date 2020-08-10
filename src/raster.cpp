@@ -368,7 +368,7 @@ set<cellVecinos> Raster::vecinos3(set<cellVecinos> vecinos){//obtiene vecinos qu
 }
 
 void Raster::exportTiff(string path, float** output_raster, int rows, int cols, string heuristic, int stop, string map, string algName) {
-
+    cout << "Exporting "<< map << " tiff ..." <<endl;
     GDALDataset *poDstDS;
     //char **papszOptions = NULL;
     GDALDriver *poDriver;
@@ -381,6 +381,7 @@ void Raster::exportTiff(string path, float** output_raster, int rows, int cols, 
     poDriver = GetGDALDriverManager()->GetDriverByName("Gtiff");
     poDstDS = poDriver->Create( fileName.c_str(), cols, rows, 1, GDT_Float32, NULL);
     poDstDS->SetGeoTransform(adfGeoTransform);
+    poDstDS->SetProjection(proyeccion.c_str());
     oSRS.SetWellKnownGeogCS(proyeccion.c_str());
 
     GDALRasterBand *poBand;
@@ -398,11 +399,11 @@ void Raster::exportTiff(string path, float** output_raster, int rows, int cols, 
     }
 
     poBand = poDstDS->GetRasterBand(1);
-    poDstDS->GetRasterBand(1)->SetNoDataValue(-9999);
+    poDstDS->GetRasterBand(1)->SetNoDataValue(noDataValue);
     poBand->RasterIO( GF_Write, 0, 0, cols, rows,
                       pBuf, cols, rows, GDT_Float32, 0, 0 );
     GDALClose( (GDALDatasetH) poDstDS );
-    cout << fixed << "Max Val: " << maxVal << endl;
+    //cout << fixed << "Max Val: " << maxVal << endl;
 }
 
 void Raster::check_npa(float** npa_matrix, float** &biomass_matrix) {
@@ -442,8 +443,9 @@ void Raster::reproject_coords(string map_biomass) {
 
 /*
  * Method to generate a raster for the selected grid
+ * option: 1: Biomass 2: Friction 3: quotient
  */
-float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction) {
+float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction, int option) {
 
     // Initialize matrix
     float ** gridRaster;
@@ -458,7 +460,16 @@ float ** Raster::generateGridRaster(Grid grid, float** biomass, float** friction
         for (int j = 0; j < COLS; j++){
             if (i == x && j == y && count < grid.noElements-1) {
                 //cout << "Enter if count: " << count <<   endl ;
-                gridRaster[i][j] = biomass[x][y] / friction[x][y];
+                switch (option) {
+                    case 1:
+                        gridRaster[i][j] = biomass[x][y];
+                        break;
+                    case 2:
+                        gridRaster[i][j] = friction[x][y];
+                        break;
+                    case 3:
+                        gridRaster[i][j] = biomass[x][y] / friction[x][y];
+                }
                 count++;
                 x = grid.elements.at(count).x;
                 y = grid.elements.at(count).y;
@@ -488,13 +499,21 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction, 
     it = --grids.end();
 
 
-    // Export image
+    // Export image grid
 
-    float **gridRaster = generateGridRaster(it->second, biomass, friction);
+    //Generate biomass grid raster
+    float **gridRaster = generateGridRaster(it->second, biomass, friction, 1);
+    exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Biomass-Honduras", "-grid");
 
-    exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Haiti", "grid");
+    //Generate friction grid raster
+    gridRaster = generateGridRaster(it->second, biomass, friction, 2);
+    exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Friction-Honduras", "-grid");
 
-    exit(0);
+    // Generate quotient  grid raster
+    gridRaster = generateGridRaster(it->second, biomass, friction, 3);
+    exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Quotient-Honduras", "-grid");
+
+    
 
     const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));

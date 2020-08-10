@@ -95,7 +95,7 @@ public:
     int getIntervals();
     double getProjection();
     int getTotalGrids();
-    float ** generateGridRaster(Grid grid, float** biomass, float** friction);
+    float ** generateGridRaster(Grid grid, float** biomass, float** friction, int option);
     int getXMin();
     int getYMin();
     int getXMax();
