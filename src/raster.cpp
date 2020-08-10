@@ -513,7 +513,7 @@ Point2D Raster::runEM(map<float,Grid> grids, float** biomass, float** friction, 
     gridRaster = generateGridRaster(it->second, biomass, friction, 3);
     exportTiff(outPath, gridRaster, ROWS, COLS, "none", 0, "Quotient-Honduras", "-grid");
 
-    
+
 
     const int numElements = it->second.noElements;
     const int N1 = floor(sqrt((double)numElements));
