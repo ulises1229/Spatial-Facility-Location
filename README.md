@@ -11,23 +11,23 @@ The optimization tool contains a collection of algorithms coded in C++ that take
 
 #### 1.1.1 Hardware Requirements 
   
-  * Minumim: Dual core processor,  1 GHz Recomended:  Quad core processor 3 GHz 
-  * Minumim: RAM Memory de 4 GB, Recomended:16 GB
-  * Minumim: 1 GB of free disk space, Recomended: 4 GB of free disk space
+  * Minimum: Dual-core processor,  1 GHz Recommended:  Quad-core processor 3 GHz 
+  * Minimum: RAM Memory de 4 GB, Recomended:16 GB
+  * Minimum: 1 GB of free disk space, Recommended: 4 GB of free disk space
   
 #### 1.1.2 Software Requirements
-  The optimization tool was sucessfully tested using the CentOS Linux distribution on its version 7. In addition, it is mandatory to install the following libraries:
+  The optimization tool was successfully tested using the CentOS Linux distribution on its version 7. In addition, it is mandatory to install the following libraries:
 
   * GDAL at least versión 2.0
   * OpenCV at least version 3.0
-  * Tclap  at leas berion 1.0
+  * Tclap  at leas version 1.0
   
 ## 1.2 Library Installation
 
 ### 1.2.1 OpenCV  
-  Open the comand line and execute the following commands: 
+  Open the command line and execute the following commands: 
   
-  1. Acquire sudo privilleges:  
+  1. Acquire sudo privileges:  
   ``` bash
    su
   ```
@@ -37,7 +37,7 @@ The optimization tool contains a collection of algorithms coded in C++ that take
   ```
   3. Install Development Tools
   ``` bash
-  # yum groupinstall "Development Tools"
+  # yum group install "Development Tools"
   
   # yum install cmake gcc gtk2-devel pkgconfig libpng-devel libjpeg-turbo-devel jasper-devel openexr-devel libtiff-devel libwebp-devel
   ```
@@ -105,13 +105,13 @@ The optimization tool contains a collection of algorithms coded in C++ that take
 ## 2.1. Web-based platform
 http://www.mofuss.unam.mx/optimization
 
-[comment]: < TODO: replace this image for an updatet one>
+[comment]: < TODO: replace this image with an updated one>
 ![PROBIOMASA 01](/images/webpage.png)
 
 ## 2.2 Docker Container 
 #### 2.2.1 Docker Installation
  
- Install docker according your platform (windows, linix or mac) following the instructions in the URL.
+ Install docker according to your platform (windows, Linux, or Mac) following the instructions in the URL.
  https://docs.docker.com/install/
  
  ### 2.2.2. Docker container creation
@@ -132,14 +132,14 @@ http://www.mofuss.unam.mx/optimization
  docker build -t optimization .
   ```
  
- 4. One the installation finished, it would be possible to identify the coantainer ID using the following command.
+ 4. Once the installation is finished, it would be possible to identify the container ID using the following command.
  
   ``` bash
  docker images 
   ```
  
 
-### 2.2.3 Runing the docker container
+### 2.2.3 Running the docker container
 
  ```
 docker run -it  --name optimization -v optimization:/storage optimization-tool:latest 
@@ -194,10 +194,10 @@ Uso:
 Donde: 
 ``` bash
    -s <float>,  --demand <float>
-     (requerido)  Demanda de biomasa.
+     (required)  Demanda de biomasa.
          -- OR --
    -w <float>,  --watts <float>
-     (requerido)  Demanda en watts.
+     (required)  Demanda en watts.
 
 
    -p <float>,  --production <float>
@@ -265,7 +265,7 @@ Ejecución del programa con un mapa de Haití, algoritmo: A*, validación: 1, he
     Sum: 100168.125000
     Total Cost: 434142.562500
     A* Search time = 0.120000 secs.
-    Creating the final route image took 0.200000 secs.
+    Creating the final route image took 0.200000 seconds.
     
     
 ``` 
